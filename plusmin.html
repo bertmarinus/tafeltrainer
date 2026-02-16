@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Plus- en minsommen</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8eaf6 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 42px;
+            color: #805ad5;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #718096;
+        }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .card h2 {
+            font-size: 28px;
+            color: #2d3748;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .hint {
+            text-align: center;
+            color: #a0aec0;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        /* Type selectie grid */
+        .type-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .type-card {
+            background: white;
+            border: 3px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 30px 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .type-card:hover:not(.disabled) {
+            border-color: #9f7aea;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(159, 122, 234, 0.3);
+        }
+
+        .type-card.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .type-card .icon {
+            font-size: 50px;
+            margin-bottom: 12px;
+        }
+
+        .type-card .title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #2d3748;
+        }
+
+        .type-card .beschrijving {
+            font-size: 14px;
+            opacity: 0.8;
+            color: #4a5568;
+        }
+
+        .type-card.disabled .badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #fed7aa;
+            color: #c05621;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* Instellingen */
+        .settings {
+            margin: 30px 0;
+        }
+
+        .setting-row {
+            margin-bottom: 20px;
+        }
+
+        .setting-row label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 17px;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+
+        .setting-row select {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            background: #f7fafc;
+            color: #2d3748;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            width: 100%;
+            padding: 24px;
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #9f7aea 0%, #805ad5 100%);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(159, 122, 234, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(159, 122, 234, 0.5);
+        }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 18px;
+            font-size: 18px;
+            font-weight: 600;
+            background: white;
+            border: 2px solid #e2e8f0;
+            color: #4a5568;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-secondary:hover {
+            border-color: #cbd5e0;
+            background: #f7fafc;
+        }
+
+        /* Splitsen visual - ALLE VAKJES VIERKANT EN EVEN GROOT */
+        .splitsen-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .getal-box {
+            background: white;
+            border: 3px solid #e2e8f0;
+            border-radius: 16px;
+            font-size: 64px;
+            font-weight: 800;
+            color: #2d3748;
+            width: 140px;
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .getal-box input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: transparent;
+            font-size: 64px;
+            font-weight: 800;
+            color: #2d3748;
+            text-align: center;
+            -webkit-appearance: none;
+            -moz-appearance: textfield;
+            outline: none;
+        }
+
+        .getal-box input::-webkit-inner-spin-button,
+        .getal-box input::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .getal-box.actief {
+            border-color: #9f7aea;
+            box-shadow: 0 0 0 4px rgba(159, 122, 234, 0.15);
+        }
+
+        .splits-lijn {
+            width: 2px;
+            height: 40px;
+            background: #cbd5e0;
+            position: relative;
+        }
+
+        .splits-lijn::before,
+        .splits-lijn::after {
+            content: '';
+            position: absolute;
+            width: 90px;
+            height: 2px;
+            background: #cbd5e0;
+            top: 100%;
+        }
+
+        .splits-lijn::before {
+            left: -88px;
+        }
+
+        .splits-lijn::after {
+            right: -88px;
+        }
+
+        .bottom-getallen {
+            display: flex;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .submit-btn {
+            width: 70px;
+            height: 70px;
+            font-size: 30px;
+            background: linear-gradient(135deg, #b794f6 0%, #9f7aea 100%);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(159, 122, 234, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin: 20px auto 0 auto;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(159, 122, 234, 0.5);
+        }
+
+        /* Voortgang */
+        .voortgang-indicator {
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 15px;
+            padding: 8px 15px;
+            background: rgba(159, 122, 234, 0.1);
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        .stop-btn {
+            display: block;
+            margin: 10px auto 15px auto;
+            padding: 10px 30px;
+            font-size: 15px;
+            font-weight: 600;
+            background: white;
+            border: 2px solid #feb2b2;
+            color: #e53e3e;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .stop-btn:hover {
+            background: #fff5f5;
+            border-color: #fc8181;
+        }
+
+        /* Feedback popup */
+        .feedback {
+            position: fixed;
+            bottom: 520px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            max-width: 320px;
+            width: 70%;
+            border-radius: 20px;
+            text-align: center;
+            padding: 30px 25px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        .feedback.show {
+            opacity: 1;
+        }
+
+        .feedback.goed-feedback {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+        }
+
+        .feedback.fout-feedback {
+            background: linear-gradient(135deg, #fc8181 0%, #f56565 100%);
+            color: white;
+        }
+
+        .feedback .icon-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px auto;
+            font-size: 35px;
+            font-weight: 800;
+        }
+
+        .feedback.goed-feedback .icon-circle {
+            color: #38a169;
+        }
+
+        .feedback.fout-feedback .icon-circle {
+            color: #f56565;
+        }
+
+        .feedback .title {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .feedback .sub {
+            font-size: 24px;
+            font-weight: 600;
+            opacity: 0.95;
+            margin-top: 8px;
+        }
+
+        /* Utility */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .type-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .getal-box {
+                font-size: 52px;
+                width: 120px;
+                height: 120px;
+            }
+
+            .getal-box input {
+                font-size: 52px;
+            }
+
+            .bottom-getallen {
+                gap: 40px;
+            }
+
+            .splits-lijn::before {
+                left: -68px;
+                width: 70px;
+            }
+
+            .splits-lijn::after {
+                right: -68px;
+                width: 70px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- TYPE SELECTIE -->
+        <div id="type-selectie-scherm">
+            <div class="header">
+                <h1>➕➖ Plus- en minsommen</h1>
+                <p class="subtitle">Kies wat je wilt oefenen</p>
+                <button onclick="window.location.href='index.html'" style="margin-top: 10px; padding: 10px 20px; background: white; border: 2px solid #e2e8f0; border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 600; color: #4a5568;">🏠 Terug naar hoofdmenu</button>
+            </div>
+
+            <div class="card">
+                <h2>Kies een oefening</h2>
+                <p class="hint">Wat wil je oefenen?</p>
+
+                <div class="type-grid">
+                    <div class="type-card" onclick="gaaNaarInstellingen('splitsen')">
+                        <div class="icon">🌳</div>
+                        <div class="title">Splitsen met tiental</div>
+                        <div class="beschrijving">18 = 8 + 10</div>
+                    </div>
+
+                    <div class="type-card disabled">
+                        <div class="badge">Binnenkort</div>
+                        <div class="icon">🎯</div>
+                        <div class="title">Bijna 10</div>
+                        <div class="beschrijving">5+4, 6+3, 16+3</div>
+                    </div>
+
+                    <div class="type-card disabled">
+                        <div class="badge">Binnenkort</div>
+                        <div class="icon">📊</div>
+                        <div class="title">Type 3</div>
+                        <div class="beschrijving">Nog toe te voegen</div>
+                    </div>
+
+                    <div class="type-card disabled">
+                        <div class="badge">Binnenkort</div>
+                        <div class="icon">🎲</div>
+                        <div class="title">Type 4</div>
+                        <div class="beschrijving">Nog toe te voegen</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- INSTELLINGEN -->
+        <div id="instellingen-scherm" class="hidden">
+            <div class="header">
+                <h1 id="instellingen-titel">➕➖ Splitsen</h1>
+                <p class="subtitle">Kies je instellingen</p>
+            </div>
+
+            <div class="card">
+                <h2>Instellingen</h2>
+                <p class="hint">Stel je oefening in</p>
+
+                <div class="settings">
+                    <div class="setting-row">
+                        <label>
+                            <span>🎯</span>
+                            <span>Maximaal getal</span>
+                        </label>
+                        <select id="max-getal-select">
+                            <option value="10">Tot 10</option>
+                            <option value="20">Tot 20</option>
+                            <option value="100">Tot 100</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-row">
+                        <label>
+                            <span>➕➖</span>
+                            <span>Type sommen</span>
+                        </label>
+                        <select id="som-type-select">
+                            <option value="plus">Alleen plussommen</option>
+                            <option value="min">Alleen minsommen</option>
+                            <option value="beide">Beide (gemengd)</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-row">
+                        <label>
+                            <span>⏱️</span>
+                            <span>Tijdslimiet</span>
+                        </label>
+                        <select id="tijd-select">
+                            <option value="0">Geen limiet</option>
+                            <option value="300">5 minuten</option>
+                            <option value="600">10 minuten</option>
+                            <option value="900">15 minuten</option>
+                            <option value="1200">20 minuten</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-row">
+                        <label>
+                            <span>⦿</span>
+                            <span>Minimum aantal sommen</span>
+                        </label>
+                        <select id="minimum-select">
+                            <option value="0">Geen minimum</option>
+                            <option value="30">30 sommen</option>
+                            <option value="50">50 sommen</option>
+                            <option value="100">100 sommen</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="btn-primary" onclick="startOefenen()">
+                    <span>▶</span>
+                    <span>Start Oefenen!</span>
+                </button>
+
+                <button class="btn-secondary" onclick="toonTypeSelectie()" style="margin-top: 15px;">
+                    <span>←</span>
+                    <span>Terug</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- OEFEN SCHERM -->
+        <div id="oefen-scherm" class="hidden">
+            <!-- iOS KEYBOARD HACK -->
+            <input 
+                type="text" 
+                id="dummy-input"
+                style="position: absolute; left: -9999px; width: 1px; height: 1px;"
+                tabindex="-1"
+            >
+            
+            <!-- VOORTGANGSINDICATOR -->
+            <div style="text-align: center; margin-top: 20px;">
+                <div id="voortgang-indicator" class="voortgang-indicator" style="display: none;"></div>
+            </div>
+
+            <!-- SPLITSEN VISUAL - ALLE VAKJES VIERKANT EN EVEN GROOT -->
+            <div class="splitsen-container">
+                <div class="getal-box" id="top-getal">18</div>
+                <div class="splits-lijn"></div>
+                <div class="bottom-getallen">
+                    <div class="getal-box" id="links-box"></div>
+                    <div class="getal-box" id="rechts-box"></div>
+                </div>
+            </div>
+
+            <button class="submit-btn" onclick="controleerAntwoord()">➤</button>
+
+            <button class="stop-btn" onclick="stopOefenen()">⏹ Stoppen</button>
+
+            <div class="feedback" id="feedback"></div>
+        </div>
+
+        <!-- RESULTATEN -->
+        <div id="resultaten-scherm" class="hidden">
+            <div class="card">
+                <h2 id="resultaat-titel">🏆 Gefeliciteerd!</h2>
+
+                <div style="text-align: center; margin: 30px 0;">
+                    <div style="font-size: 24px; font-weight: 700; color: #2d3748; margin-bottom: 15px;">
+                        Deze sessie
+                    </div>
+                    <div style="display: flex; justify-content: center; gap: 30px; margin-bottom: 40px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 48px; font-weight: 800; color: #38a169;" id="sessie-goed">0</div>
+                            <div style="font-size: 16px; color: #4a5568;">Goed</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 48px; font-weight: 800; color: #e53e3e;" id="sessie-fout">0</div>
+                            <div style="font-size: 16px; color: #4a5568;">Fout</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 48px; font-weight: 800; color: #4299e1;" id="sessie-score">0%</div>
+                            <div style="font-size: 16px; color: #4a5568;">Score</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-primary" onclick="opnieuw()">
+                    <span>↻</span>
+                    <span>Opnieuw</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // GELUIDJES
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playGoedGeluid() {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            oscillator.frequency.value = 800;
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.15);
+        }
+        
+        function playFoutGeluid() {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            oscillator.frequency.value = 200;
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.2);
+        }
+
+        // State
+        let huidigType = '';
+        let maxGetal = 10;
+        let somType = 'plus';
+        let tijdLimiet = 0;
+        let minimumSommen = 0;
+        let startTijd = null;
+        
+        let huidigeSom = null;
+        let correctAntwoord = 0;
+        
+        let stats = {
+            huidigGoed: 0,
+            huidigFout: 0,
+            sommenTeller: 0
+        };
+
+        // Navigatie
+        function toonTypeSelectie() {
+            document.getElementById('type-selectie-scherm').classList.remove('hidden');
+            document.getElementById('instellingen-scherm').classList.add('hidden');
+            document.getElementById('oefen-scherm').classList.add('hidden');
+            document.getElementById('resultaten-scherm').classList.add('hidden');
+        }
+
+        function gaaNaarInstellingen(type) {
+            huidigType = type;
+            document.getElementById('type-selectie-scherm').classList.add('hidden');
+            document.getElementById('instellingen-scherm').classList.remove('hidden');
+        }
+
+        function startOefenen() {
+            // Reset stats
+            stats.huidigGoed = 0;
+            stats.huidigFout = 0;
+            stats.sommenTeller = 0;
+
+            // Instellingen ophalen
+            maxGetal = parseInt(document.getElementById('max-getal-select').value);
+            somType = document.getElementById('som-type-select').value;
+            tijdLimiet = parseInt(document.getElementById('tijd-select').value);
+            minimumSommen = parseInt(document.getElementById('minimum-select').value);
+            startTijd = tijdLimiet > 0 ? Date.now() : null;
+
+            // Scherm wisselen
+            document.getElementById('instellingen-scherm').classList.add('hidden');
+            document.getElementById('oefen-scherm').classList.remove('hidden');
+            
+            // Eerste som
+            volgendeSom();
+            
+            // Timer
+            if (window.timerInterval) clearInterval(window.timerInterval);
+            if (tijdLimiet > 0) {
+                window.timerInterval = setInterval(updateVoortgang, 1000);
+            }
+        }
+
+        function volgendeSom() {
+            if (checkStopVoorwaarde()) {
+                toonResultaten();
+                return;
+            }
+
+            // Genereer nieuwe som
+            genereerSplitsSom();
+            updateVoortgang();
+            
+            // Clear feedback
+            const feedback = document.getElementById('feedback');
+            feedback.className = 'feedback';
+            feedback.innerHTML = '';
+        }
+
+        function genereerSplitsSom() {
+            // Genereer random getal binnen range
+            // Totaal mag NOOIT groter zijn dan maxGetal!
+            let totaal;
+            
+            if (maxGetal === 10) {
+                totaal = Math.floor(Math.random() * 9) + 2; // 2-10
+            } else if (maxGetal === 20) {
+                totaal = Math.floor(Math.random() * 19) + 2; // 2-20
+            } else {
+                totaal = Math.floor(Math.random() * 99) + 2; // 2-100
+            }
+            
+            // Extra check: totaal mag NOOIT groter zijn dan maxGetal
+            if (totaal > maxGetal) {
+                totaal = maxGetal;
+            }
+            
+            // Willekeurige split (niet altijd tiental!)
+            // getal1 kan zijn van 1 tot (totaal - 1)
+            const getal1 = Math.floor(Math.random() * (totaal - 1)) + 1;
+            const getal2 = totaal - getal1;
+            
+            // Random: welk vak is leeg?
+            const linksLeeg = Math.random() < 0.5;
+            
+            // Vul top getal
+            document.getElementById('top-getal').textContent = totaal;
+            
+            // Reset boxes
+            const linksBox = document.getElementById('links-box');
+            const rechtsBox = document.getElementById('rechts-box');
+            
+            if (linksLeeg) {
+                // Links = INPUT (leeg)
+                linksBox.innerHTML = '<input type="tel" id="aktief-input" pattern="[0-9]*" autocomplete="off">';
+                linksBox.classList.add('actief');
+                
+                // Rechts = GETAL (gevuld)
+                rechtsBox.textContent = getal2;
+                rechtsBox.classList.remove('actief');
+                
+                correctAntwoord = getal1;
+                huidigeSom = {totaal, getal1, getal2, leegVeld: 'links'};
+                
+                // Focus + Enter handler
+                setTimeout(() => {
+                    const input = document.getElementById('aktief-input');
+                    if (input) {
+                        input.focus();
+                        input.addEventListener('keypress', (e) => {
+                            if (e.key === 'Enter') {
+                                e.preventDefault();
+                                controleerAntwoord();
+                            }
+                        });
+                    }
+                }, 100);
+            } else {
+                // Links = GETAL (gevuld)
+                linksBox.textContent = getal1;
+                linksBox.classList.remove('actief');
+                
+                // Rechts = INPUT (leeg)
+                rechtsBox.innerHTML = '<input type="tel" id="aktief-input" pattern="[0-9]*" autocomplete="off">';
+                rechtsBox.classList.add('actief');
+                
+                correctAntwoord = getal2;
+                huidigeSom = {totaal, getal1, getal2, leegVeld: 'rechts'};
+                
+                // Focus + Enter handler
+                setTimeout(() => {
+                    const input = document.getElementById('aktief-input');
+                    if (input) {
+                        input.focus();
+                        input.addEventListener('keypress', (e) => {
+                            if (e.key === 'Enter') {
+                                e.preventDefault();
+                                controleerAntwoord();
+                            }
+                        });
+                    }
+                }, 100);
+            }
+        }
+
+        function controleerAntwoord() {
+            const input = document.getElementById('aktief-input');
+            
+            if (!input) return;
+            
+            const antwoord = parseInt(input.value);
+
+            if (isNaN(antwoord) || input.value === '') {
+                input.focus();
+                return;
+            }
+
+            stats.sommenTeller++;
+
+            const feedback = document.getElementById('feedback');
+            let feedbackDuur = 800;
+            
+            if (antwoord === correctAntwoord) {
+                // GOED!
+                stats.huidigGoed++;
+                playGoedGeluid();
+                
+                feedback.innerHTML = `
+                    <div class="icon-circle">✓</div>
+                    <div class="title">Goed zo! 🎉</div>
+                `;
+                feedback.className = 'feedback goed-feedback show';
+                feedbackDuur = 800;
+            } else {
+                // FOUT!
+                stats.huidigFout++;
+                playFoutGeluid();
+                
+                feedback.innerHTML = `
+                    <div class="icon-circle">✗</div>
+                    <div class="title">Helaas!</div>
+                    <div class="sub">${huidigeSom.totaal} = ${huidigeSom.getal1} + ${huidigeSom.getal2}</div>
+                `;
+                feedback.className = 'feedback fout-feedback show';
+                feedbackDuur = 1500;
+            }
+
+            setTimeout(() => {
+                feedback.className = 'feedback';
+                feedback.innerHTML = '';
+                volgendeSom();
+            }, feedbackDuur);
+        }
+
+        function updateVoortgang() {
+            const indicator = document.getElementById('voortgang-indicator');
+            let text = '';
+            
+            if (minimumSommen > 0) {
+                text = `${stats.sommenTeller} / ${minimumSommen} sommen`;
+            }
+            
+            if (tijdLimiet > 0 && startTijd) {
+                const verstreken = Math.floor((Date.now() - startTijd) / 1000);
+                const resterend = Math.max(0, tijdLimiet - verstreken);
+                const minuten = Math.floor(resterend / 60);
+                const seconden = resterend % 60;
+                const tijdText = `${minuten}:${seconden.toString().padStart(2, '0')}`;
+                
+                if (text) {
+                    text += ` • ${tijdText}`;
+                } else {
+                    text = `Tijd: ${tijdText}`;
+                }
+            }
+            
+            if (text) {
+                indicator.textContent = text;
+                indicator.style.display = 'inline-block';
+            } else {
+                indicator.style.display = 'none';
+            }
+        }
+
+        function checkStopVoorwaarde() {
+            let tijdBereikt = false;
+            let minimumBereikt = false;
+            
+            if (tijdLimiet > 0 && startTijd) {
+                const verstreken = (Date.now() - startTijd) / 1000;
+                tijdBereikt = verstreken >= tijdLimiet;
+            }
+            
+            if (minimumSommen > 0) {
+                minimumBereikt = stats.sommenTeller >= minimumSommen;
+            }
+            
+            if (tijdLimiet > 0 && minimumSommen > 0) {
+                return tijdBereikt || minimumBereikt;
+            }
+            
+            if (tijdLimiet > 0) {
+                return tijdBereikt;
+            }
+            
+            if (minimumSommen > 0) {
+                return minimumBereikt;
+            }
+            
+            return false;
+        }
+
+        function stopOefenen() {
+            if (confirm('Weet je zeker dat je wilt stoppen?')) {
+                toonResultaten();
+            }
+        }
+
+        function toonResultaten() {
+            if (window.timerInterval) {
+                clearInterval(window.timerInterval);
+                window.timerInterval = null;
+            }
+
+            document.getElementById('oefen-scherm').classList.add('hidden');
+            document.getElementById('resultaten-scherm').classList.remove('hidden');
+
+            const totaalHuidig = stats.huidigGoed + stats.huidigFout;
+            const percHuidig = totaalHuidig > 0 ? Math.round((stats.huidigGoed / totaalHuidig) * 100) : 0;
+
+            document.getElementById('sessie-goed').textContent = stats.huidigGoed;
+            document.getElementById('sessie-fout').textContent = stats.huidigFout;
+            document.getElementById('sessie-score').textContent = percHuidig + '%';
+        }
+
+        function opnieuw() {
+            document.getElementById('resultaten-scherm').classList.add('hidden');
+            document.getElementById('type-selectie-scherm').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

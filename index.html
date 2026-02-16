@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tafeltrainer - Hoofdmenu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8eaf6 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 42px;
+            color: #805ad5;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #718096;
+        }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .card h2 {
+            font-size: 28px;
+            color: #2d3748;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .hint {
+            text-align: center;
+            color: #a0aec0;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        .oefening-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .oefening-card {
+            background: white;
+            border: 3px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .oefening-card:hover:not(.disabled) {
+            border-color: #9f7aea;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(159, 122, 234, 0.3);
+        }
+
+        .oefening-card.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .oefening-card .icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .oefening-card .title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #2d3748;
+        }
+
+        .oefening-card .beschrijving {
+            font-size: 16px;
+            opacity: 0.8;
+            color: #4a5568;
+        }
+
+        .oefening-card.disabled .badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #fed7aa;
+            color: #c05621;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .oefening-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✨ Tafeltrainer</h1>
+            <p class="subtitle">Leer rekenen op een slimme manier!</p>
+        </div>
+
+        <div class="card">
+            <h2>Wat wil je oefenen?</h2>
+            <p class="hint">Kies een type oefening om te beginnen</p>
+
+            <div class="oefening-grid">
+                <div class="oefening-card" onclick="window.location.href='tafels.html'">
+                    <div class="icon">✖️</div>
+                    <div class="title">Tafels</div>
+                    <div class="beschrijving">Keersommen oefenen</div>
+                </div>
+
+                <div class="oefening-card" onclick="window.location.href='plusmin.html'">
+                    <div class="icon">➕➖</div>
+                    <div class="title">Plus- en minsommen</div>
+                    <div class="beschrijving">Optellen en aftrekken</div>
+                </div>
+
+                <div class="oefening-card disabled">
+                    <div class="badge">Binnenkort</div>
+                    <div class="icon">➗</div>
+                    <div class="title">Deelsommen</div>
+                    <div class="beschrijving">Delen oefenen</div>
+                </div>
+
+                <div class="oefening-card disabled">
+                    <div class="badge">Binnenkort</div>
+                    <div class="icon">🧮</div>
+                    <div class="title">Gemengd</div>
+                    <div class="beschrijving">Alles door elkaar</div>
+                </div>
+
+                <div class="oefening-card disabled">
+                    <div class="badge">Binnenkort</div>
+                    <div class="icon">🍰</div>
+                    <div class="title">Breuken</div>
+                    <div class="beschrijving">Breuken oefenen</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
