@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Breuken</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8eaf6 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 42px;
+            color: #805ad5;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #718096;
+        }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .card h2 {
+            font-size: 28px;
+            color: #2d3748;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .hint {
+            text-align: center;
+            color: #a0aec0;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        /* Type selectie grid */
+        .type-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .type-card {
+            background: white;
+            border: 3px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 30px 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .type-card:hover:not(.disabled) {
+            border-color: #9f7aea;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(159, 122, 234, 0.3);
+        }
+
+        .type-card.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .type-card .icon {
+            font-size: 50px;
+            margin-bottom: 12px;
+        }
+
+        .type-card .title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #2d3748;
+        }
+
+        .type-card .beschrijving {
+            font-size: 14px;
+            opacity: 0.8;
+            color: #4a5568;
+        }
+
+        .type-card.disabled .badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #fed7aa;
+            color: #c05621;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* Instellingen */
+        .settings {
+            margin: 30px 0;
+        }
+
+        .setting-row {
+            margin-bottom: 20px;
+        }
+
+        .setting-row label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 17px;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+
+        .setting-row select {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            background: #f7fafc;
+            color: #2d3748;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            width: 100%;
+            padding: 24px;
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #9f7aea 0%, #805ad5 100%);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(159, 122, 234, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(159, 122, 234, 0.5);
+        }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 18px;
+            font-size: 18px;
+            font-weight: 600;
+            background: white;
+            border: 2px solid #e2e8f0;
+            color: #4a5568;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-secondary:hover {
+            border-color: #cbd5e0;
+            background: #f7fafc;
+        }
+
+        /* BREUK VISUAL */
+        .breuk-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .breuk {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .breuk-deel {
+            width: 120px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .breuk-getal {
+            background: white;
+            border: 3px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 48px;
+            font-weight: 800;
+            color: #2d3748;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .breuk-input {
+            background: white;
+            border: 3px solid #9f7aea;
+            border-radius: 12px;
+            font-size: 48px;
+            font-weight: 800;
+            color: #2d3748;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            -webkit-appearance: none;
+            -moz-appearance: textfield;
+            box-shadow: 0 0 0 4px rgba(159, 122, 234, 0.15);
+        }
+
+        .breuk-input::-webkit-inner-spin-button,
+        .breuk-input::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .breuk-input:focus {
+            outline: none;
+            border-color: #805ad5;
+        }
+
+        .breuk-streep {
+            width: 120px;
+            height: 4px;
+            background: #2d3748;
+            border-radius: 2px;
+        }
+
+        .operator {
+            font-size: 48px;
+            font-weight: 700;
+            color: #9f7aea;
+            margin: 0 10px;
+        }
+
+        .equals {
+            font-size: 48px;
+            font-weight: 700;
+            color: #a0aec0;
+            margin: 0 10px;
+        }
+
+        .submit-btn {
+            width: 70px;
+            height: 70px;
+            font-size: 30px;
+            background: linear-gradient(135deg, #b794f6 0%, #9f7aea 100%);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(159, 122, 234, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin: 20px auto 0 auto;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(159, 122, 234, 0.5);
+        }
+
+        /* Voortgang */
+        .voortgang-indicator {
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 15px;
+            padding: 8px 15px;
+            background: rgba(159, 122, 234, 0.1);
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        .stop-btn {
+            display: block;
+            margin: 10px auto 15px auto;
+            padding: 10px 30px;
+            font-size: 15px;
+            font-weight: 600;
+            background: white;
+            border: 2px solid #feb2b2;
+            color: #e53e3e;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .stop-btn:hover {
+            background: #fff5f5;
+            border-color: #fc8181;
+        }
+
+        /* Feedback popup */
+        .feedback {
+            position: fixed;
+            bottom: 520px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            max-width: 320px;
+            width: 70%;
+            border-radius: 20px;
+            text-align: center;
+            padding: 30px 25px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        .feedback.show {
+            opacity: 1;
+        }
+
+        .feedback.goed-feedback {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+        }
+
+        .feedback.fout-feedback {
+            background: linear-gradient(135deg, #fc8181 0%, #f56565 100%);
+            color: white;
+        }
+
+        .feedback .icon-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px auto;
+            font-size: 35px;
+            font-weight: 800;
+        }
+
+        .feedback.goed-feedback .icon-circle {
+            color: #38a169;
+        }
+
+        .feedback.fout-feedback .icon-circle {
+            color: #f56565;
+        }
+
+        .feedback .title {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .feedback .sub {
+            font-size: 20px;
+            font-weight: 600;
+            opacity: 0.95;
+            margin-top: 8px;
+        }
+
+        /* Utility */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .type-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .breuk-container {
+                gap: 15px;
+            }
+
+            .breuk-deel {
+                width: 90px;
+                height: 60px;
+            }
+
+            .breuk-getal,
+            .breuk-input {
+                font-size: 36px;
+            }
+
+            .breuk-streep {
+                width: 90px;
+            }
+
+            .operator,
+            .equals {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- TYPE SELECTIE -->
+        <div id="type-selectie-scherm">
+            <div class="header">
+                <h1>🍰 Breuken</h1>
+                <p class="subtitle">Kies wat je wilt oefenen</p>
+                <button onclick="window.location.href='index.html'" style="margin-top: 10px; padding: 10px 20px; background: white; border: 2px solid #e2e8f0; border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 600; color: #4a5568;">🏠 Terug naar hoofdmenu</button>
+            </div>
+
+            <div class="card">
+                <h2>Kies een oefening</h2>
+                <p class="hint">Wat wil je oefenen?</p>
+
+                <div class="type-grid">
+                    <div class="type-card" onclick="gaaNaarInstellingen('optellen')">
+                        <div class="icon">➕</div>
+                        <div class="title">Breuken optellen</div>
+                        <div class="beschrijving">1/4 + 2/4 = ?</div>
+                    </div>
+
+                    <div class="type-card" onclick="gaaNaarInstellingen('aftrekken')">
+                        <div class="icon">➖</div>
+                        <div class="title">Breuken aftrekken</div>
+                        <div class="beschrijving">3/4 - 1/4 = ?</div>
+                    </div>
+
+                    <div class="type-card" onclick="gaaNaarInstellingen('vermenigvuldigen')">
+                        <div class="icon">✖️</div>
+                        <div class="title">Vermenigvuldigen</div>
+                        <div class="beschrijving">2/3 × 3/4 = ?</div>
+                    </div>
+
+                    <div class="type-card" onclick="gaaNaarInstellingen('vereenvoudigen')">
+                        <div class="icon">⚡</div>
+                        <div class="title">Vereenvoudigen</div>
+                        <div class="beschrijving">6/8 = ?</div>
+                    </div>
+
+                    <div class="type-card" onclick="gaaNaarInstellingen('gelijknamig')">
+                        <div class="icon">🔄</div>
+                        <div class="title">Gelijknamig maken</div>
+                        <div class="beschrijving">1/2 en 1/4</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- INSTELLINGEN -->
+        <div id="instellingen-scherm" class="hidden">
+            <div class="header">
+                <h1 id="instellingen-titel">🍰 Breuken</h1>
+                <p class="subtitle">Kies je instellingen</p>
+            </div>
+
+            <div class="card">
+                <h2>Instellingen</h2>
+                <p class="hint">Stel je oefening in</p>
+
+                <div class="settings">
+                    <div class="setting-row">
+                        <label>
+                            <span>⏱️</span>
+                            <span>Tijdslimiet</span>
+                        </label>
+                        <select id="tijd-select">
+                            <option value="0">Geen limiet</option>
+                            <option value="300">5 minuten</option>
+                            <option value="600">10 minuten</option>
+                            <option value="900">15 minuten</option>
+                            <option value="1200">20 minuten</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-row">
+                        <label>
+                            <span>⦿</span>
+                            <span>Minimum aantal sommen</span>
+                        </label>
+                        <select id="minimum-select">
+                            <option value="0">Geen minimum</option>
+                            <option value="30">30 sommen</option>
+                            <option value="50">50 sommen</option>
+                            <option value="100">100 sommen</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="btn-primary" onclick="startOefenen()">
+                    <span>▶</span>
+                    <span>Start Oefenen!</span>
+                </button>
+
+                <button class="btn-secondary" onclick="toonTypeSelectie()" style="margin-top: 15px;">
+                    <span>←</span>
+                    <span>Terug</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- OEFEN SCHERM -->
+        <div id="oefen-scherm" class="hidden">
+            <!-- iOS KEYBOARD HACK -->
+            <input 
+                type="text" 
+                id="dummy-input"
+                style="position: absolute; left: -9999px; width: 1px; height: 1px;"
+                tabindex="-1"
+            >
+            
+            <!-- VOORTGANGSINDICATOR -->
+            <div style="text-align: center; margin-top: 20px;">
+                <div id="voortgang-indicator" class="voortgang-indicator" style="display: none;"></div>
+            </div>
+
+            <!-- BREUK VISUAL -->
+            <div id="breuk-display" class="breuk-container">
+                <!-- Dynamisch gegenereerd -->
+            </div>
+
+            <button class="submit-btn" onclick="controleerAntwoord()">➤</button>
+
+            <button class="stop-btn" onclick="stopOefenen()">⏹ Stoppen</button>
+
+            <div class="feedback" id="feedback"></div>
+        </div>
+
+        <!-- RESULTATEN -->
+        <div id="resultaten-scherm" class="hidden">
+            <div class="card">
+                <h2 id="resultaat-titel">🏆 Gefeliciteerd!</h2>
+
+                <div style="text-align: center; margin: 30px 0;">
+                    <div style="font-size: 24px; font-weight: 700; color: #2d3748; margin-bottom: 15px;">
+                        Deze sessie
+                    </div>
+                    <div style="display: flex; justify-content: center; gap: 30px; margin-bottom: 40px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 48px; font-weight: 800; color: #38a169;" id="sessie-goed">0</div>
+                            <div style="font-size: 16px; color: #4a5568;">Goed</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 48px; font-weight: 800; color: #e53e3e;" id="sessie-fout">0</div>
+                            <div style="font-size: 16px; color: #4a5568;">Fout</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 48px; font-weight: 800; color: #4299e1;" id="sessie-score">0%</div>
+                            <div style="font-size: 16px; color: #4a5568;">Score</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-primary" onclick="opnieuw()">
+                    <span>↻</span>
+                    <span>Opnieuw</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // GELUIDJES
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playGoedGeluid() {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            oscillator.frequency.value = 800;
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.15);
+        }
+        
+        function playFoutGeluid() {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            oscillator.frequency.value = 200;
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.2);
+        }
+
+        // State
+        let huidigType = '';
+        let tijdLimiet = 0;
+        let minimumSommen = 0;
+        let startTijd = null;
+        
+        let huidigeSom = null;
+        let moeilijkeSommen = {};
+        let sommenSindsMoeilijk = 0;
+        
+        let stats = {
+            huidigGoed: 0,
+            huidigFout: 0,
+            sommenTeller: 0
+        };
+
+        // Math helpers
+        function ggd(a, b) {
+            return b === 0 ? a : ggd(b, a % b);
+        }
+
+        function kgv(a, b) {
+            return (a * b) / ggd(a, b);
+        }
+
+        function genereerBreuk() {
+            const noemer = Math.floor(Math.random() * 19) + 2; // 2-20
+            const teller = Math.floor(Math.random() * (noemer - 1)) + 1; // 1 tot noemer-1
+            return {teller, noemer};
+        }
+
+        function vereenvoudigBreuk(teller, noemer) {
+            const d = ggd(teller, noemer);
+            return {teller: teller / d, noemer: noemer / d};
+        }
+
+        // Navigatie
+        function toonTypeSelectie() {
+            document.getElementById('type-selectie-scherm').classList.remove('hidden');
+            document.getElementById('instellingen-scherm').classList.add('hidden');
+            document.getElementById('oefen-scherm').classList.add('hidden');
+            document.getElementById('resultaten-scherm').classList.add('hidden');
+        }
+
+        function gaaNaarInstellingen(type) {
+            huidigType = type;
+            document.getElementById('type-selectie-scherm').classList.add('hidden');
+            document.getElementById('instellingen-scherm').classList.remove('hidden');
+            
+            const titels = {
+                'optellen': '➕ Breuken optellen',
+                'aftrekken': '➖ Breuken aftrekken',
+                'vermenigvuldigen': '✖️ Breuken vermenigvuldigen',
+                'vereenvoudigen': '⚡ Breuken vereenvoudigen',
+                'gelijknamig': '🔄 Gelijknamig maken'
+            };
+            document.getElementById('instellingen-titel').textContent = titels[type] || '🍰 Breuken';
+        }
+
+        function startOefenen() {
+            // Reset stats
+            stats.huidigGoed = 0;
+            stats.huidigFout = 0;
+            stats.sommenTeller = 0;
+            moeilijkeSommen = {};
+            sommenSindsMoeilijk = 0;
+
+            // Instellingen ophalen
+            tijdLimiet = parseInt(document.getElementById('tijd-select').value);
+            minimumSommen = parseInt(document.getElementById('minimum-select').value);
+            startTijd = tijdLimiet > 0 ? Date.now() : null;
+
+            // Scherm wisselen
+            document.getElementById('instellingen-scherm').classList.add('hidden');
+            document.getElementById('oefen-scherm').classList.remove('hidden');
+            
+            // Eerste som
+            volgendeSom();
+            
+            // Timer
+            if (window.timerInterval) clearInterval(window.timerInterval);
+            if (tijdLimiet > 0) {
+                window.timerInterval = setInterval(updateVoortgang, 1000);
+            }
+        }
+
+        function volgendeSom() {
+            if (checkStopVoorwaarde()) {
+                toonResultaten();
+                return;
+            }
+
+            // Adaptief algoritme: check of moeilijke som moet komen
+            const moeilijkeKeys = Object.keys(moeilijkeSommen);
+            if (moeilijkeKeys.length > 0 && sommenSindsMoeilijk >= (Math.floor(Math.random() * 3) + 3)) {
+                // Herhaal moeilijke som
+                const somString = moeilijkeKeys[Math.floor(Math.random() * moeilijkeKeys.length)];
+                const [teller, noemer] = somString.split('/').map(Number);
+                regenereerMoeilijkeSom(teller, noemer);
+                sommenSindsMoeilijk = 0;
+            } else {
+                // Genereer nieuwe som
+                genereerSom();
+            }
+            
+            updateVoortgang();
+            
+            // Clear feedback
+            const feedback = document.getElementById('feedback');
+            feedback.className = 'feedback';
+            feedback.innerHTML = '';
+        }
+
+        function regenereerMoeilijkeSom(teller, noemer) {
+            // Genereer zelfde type som maar met deze specifieke breuk
+            // Voor nu: genereer gewoon nieuwe som (kan later verfijnd worden)
+            genereerSom();
+        }
+
+        function genereerSom() {
+            const display = document.getElementById('breuk-display');
+            
+            if (huidigType === 'optellen' || huidigType === 'aftrekken') {
+                // Zelfde noemer
+                const noemer = Math.floor(Math.random() * 19) + 2;
+                const teller1 = Math.floor(Math.random() * (noemer - 1)) + 1;
+                let teller2;
+                
+                if (huidigType === 'optellen') {
+                    teller2 = Math.floor(Math.random() * (noemer - teller1)) + 1;
+                } else {
+                    teller2 = Math.floor(Math.random() * teller1) + 1;
+                }
+                
+                const operator = huidigType === 'optellen' ? '+' : '-';
+                const resultTeller = huidigType === 'optellen' ? teller1 + teller2 : teller1 - teller2;
+                
+                huidigeSom = {
+                    type: huidigType,
+                    breuk1: {teller: teller1, noemer},
+                    breuk2: {teller: teller2, noemer},
+                    antwoord: {teller: resultTeller, noemer}
+                };
+                
+                display.innerHTML = `
+                    <div class="breuk">
+                        <div class="breuk-deel"><div class="breuk-getal">${teller1}</div></div>
+                        <div class="breuk-streep"></div>
+                        <div class="breuk-deel"><div class="breuk-getal">${noemer}</div></div>
+                    </div>
+                    <div class="operator">${operator}</div>
+                    <div class="breuk">
+                        <div class="breuk-deel"><div class="breuk-getal">${teller2}</div></div>
+                        <div class="breuk-streep"></div>
+                        <div class="breuk-deel"><div class="breuk-getal">${noemer}</div></div>
+                    </div>
+                    <div class="equals">=</div>
+                    <div class="breuk">
+                        <div class="breuk-deel"><input type="tel" id="antwoord-teller" class="breuk-input" pattern="[0-9]*" autocomplete="off"></div>
+                        <div class="breuk-streep"></div>
+                        <div class="breuk-deel"><input type="tel" id="antwoord-noemer" class="breuk-input" pattern="[0-9]*" autocomplete="off"></div>
+                    </div>
+                `;
+                
+            } else if (huidigType === 'vermenigvuldigen') {
+                const breuk1 = genereerBreuk();
+                const breuk2 = genereerBreuk();
+                const resultTeller = breuk1.teller * breuk2.teller;
+                const resultNoemer = breuk1.noemer * breuk2.noemer;
+                
+                huidigeSom = {
+                    type: 'vermenigvuldigen',
+                    breuk1,
+                    breuk2,
+                    antwoord: {teller: resultTeller, noemer: resultNoemer}
+                };
+                
+                display.innerHTML = `
+                    <div class="breuk">
+                        <div class="breuk-deel"><div class="breuk-getal">${breuk1.teller}</div></div>
+                        <div class="breuk-streep"></div>
+                        <div class="breuk-deel"><div class="breuk-getal">${breuk1.noemer}</div></div>
+                    </div>
+                    <div class="operator">×</div>
+                    <div class="breuk">
+                        <div class="breuk-deel"><div class="breuk-getal">${breuk2.teller}</div></div>
+                        <div class="breuk-streep"></div>
+                        <div class="breuk-deel"><div class="breuk-getal">${breuk2.noemer}</div></div>
+                    </div>
+                    <div class="equals">=</div>
+                    <div class="breuk">
+                        <div class="breuk-deel"><input type="tel" id="antwoord-teller" class="breuk-input" pattern="[0-9]*" autocomplete="off"></div>
+                        <div class="breuk-streep"></div>
+                        <div class="breuk-deel"><input type="tel" id="antwoord-noemer" class="breuk-input" pattern="[0-9]*" autocomplete="off"></div>
+                    </div>
+                `;
+                
+            } else if (huidigType === 'vereenvoudigen') {
+                // Genereer breuk die vereenvoudigd kan worden
+                const vereenvoudigd = genereerBreuk();
+                const factor = Math.floor(Math.random() * 4) + 2; // 2-5
+                const teller = vereenvoudigd.teller * factor;
+                const noemer = vereenvoudigd.noemer * factor;
+                
+                huidigeSom = {
+                    type: 'vereenvoudigen',
+                    breuk: {teller, noemer},
+                    antwoord: vereenvoudigd
+                };
+                
+                display.innerHTML = `
+                    <div class="breuk">
+                        <div class="breuk-deel"><div class="breuk-getal">${teller}</div></div>
+                        <div class="breuk-streep"></div>
+                        <div class="breuk-deel"><div class="breuk-getal">${noemer}</div></div>
+                    </div>
+                    <div class="equals">=</div>
+                    <div class="breuk">
+                        <div class="breuk-deel"><input type="tel" id="antwoord-teller" class="breuk-input" pattern="[0-9]*" autocomplete="off"></div>
+                        <div class="breuk-streep"></div>
+                        <div class="breuk-deel"><input type="tel" id="antwoord-noemer" class="breuk-input" pattern="[0-9]*" autocomplete="off"></div>
+                    </div>
+                `;
+                
+            } else if (huidigType === 'gelijknamig') {
+                // Genereer twee breuken met verschillende noemers
+                const breuk1 = genereerBreuk();
+                let breuk2 = genereerBreuk();
+                
+                // Zorg dat noemers verschillend zijn
+                while (breuk2.noemer === breuk1.noemer) {
+                    breuk2 = genereerBreuk();
+                }
+                
+                // Bereken KGV
+                const gemeenschappelijkeNoemer = kgv(breuk1.noemer, breuk2.noemer);
+                const nieuweT1 = breuk1.teller * (gemeenschappelijkeNoemer / breuk1.noemer);
+                const nieuweT2 = breuk2.teller * (gemeenschappelijkeNoemer / breuk2.noemer);
+                
+                huidigeSom = {
+                    type: 'gelijknamig',
+                    breuk1,
+                    breuk2,
+                    antwoord1: {teller: nieuweT1, noemer: gemeenschappelijkeNoemer},
+                    antwoord2: {teller: nieuweT2, noemer: gemeenschappelijkeNoemer}
+                };
+                
+                display.innerHTML = `
+                    <div class="breuk">
+                        <div class="breuk-deel"><div class="breuk-getal">${breuk1.teller}</div></div>
+                        <div class="breuk-streep"></div>
+                        <div class="breuk-deel"><div class="breuk-getal">${breuk1.noemer}</div></div>
+                    </div>
+                    <div style="font-size: 24px; color: #4a5568; margin: 0 15px;">en</div>
+                    <div class="breuk">
+                        <div class="breuk-deel"><div class="breuk-getal">${breuk2.teller}</div></div>
+                        <div class="breuk-streep"></div>
+                        <div class="breuk-deel"><div class="breuk-getal">${breuk2.noemer}</div></div>
+                    </div>
+                    <div class="equals">=</div>
+                    <div class="breuk">
+                        <div class="breuk-deel"><input type="tel" id="antwoord-t1" class="breuk-input" pattern="[0-9]*" autocomplete="off"></div>
+                        <div class="breuk-streep"></div>
+                        <div class="breuk-deel"><input type="tel" id="antwoord-n1" class="breuk-input" pattern="[0-9]*" autocomplete="off"></div>
+                    </div>
+                    <div style="font-size: 24px; color: #4a5568; margin: 0 15px;">en</div>
+                    <div class="breuk">
+                        <div class="breuk-deel"><input type="tel" id="antwoord-t2" class="breuk-input" pattern="[0-9]*" autocomplete="off"></div>
+                        <div class="breuk-streep"></div>
+                        <div class="breuk-deel"><input type="tel" id="antwoord-n2" class="breuk-input" pattern="[0-9]*" autocomplete="off"></div>
+                    </div>
+                `;
+            }
+            
+            // Focus eerste input
+            setTimeout(() => {
+                let firstInput;
+                if (huidigType === 'gelijknamig') {
+                    firstInput = document.getElementById('antwoord-t1');
+                    if (firstInput) {
+                        firstInput.focus();
+                        document.getElementById('antwoord-t1').addEventListener('keypress', handleEnter);
+                        document.getElementById('antwoord-n1').addEventListener('keypress', handleEnter);
+                        document.getElementById('antwoord-t2').addEventListener('keypress', handleEnter);
+                        document.getElementById('antwoord-n2').addEventListener('keypress', handleEnter);
+                    }
+                } else {
+                    firstInput = document.getElementById('antwoord-teller');
+                    if (firstInput) {
+                        firstInput.focus();
+                        document.getElementById('antwoord-teller').addEventListener('keypress', handleEnter);
+                        document.getElementById('antwoord-noemer').addEventListener('keypress', handleEnter);
+                    }
+                }
+            }, 100);
+        }
+
+        function handleEnter(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                controleerAntwoord();
+            }
+        }
+
+        function controleerAntwoord() {
+            if (huidigType === 'gelijknamig') {
+                // Gelijknamig: 4 inputs!
+                const t1Input = document.getElementById('antwoord-t1');
+                const n1Input = document.getElementById('antwoord-n1');
+                const t2Input = document.getElementById('antwoord-t2');
+                const n2Input = document.getElementById('antwoord-n2');
+                
+                if (!t1Input || !n1Input || !t2Input || !n2Input) return;
+                
+                const t1 = parseInt(t1Input.value);
+                const n1 = parseInt(n1Input.value);
+                const t2 = parseInt(t2Input.value);
+                const n2 = parseInt(n2Input.value);
+                
+                if (isNaN(t1) || isNaN(n1) || isNaN(t2) || isNaN(n2) || 
+                    t1Input.value === '' || n1Input.value === '' || t2Input.value === '' || n2Input.value === '') {
+                    t1Input.focus();
+                    return;
+                }
+                
+                stats.sommenTeller++;
+                
+                const feedback = document.getElementById('feedback');
+                let feedbackDuur = 800;
+                
+                // Check equivalente breuken voor beide
+                const antwoord1Vereenv = vereenvoudigBreuk(t1, n1);
+                const correct1Vereenv = vereenvoudigBreuk(huidigeSom.antwoord1.teller, huidigeSom.antwoord1.noemer);
+                const antwoord2Vereenv = vereenvoudigBreuk(t2, n2);
+                const correct2Vereenv = vereenvoudigBreuk(huidigeSom.antwoord2.teller, huidigeSom.antwoord2.noemer);
+                
+                const goed1 = (antwoord1Vereenv.teller === correct1Vereenv.teller && antwoord1Vereenv.noemer === correct1Vereenv.noemer);
+                const goed2 = (antwoord2Vereenv.teller === correct2Vereenv.teller && antwoord2Vereenv.noemer === correct2Vereenv.noemer);
+                
+                // Check ook of noemers gelijk zijn
+                const zelfdeNoemer = (n1 === n2);
+                
+                if (goed1 && goed2 && zelfdeNoemer) {
+                    stats.huidigGoed++;
+                    playGoedGeluid();
+                    feedback.innerHTML = `
+                        <div class="icon-circle">✓</div>
+                        <div class="title">Goed zo! 🎉</div>
+                    `;
+                    feedback.className = 'feedback goed-feedback show';
+                    feedbackDuur = 800;
+                    sommenSindsMoeilijk++;
+                } else {
+                    stats.huidigFout++;
+                    playFoutGeluid();
+                    feedback.innerHTML = `
+                        <div class="icon-circle">✗</div>
+                        <div class="title">Helaas!</div>
+                        <div class="sub">${huidigeSom.antwoord1.teller}/${huidigeSom.antwoord1.noemer} en ${huidigeSom.antwoord2.teller}/${huidigeSom.antwoord2.noemer}</div>
+                    `;
+                    feedback.className = 'feedback fout-feedback show';
+                    feedbackDuur = 1500;
+                    sommenSindsMoeilijk = 0;
+                }
+                
+                setTimeout(() => {
+                    feedback.className = 'feedback';
+                    feedback.innerHTML = '';
+                    volgendeSom();
+                }, feedbackDuur);
+                return;
+            }
+            
+            // Normale breuken (2 inputs)
+            const tellerInput = document.getElementById('antwoord-teller');
+            const noemerInput = document.getElementById('antwoord-noemer');
+            
+            if (!tellerInput || !noemerInput) return;
+            
+            const antwoordTeller = parseInt(tellerInput.value);
+            const antwoordNoemer = parseInt(noemerInput.value);
+
+            if (isNaN(antwoordTeller) || isNaN(antwoordNoemer) || tellerInput.value === '' || noemerInput.value === '') {
+                tellerInput.focus();
+                return;
+            }
+
+            stats.sommenTeller++;
+
+            const feedback = document.getElementById('feedback');
+            let feedbackDuur = 800;
+            
+            const correctTeller = huidigeSom.antwoord.teller;
+            const correctNoemer = huidigeSom.antwoord.noemer;
+            
+            // Check equivalente breuken: 14/16 = 7/8
+            const vereenvoudigdAntwoord = vereenvoudigBreuk(antwoordTeller, antwoordNoemer);
+            const vereenvoudigdCorrect = vereenvoudigBreuk(correctTeller, correctNoemer);
+            
+            const isGoed = (vereenvoudigdAntwoord.teller === vereenvoudigdCorrect.teller && 
+                           vereenvoudigdAntwoord.noemer === vereenvoudigdCorrect.noemer);
+            
+            const somString = `${correctTeller}/${correctNoemer}`;
+            
+            if (isGoed) {
+                // GOED!
+                stats.huidigGoed++;
+                playGoedGeluid();
+                
+                feedback.innerHTML = `
+                    <div class="icon-circle">✓</div>
+                    <div class="title">Goed zo! 🎉</div>
+                `;
+                feedback.className = 'feedback goed-feedback show';
+                feedbackDuur = 800;
+                
+                // Adaptief: update moeilijke sommen
+                if (moeilijkeSommen[somString]) {
+                    moeilijkeSommen[somString]--;
+                    if (moeilijkeSommen[somString] <= 0) {
+                        delete moeilijkeSommen[somString];
+                    }
+                }
+                sommenSindsMoeilijk++;
+                
+            } else {
+                // FOUT!
+                stats.huidigFout++;
+                playFoutGeluid();
+                
+                feedback.innerHTML = `
+                    <div class="icon-circle">✗</div>
+                    <div class="title">Helaas!</div>
+                    <div class="sub">Antwoord: ${correctTeller}/${correctNoemer}</div>
+                `;
+                feedback.className = 'feedback fout-feedback show';
+                feedbackDuur = 1500;
+                
+                // Adaptief: markeer als moeilijk
+                if (!moeilijkeSommen[somString]) {
+                    moeilijkeSommen[somString] = 0;
+                }
+                moeilijkeSommen[somString] += 3;
+                sommenSindsMoeilijk = 0;
+            }
+
+            setTimeout(() => {
+                feedback.className = 'feedback';
+                feedback.innerHTML = '';
+                volgendeSom();
+            }, feedbackDuur);
+        }
+
+        function updateVoortgang() {
+            const indicator = document.getElementById('voortgang-indicator');
+            let text = '';
+            
+            if (minimumSommen > 0) {
+                text = `${stats.sommenTeller} / ${minimumSommen} sommen`;
+            }
+            
+            if (tijdLimiet > 0 && startTijd) {
+                const verstreken = Math.floor((Date.now() - startTijd) / 1000);
+                const resterend = Math.max(0, tijdLimiet - verstreken);
+                const minuten = Math.floor(resterend / 60);
+                const seconden = resterend % 60;
+                const tijdText = `${minuten}:${seconden.toString().padStart(2, '0')}`;
+                
+                if (text) {
+                    text += ` • ${tijdText}`;
+                } else {
+                    text = `Tijd: ${tijdText}`;
+                }
+            }
+            
+            if (text) {
+                indicator.textContent = text;
+                indicator.style.display = 'inline-block';
+            } else {
+                indicator.style.display = 'none';
+            }
+        }
+
+        function checkStopVoorwaarde() {
+            let tijdBereikt = false;
+            let minimumBereikt = false;
+            
+            if (tijdLimiet > 0 && startTijd) {
+                const verstreken = (Date.now() - startTijd) / 1000;
+                tijdBereikt = verstreken >= tijdLimiet;
+            }
+            
+            if (minimumSommen > 0) {
+                minimumBereikt = stats.sommenTeller >= minimumSommen;
+            }
+            
+            if (tijdLimiet > 0 && minimumSommen > 0) {
+                return tijdBereikt || minimumBereikt;
+            }
+            
+            if (tijdLimiet > 0) {
+                return tijdBereikt;
+            }
+            
+            if (minimumSommen > 0) {
+                return minimumBereikt;
+            }
+            
+            return false;
+        }
+
+        function stopOefenen() {
+            if (confirm('Weet je zeker dat je wilt stoppen?')) {
+                toonResultaten();
+            }
+        }
+
+        function toonResultaten() {
+            if (window.timerInterval) {
+                clearInterval(window.timerInterval);
+                window.timerInterval = null;
+            }
+
+            document.getElementById('oefen-scherm').classList.add('hidden');
+            document.getElementById('resultaten-scherm').classList.remove('hidden');
+
+            const totaalHuidig = stats.huidigGoed + stats.huidigFout;
+            const percHuidig = totaalHuidig > 0 ? Math.round((stats.huidigGoed / totaalHuidig) * 100) : 0;
+
+            document.getElementById('sessie-goed').textContent = stats.huidigGoed;
+            document.getElementById('sessie-fout').textContent = stats.huidigFout;
+            document.getElementById('sessie-score').textContent = percHuidig + '%';
+        }
+
+        function opnieuw() {
+            document.getElementById('resultaten-scherm').classList.add('hidden');
+            document.getElementById('type-selectie-scherm').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
