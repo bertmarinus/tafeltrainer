@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Breuken</title>
+    <title>Breuken - LearnForge</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2348bb78'/><text y='.9em' font-size='75' x='12'>🍰</text></svg>">
     <style>
         * {
             margin: 0;
@@ -11,131 +13,198 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary: #667eea;
+            --secondary: #48bb78;
+            --secondary-dark: #38a169;
+            --text-dark: #2d3748;
+            --text-light: #718096;
+            --border: #e2e8f0;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e8eaf6 100%);
+            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #e0e7ff 0%, #fce7f3 50%, #dbeafe 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 25px 20px 40px;
         }
 
         .container {
+            width: 100%;
             max-width: 900px;
             margin: 0 auto;
         }
 
+        /* Terug link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            transition: color 0.3s;
+        }
+        .back-link:hover { color: var(--secondary); }
+
+        /* Header */
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
+            animation: fadeInDown 0.6s ease;
+        }
+
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            border-radius: 22px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            margin-bottom: 14px;
+            box-shadow: 0 10px 30px rgba(72, 187, 120, 0.35);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
 
         .header h1 {
+            font-family: 'Fredoka', sans-serif;
             font-size: 42px;
-            color: #805ad5;
-            margin-bottom: 5px;
+            color: var(--text-dark);
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
         }
 
-        .subtitle {
+        .header .subtitle {
             font-size: 18px;
-            color: #718096;
+            color: var(--text-light);
+            font-weight: 600;
         }
 
+        /* Card */
         .card {
             background: white;
-            border-radius: 24px;
-            padding: 40px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-            margin-bottom: 30px;
+            border-radius: 28px;
+            padding: 45px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            animation: fadeInUp 0.6s ease 0.2s both;
         }
 
         .card h2 {
-            font-size: 28px;
-            color: #2d3748;
-            margin-bottom: 10px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 30px;
+            color: var(--text-dark);
             text-align: center;
+            margin-bottom: 8px;
+            font-weight: 600;
         }
 
         .hint {
             text-align: center;
-            color: #a0aec0;
-            font-size: 16px;
+            color: var(--text-light);
+            font-size: 17px;
             margin-bottom: 30px;
         }
 
-        /* Type selectie grid */
+        /* Type grid */
         .type-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+            gap: 18px;
         }
 
         .type-card {
-            background: white;
-            border: 3px solid #e2e8f0;
+            border: 3px solid var(--border);
             border-radius: 20px;
-            padding: 30px 25px;
+            padding: 25px 15px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
+            background: white;
+            animation: fadeInUp 0.5s ease both;
         }
+
+        .type-card:nth-child(1) { animation-delay: 0.25s; }
+        .type-card:nth-child(2) { animation-delay: 0.30s; }
+        .type-card:nth-child(3) { animation-delay: 0.35s; }
+        .type-card:nth-child(4) { animation-delay: 0.40s; }
+        .type-card:nth-child(5) { animation-delay: 0.45s; }
 
         .type-card:hover:not(.disabled) {
-            border-color: #9f7aea;
-            transform: translateY(-4px);
-            box-shadow: 0 12px 30px rgba(159, 122, 234, 0.3);
+            border-color: var(--secondary);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(72, 187, 120, 0.2);
+            background: linear-gradient(135deg, #f0fff4 0%, #e6fffa 100%);
         }
 
+        .type-card:not(.disabled):active { transform: translateY(-2px); }
+
         .type-card.disabled {
-            opacity: 0.5;
+            opacity: 0.55;
             cursor: not-allowed;
         }
 
         .type-card .icon {
-            font-size: 50px;
+            font-size: 44px;
             margin-bottom: 12px;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .type-card:not(.disabled):hover .icon {
+            transform: scale(1.15) rotate(-5deg);
         }
 
         .type-card .title {
+            font-family: 'Fredoka', sans-serif;
             font-size: 22px;
-            font-weight: 700;
+            font-weight: 600;
+            color: var(--text-dark);
             margin-bottom: 6px;
-            color: #2d3748;
         }
 
         .type-card .beschrijving {
             font-size: 14px;
-            opacity: 0.8;
-            color: #4a5568;
+            color: var(--text-light);
+            font-weight: 600;
         }
 
-        .type-card.disabled .badge {
+        .badge {
             position: absolute;
             top: 12px;
             right: 12px;
             background: #fed7aa;
             color: #c05621;
-            padding: 5px 10px;
+            padding: 4px 10px;
             border-radius: 8px;
             font-size: 11px;
-            font-weight: 600;
+            font-weight: 700;
+            font-family: 'Fredoka', sans-serif;
         }
 
         /* Instellingen */
-        .settings {
-            margin: 30px 0;
-        }
+        .settings { margin: 25px 0; }
 
-        .setting-row {
-            margin-bottom: 20px;
-        }
+        .setting-row { margin-bottom: 20px; }
 
         .setting-row label {
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 17px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 18px;
             font-weight: 600;
-            color: #4a5568;
+            color: var(--text-dark);
             margin-bottom: 10px;
         }
 
@@ -143,26 +212,34 @@
             width: 100%;
             padding: 16px 20px;
             font-size: 16px;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 600;
+            border: 3px solid var(--border);
+            border-radius: 14px;
             background: #f7fafc;
-            color: #2d3748;
+            color: var(--text-dark);
             cursor: pointer;
-            font-weight: 500;
+            transition: border-color 0.3s;
         }
 
-        /* Buttons */
+        .setting-row select:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        /* Knoppen */
         .btn-primary {
             width: 100%;
-            padding: 24px;
-            font-size: 24px;
+            padding: 22px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 22px;
             font-weight: 700;
-            background: linear-gradient(135deg, #9f7aea 0%, #805ad5 100%);
+            background: linear-gradient(135deg, #68d391 0%, #48bb78 100%);
             color: white;
             border: none;
             border-radius: 16px;
             cursor: pointer;
-            box-shadow: 0 8px 24px rgba(159, 122, 234, 0.4);
+            box-shadow: 0 8px 24px rgba(72, 187, 120, 0.35);
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
@@ -171,18 +248,19 @@
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 28px rgba(159, 122, 234, 0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(72, 187, 120, 0.45);
         }
 
         .btn-secondary {
             width: 100%;
             padding: 18px;
+            font-family: 'Fredoka', sans-serif;
             font-size: 18px;
             font-weight: 600;
             background: white;
-            border: 2px solid #e2e8f0;
-            color: #4a5568;
+            border: 3px solid var(--border);
+            color: var(--text-dark);
             border-radius: 14px;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -193,11 +271,11 @@
         }
 
         .btn-secondary:hover {
-            border-color: #cbd5e0;
+            border-color: var(--text-light);
             background: #f7fafc;
         }
 
-        /* BREUK VISUAL */
+        /* Breuk visual */
         .breuk-container {
             display: flex;
             justify-content: center;
@@ -232,11 +310,12 @@
 
         .breuk-getal {
             background: white;
-            border: 3px solid #e2e8f0;
+            border: 3px solid var(--border);
             border-radius: 12px;
+            font-family: 'Fredoka', sans-serif;
             font-size: 48px;
             font-weight: 800;
-            color: #2d3748;
+            color: var(--text-dark);
             width: 100%;
             height: 100%;
             display: flex;
@@ -246,17 +325,18 @@
 
         .breuk-input {
             background: white;
-            border: 3px solid #9f7aea;
+            border: 3px solid var(--secondary);
             border-radius: 12px;
+            font-family: 'Fredoka', sans-serif;
             font-size: 48px;
             font-weight: 800;
-            color: #2d3748;
+            color: var(--text-dark);
             width: 100%;
             height: 100%;
             text-align: center;
             -webkit-appearance: none;
             -moz-appearance: textfield;
-            box-shadow: 0 0 0 4px rgba(159, 122, 234, 0.15);
+            box-shadow: 0 0 0 4px rgba(72, 187, 120, 0.15);
         }
 
         .breuk-input::-webkit-inner-spin-button,
@@ -267,27 +347,29 @@
 
         .breuk-input:focus {
             outline: none;
-            border-color: #805ad5;
+            border-color: var(--secondary-dark);
         }
 
         .breuk-streep {
             width: 120px;
             height: 4px;
-            background: #2d3748;
+            background: var(--text-dark);
             border-radius: 2px;
         }
 
         .operator {
+            font-family: 'Fredoka', sans-serif;
             font-size: 48px;
             font-weight: 700;
-            color: #9f7aea;
+            color: var(--secondary);
             margin: 0 10px;
         }
 
         .equals {
+            font-family: 'Fredoka', sans-serif;
             font-size: 48px;
             font-weight: 700;
-            color: #a0aec0;
+            color: var(--text-light);
             margin: 0 10px;
         }
 
@@ -295,12 +377,12 @@
             width: 60px;
             height: 60px;
             font-size: 28px;
-            background: linear-gradient(135deg, #b794f6 0%, #9f7aea 100%);
+            background: linear-gradient(135deg, #68d391 0%, #48bb78 100%);
             color: white;
             border: none;
             border-radius: 12px;
             cursor: pointer;
-            box-shadow: 0 6px 20px rgba(159, 122, 234, 0.4);
+            box-shadow: 0 6px 20px rgba(72, 187, 120, 0.35);
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
@@ -310,18 +392,19 @@
 
         .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(159, 122, 234, 0.5);
+            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.5);
         }
 
         /* Voortgang */
         .voortgang-indicator {
+            font-family: 'Fredoka', sans-serif;
             text-align: center;
             font-size: 18px;
             font-weight: 600;
-            color: #4a5568;
+            color: var(--text-dark);
             margin-bottom: 15px;
-            padding: 8px 15px;
-            background: rgba(159, 122, 234, 0.1);
+            padding: 8px 20px;
+            background: rgba(72, 187, 120, 0.1);
             border-radius: 12px;
             display: inline-block;
         }
@@ -332,6 +415,7 @@
             max-width: 300px;
             margin: 40px auto 20px auto;
             padding: 16px 30px;
+            font-family: 'Fredoka', sans-serif;
             font-size: 18px;
             font-weight: 600;
             background: white;
@@ -343,9 +427,7 @@
             position: relative;
         }
 
-        .stop-btn * {
-            pointer-events: none;
-        }
+        .stop-btn * { pointer-events: none; }
 
         .stop-btn:hover {
             background: #fff5f5;
@@ -369,9 +451,7 @@
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
         }
 
-        .feedback.show {
-            opacity: 1;
-        }
+        .feedback.show { opacity: 1; }
 
         .feedback.goed-feedback {
             background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
@@ -392,75 +472,93 @@
             align-items: center;
             justify-content: center;
             margin: 0 auto 15px auto;
+            font-family: 'Fredoka', sans-serif;
             font-size: 35px;
             font-weight: 800;
         }
 
-        .feedback.goed-feedback .icon-circle {
-            color: #38a169;
-        }
-
-        .feedback.fout-feedback .icon-circle {
-            color: #f56565;
-        }
+        .feedback.goed-feedback .icon-circle { color: #38a169; }
+        .feedback.fout-feedback .icon-circle { color: #f56565; }
 
         .feedback .title {
+            font-family: 'Fredoka', sans-serif;
             font-size: 32px;
             font-weight: 800;
             margin-bottom: 8px;
         }
 
         .feedback .sub {
+            font-family: 'Fredoka', sans-serif;
             font-size: 20px;
             font-weight: 600;
             opacity: 0.95;
             margin-top: 8px;
         }
 
-        /* Utility */
-        .hidden {
-            display: none !important;
+        /* Resultaten */
+        .score-grid {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0 40px;
         }
 
-        /* Mobile */
+        .score-item { text-align: center; }
+
+        .score-getal {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 52px;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .score-label {
+            font-size: 16px;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        /* Utility */
+        .hidden { display: none !important; }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            .type-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .breuk-container {
-                gap: 15px;
-            }
-
-            .breuk-deel {
-                width: 90px;
-                height: 60px;
-            }
-
-            .breuk-getal,
-            .breuk-input {
-                font-size: 36px;
-            }
-
-            .breuk-streep {
-                width: 90px;
-            }
-
-            .operator,
-            .equals {
-                font-size: 36px;
-            }
+            body { padding: 15px 15px 30px; }
+            .header h1 { font-size: 34px; }
+            .app-icon { width: 68px; height: 68px; font-size: 36px; }
+            .card { padding: 30px 20px; }
+            .type-grid { grid-template-columns: 1fr; }
+            .breuk-container { gap: 15px; }
+            .breuk-deel { width: 90px; height: 60px; }
+            .breuk-getal, .breuk-input { font-size: 36px; }
+            .breuk-streep { width: 90px; }
+            .operator, .equals { font-size: 36px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
+
         <!-- TYPE SELECTIE -->
         <div id="type-selectie-scherm">
+            <a href="index.html" class="back-link">← Terug naar Rekenen</a>
+
             <div class="header">
-                <h1>🍰 Breuken</h1>
+                <div class="app-icon">🍰</div>
+                <h1>Breuken</h1>
                 <p class="subtitle">Kies wat je wilt oefenen</p>
-                <button onclick="window.location.href='index.html'" style="margin-top: 10px; padding: 10px 20px; background: white; border: 2px solid #e2e8f0; border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 600; color: #4a5568;">🏠 Terug naar hoofdmenu</button>
             </div>
 
             <div class="card">
@@ -469,31 +567,31 @@
 
                 <div class="type-grid">
                     <div class="type-card" onclick="gaaNaarInstellingen('optellen')">
-                        <div class="icon">➕</div>
+                        <span class="icon">➕</span>
                         <div class="title">Breuken optellen</div>
                         <div class="beschrijving">1/4 + 2/4 = ?</div>
                     </div>
 
                     <div class="type-card" onclick="gaaNaarInstellingen('aftrekken')">
-                        <div class="icon">➖</div>
+                        <span class="icon">➖</span>
                         <div class="title">Breuken aftrekken</div>
                         <div class="beschrijving">3/4 - 1/4 = ?</div>
                     </div>
 
                     <div class="type-card" onclick="gaaNaarInstellingen('vermenigvuldigen')">
-                        <div class="icon">✖️</div>
+                        <span class="icon">✖️</span>
                         <div class="title">Vermenigvuldigen</div>
                         <div class="beschrijving">2/3 × 3/4 = ?</div>
                     </div>
 
                     <div class="type-card" onclick="gaaNaarInstellingen('vereenvoudigen')">
-                        <div class="icon">⚡</div>
+                        <span class="icon">⚡</span>
                         <div class="title">Vereenvoudigen</div>
                         <div class="beschrijving">6/8 = ?</div>
                     </div>
 
                     <div class="type-card" onclick="gaaNaarInstellingen('gelijknamig')">
-                        <div class="icon">🔄</div>
+                        <span class="icon">🔄</span>
                         <div class="title">Gelijknamig maken</div>
                         <div class="beschrijving">1/2 en 1/4</div>
                     </div>
@@ -504,7 +602,8 @@
         <!-- INSTELLINGEN -->
         <div id="instellingen-scherm" class="hidden">
             <div class="header">
-                <h1 id="instellingen-titel">🍰 Breuken</h1>
+                <div class="app-icon">⚙️</div>
+                <h1 id="instellingen-titel">Breuken</h1>
                 <p class="subtitle">Kies je instellingen</p>
             </div>
 
@@ -514,10 +613,7 @@
 
                 <div class="settings">
                     <div class="setting-row">
-                        <label>
-                            <span>⚙️</span>
-                            <span>Moeilijkheid</span>
-                        </label>
+                        <label><span>⚙️</span><span>Moeilijkheid</span></label>
                         <select id="moeilijkheid-select">
                             <option value="5">Makkelijk (tot 5)</option>
                             <option value="10" selected>Normaal (tot 10)</option>
@@ -526,10 +622,7 @@
                     </div>
 
                     <div class="setting-row">
-                        <label>
-                            <span>⏱️</span>
-                            <span>Tijdslimiet</span>
-                        </label>
+                        <label><span>⏱️</span><span>Tijdslimiet</span></label>
                         <select id="tijd-select">
                             <option value="0">Geen limiet</option>
                             <option value="300">5 minuten</option>
@@ -540,10 +633,7 @@
                     </div>
 
                     <div class="setting-row">
-                        <label>
-                            <span>⦿</span>
-                            <span>Minimum aantal sommen</span>
-                        </label>
+                        <label><span>⦿</span><span>Minimum aantal sommen</span></label>
                         <select id="minimum-select">
                             <option value="0">Geen minimum</option>
                             <option value="30">30 sommen</option>
@@ -553,75 +643,55 @@
                     </div>
                 </div>
 
-                <button class="btn-primary" onclick="startOefenen()">
-                    <span>▶</span>
-                    <span>Start Oefenen!</span>
-                </button>
-
-                <button class="btn-secondary" onclick="toonTypeSelectie()" style="margin-top: 15px;">
-                    <span>←</span>
-                    <span>Terug</span>
-                </button>
+                <button class="btn-primary" onclick="startOefenen()">▶ Start Oefenen!</button>
+                <button class="btn-secondary" onclick="toonTypeSelectie()" style="margin-top: 15px;">← Terug</button>
             </div>
         </div>
 
         <!-- OEFEN SCHERM -->
         <div id="oefen-scherm" class="hidden">
-            <!-- iOS KEYBOARD HACK -->
-            <input 
-                type="text" 
-                id="dummy-input"
-                style="position: absolute; left: -9999px; width: 1px; height: 1px;"
-                tabindex="-1"
-            >
-            
-            <!-- VOORTGANGSINDICATOR -->
+            <input type="text" id="dummy-input" style="position: absolute; left: -9999px; width: 1px; height: 1px;" tabindex="-1">
+
             <div style="text-align: center; margin-top: 20px;">
                 <div id="voortgang-indicator" class="voortgang-indicator" style="display: none;"></div>
             </div>
 
-            <!-- BREUK VISUAL MET SUBMIT BUTTON -->
-            <div id="breuk-display" class="breuk-container">
-                <!-- Dynamisch gegenereerd -->
-            </div>
+            <div id="breuk-display" class="breuk-container"></div>
 
-            <!-- STOPKNOP ONDERAAN -->
             <button class="stop-btn" onclick="stopOefenen()">⏹ Stoppen</button>
-
             <div class="feedback" id="feedback"></div>
         </div>
 
         <!-- RESULTATEN -->
         <div id="resultaten-scherm" class="hidden">
-            <div class="card">
-                <h2 id="resultaat-titel">🏆 Gefeliciteerd!</h2>
+            <div class="header">
+                <div class="app-icon">🏆</div>
+                <h1>Gefeliciteerd!</h1>
+                <p class="subtitle">Bekijk je resultaten</p>
+            </div>
 
-                <div style="text-align: center; margin: 30px 0;">
-                    <div style="font-size: 24px; font-weight: 700; color: #2d3748; margin-bottom: 15px;">
-                        Deze sessie
+            <div class="card">
+                <h2 id="resultaat-titel">🏆 Resultaten</h2>
+
+                <div class="score-grid">
+                    <div class="score-item">
+                        <div class="score-getal" style="color: #38a169;" id="sessie-goed">0</div>
+                        <div class="score-label">Goed</div>
                     </div>
-                    <div style="display: flex; justify-content: center; gap: 30px; margin-bottom: 40px;">
-                        <div style="text-align: center;">
-                            <div style="font-size: 48px; font-weight: 800; color: #38a169;" id="sessie-goed">0</div>
-                            <div style="font-size: 16px; color: #4a5568;">Goed</div>
-                        </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 48px; font-weight: 800; color: #e53e3e;" id="sessie-fout">0</div>
-                            <div style="font-size: 16px; color: #4a5568;">Fout</div>
-                        </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 48px; font-weight: 800; color: #4299e1;" id="sessie-score">0%</div>
-                            <div style="font-size: 16px; color: #4a5568;">Score</div>
-                        </div>
+                    <div class="score-item">
+                        <div class="score-getal" style="color: #e53e3e;" id="sessie-fout">0</div>
+                        <div class="score-label">Fout</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-getal" style="color: #4299e1;" id="sessie-score">0%</div>
+                        <div class="score-label">Score</div>
                     </div>
                 </div>
 
-                <button class="btn-primary" onclick="opnieuw()">
-                    <span>↻</span>
-                    <span>Opnieuw</span>
-                </button>
+                <button class="btn-primary" onclick="opnieuw()">↻ Opnieuw</button>
             </div>
         </div>
+
     </div>
 
     <script>
@@ -657,7 +727,7 @@
         let tijdLimiet = 0;
         let minimumSommen = 0;
         let startTijd = null;
-        let maxNoemer = 10; // Makkelijk=5, Normaal=10, Moeilijk=20
+        let maxNoemer = 10;
         
         let huidigeSom = null;
         let moeilijkeSommen = {};
@@ -670,17 +740,12 @@
         };
 
         // Math helpers
-        function ggd(a, b) {
-            return b === 0 ? a : ggd(b, a % b);
-        }
-
-        function kgv(a, b) {
-            return (a * b) / ggd(a, b);
-        }
+        function ggd(a, b) { return b === 0 ? a : ggd(b, a % b); }
+        function kgv(a, b) { return (a * b) / ggd(a, b); }
 
         function genereerBreuk() {
-            const noemer = Math.floor(Math.random() * (maxNoemer - 1)) + 2; // 2 tot maxNoemer
-            const teller = Math.floor(Math.random() * (noemer - 1)) + 1; // 1 tot noemer-1
+            const noemer = Math.floor(Math.random() * (maxNoemer - 1)) + 2;
+            const teller = Math.floor(Math.random() * (noemer - 1)) + 1;
             return {teller, noemer};
         }
 
@@ -709,31 +774,26 @@
                 'vereenvoudigen': '⚡ Breuken vereenvoudigen',
                 'gelijknamig': '🔄 Gelijknamig maken'
             };
-            document.getElementById('instellingen-titel').textContent = titels[type] || '🍰 Breuken';
+            document.getElementById('instellingen-titel').textContent = titels[type] || 'Breuken';
         }
 
         function startOefenen() {
-            // Reset stats
             stats.huidigGoed = 0;
             stats.huidigFout = 0;
             stats.sommenTeller = 0;
             moeilijkeSommen = {};
             sommenSindsMoeilijk = 0;
 
-            // Instellingen ophalen
             maxNoemer = parseInt(document.getElementById('moeilijkheid-select').value);
             tijdLimiet = parseInt(document.getElementById('tijd-select').value);
             minimumSommen = parseInt(document.getElementById('minimum-select').value);
             startTijd = tijdLimiet > 0 ? Date.now() : null;
 
-            // Scherm wisselen
             document.getElementById('instellingen-scherm').classList.add('hidden');
             document.getElementById('oefen-scherm').classList.remove('hidden');
             
-            // Eerste som
             volgendeSom();
             
-            // Timer
             if (window.timerInterval) clearInterval(window.timerInterval);
             if (tijdLimiet > 0) {
                 window.timerInterval = setInterval(updateVoortgang, 1000);
@@ -741,44 +801,31 @@
         }
 
         function volgendeSom() {
-            if (checkStopVoorwaarde()) {
-                toonResultaten();
-                return;
-            }
+            if (checkStopVoorwaarde()) { toonResultaten(); return; }
 
-            // Adaptief algoritme: check of moeilijke som moet komen
             const moeilijkeKeys = Object.keys(moeilijkeSommen);
             if (moeilijkeKeys.length > 0 && sommenSindsMoeilijk >= (Math.floor(Math.random() * 3) + 3)) {
-                // Herhaal moeilijke som
                 const somString = moeilijkeKeys[Math.floor(Math.random() * moeilijkeKeys.length)];
                 const [teller, noemer] = somString.split('/').map(Number);
                 regenereerMoeilijkeSom(teller, noemer);
                 sommenSindsMoeilijk = 0;
             } else {
-                // Genereer nieuwe som
                 genereerSom();
             }
             
             updateVoortgang();
-            
-            // Clear feedback
             const feedback = document.getElementById('feedback');
             feedback.className = 'feedback';
             feedback.innerHTML = '';
         }
 
-        function regenereerMoeilijkeSom(teller, noemer) {
-            // Genereer zelfde type som maar met deze specifieke breuk
-            // Voor nu: genereer gewoon nieuwe som (kan later verfijnd worden)
-            genereerSom();
-        }
+        function regenereerMoeilijkeSom(teller, noemer) { genereerSom(); }
 
         function genereerSom() {
             const display = document.getElementById('breuk-display');
             
             if (huidigType === 'optellen' || huidigType === 'aftrekken') {
-                // Zelfde noemer
-                const noemer = Math.floor(Math.random() * (maxNoemer - 1)) + 2; // 2 tot maxNoemer
+                const noemer = Math.floor(Math.random() * (maxNoemer - 1)) + 2;
                 const teller1 = Math.floor(Math.random() * (noemer - 1)) + 1;
                 let teller2;
                 
@@ -827,8 +874,7 @@
                 
                 huidigeSom = {
                     type: 'vermenigvuldigen',
-                    breuk1,
-                    breuk2,
+                    breuk1, breuk2,
                     antwoord: {teller: resultTeller, noemer: resultNoemer}
                 };
                 
@@ -854,9 +900,8 @@
                 `;
                 
             } else if (huidigType === 'vereenvoudigen') {
-                // Genereer breuk die vereenvoudigd kan worden
                 const vereenvoudigd = genereerBreuk();
-                const factor = Math.floor(Math.random() * 4) + 2; // 2-5
+                const factor = Math.floor(Math.random() * 4) + 2;
                 const teller = vereenvoudigd.teller * factor;
                 const noemer = vereenvoudigd.noemer * factor;
                 
@@ -882,32 +927,24 @@
                 `;
                 
             } else if (huidigType === 'gelijknamig') {
-                // Genereer twee breuken met verschillende noemers
-                // Gelijknamig maken: max 10 (anders te complex)
                 const maxGelijknamig = Math.min(maxNoemer, 10);
                 const genereerKleineBreuk = () => {
-                    const noemer = Math.floor(Math.random() * (maxGelijknamig - 1)) + 2; // 2 tot max
+                    const noemer = Math.floor(Math.random() * (maxGelijknamig - 1)) + 2;
                     const teller = Math.floor(Math.random() * (noemer - 1)) + 1;
                     return {teller, noemer};
                 };
                 
                 const breuk1 = genereerKleineBreuk();
                 let breuk2 = genereerKleineBreuk();
+                while (breuk2.noemer === breuk1.noemer) { breuk2 = genereerKleineBreuk(); }
                 
-                // Zorg dat noemers verschillend zijn
-                while (breuk2.noemer === breuk1.noemer) {
-                    breuk2 = genereerKleineBreuk();
-                }
-                
-                // Bereken KGV
                 const gemeenschappelijkeNoemer = kgv(breuk1.noemer, breuk2.noemer);
                 const nieuweT1 = breuk1.teller * (gemeenschappelijkeNoemer / breuk1.noemer);
                 const nieuweT2 = breuk2.teller * (gemeenschappelijkeNoemer / breuk2.noemer);
                 
                 huidigeSom = {
                     type: 'gelijknamig',
-                    breuk1,
-                    breuk2,
+                    breuk1, breuk2,
                     antwoord1: {teller: nieuweT1, noemer: gemeenschappelijkeNoemer},
                     antwoord2: {teller: nieuweT2, noemer: gemeenschappelijkeNoemer}
                 };
@@ -918,7 +955,7 @@
                         <div class="breuk-streep"></div>
                         <div class="breuk-deel"><div class="breuk-getal">${breuk1.noemer}</div></div>
                     </div>
-                    <div style="font-size: 24px; color: #4a5568; margin: 0 15px;">en</div>
+                    <div style="font-size: 24px; color: #4a5568; margin: 0 15px; font-family: 'Fredoka', sans-serif;">en</div>
                     <div class="breuk">
                         <div class="breuk-deel"><div class="breuk-getal">${breuk2.teller}</div></div>
                         <div class="breuk-streep"></div>
@@ -930,7 +967,7 @@
                         <div class="breuk-streep"></div>
                         <div class="breuk-deel"><input type="tel" id="antwoord-n1" class="breuk-input" pattern="[0-9]*" autocomplete="off"></div>
                     </div>
-                    <div style="font-size: 24px; color: #4a5568; margin: 0 15px;">en</div>
+                    <div style="font-size: 24px; color: #4a5568; margin: 0 15px; font-family: 'Fredoka', sans-serif;">en</div>
                     <div class="breuk">
                         <div class="breuk-deel"><input type="tel" id="antwoord-t2" class="breuk-input" pattern="[0-9]*" autocomplete="off"></div>
                         <div class="breuk-streep"></div>
@@ -964,26 +1001,18 @@
                 }
             }, 100);
             
-            // Extra focus trigger na 200ms voor iOS
             setTimeout(() => {
                 const input = document.getElementById('antwoord-teller') || document.getElementById('antwoord-t1');
-                if (input) {
-                    input.focus();
-                    input.click();
-                }
+                if (input) { input.focus(); input.click(); }
             }, 200);
         }
 
         function handleEnter(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                controleerAntwoord();
-            }
+            if (e.key === 'Enter') { e.preventDefault(); controleerAntwoord(); }
         }
 
         function controleerAntwoord() {
             if (huidigType === 'gelijknamig') {
-                // Gelijknamig: 4 inputs!
                 const t1Input = document.getElementById('antwoord-t1');
                 const n1Input = document.getElementById('antwoord-n1');
                 const t2Input = document.getElementById('antwoord-t2');
@@ -1007,7 +1036,6 @@
                 const feedback = document.getElementById('feedback');
                 let feedbackDuur = 800;
                 
-                // Check equivalente breuken voor beide
                 const antwoord1Vereenv = vereenvoudigBreuk(t1, n1);
                 const correct1Vereenv = vereenvoudigBreuk(huidigeSom.antwoord1.teller, huidigeSom.antwoord1.noemer);
                 const antwoord2Vereenv = vereenvoudigBreuk(t2, n2);
@@ -1015,28 +1043,19 @@
                 
                 const goed1 = (antwoord1Vereenv.teller === correct1Vereenv.teller && antwoord1Vereenv.noemer === correct1Vereenv.noemer);
                 const goed2 = (antwoord2Vereenv.teller === correct2Vereenv.teller && antwoord2Vereenv.noemer === correct2Vereenv.noemer);
-                
-                // Check ook of noemers gelijk zijn
                 const zelfdeNoemer = (n1 === n2);
                 
                 if (goed1 && goed2 && zelfdeNoemer) {
                     stats.huidigGoed++;
                     playGoedGeluid();
-                    feedback.innerHTML = `
-                        <div class="icon-circle">✓</div>
-                        <div class="title">Goed zo! 🎉</div>
-                    `;
+                    feedback.innerHTML = `<div class="icon-circle">✓</div><div class="title">Goed zo! 🎉</div>`;
                     feedback.className = 'feedback goed-feedback show';
                     feedbackDuur = 800;
                     sommenSindsMoeilijk++;
                 } else {
                     stats.huidigFout++;
                     playFoutGeluid();
-                    feedback.innerHTML = `
-                        <div class="icon-circle">✗</div>
-                        <div class="title">Helaas!</div>
-                        <div class="sub">${huidigeSom.antwoord1.teller}/${huidigeSom.antwoord1.noemer} en ${huidigeSom.antwoord2.teller}/${huidigeSom.antwoord2.noemer}</div>
-                    `;
+                    feedback.innerHTML = `<div class="icon-circle">✗</div><div class="title">Helaas!</div><div class="sub">${huidigeSom.antwoord1.teller}/${huidigeSom.antwoord1.noemer} en ${huidigeSom.antwoord2.teller}/${huidigeSom.antwoord2.noemer}</div>`;
                     feedback.className = 'feedback fout-feedback show';
                     feedbackDuur = 1500;
                     sommenSindsMoeilijk = 0;
@@ -1072,7 +1091,6 @@
             const correctTeller = huidigeSom.antwoord.teller;
             const correctNoemer = huidigeSom.antwoord.noemer;
             
-            // Check equivalente breuken: 14/16 = 7/8
             const vereenvoudigdAntwoord = vereenvoudigBreuk(antwoordTeller, antwoordNoemer);
             const vereenvoudigdCorrect = vereenvoudigBreuk(correctTeller, correctNoemer);
             
@@ -1082,43 +1100,23 @@
             const somString = `${correctTeller}/${correctNoemer}`;
             
             if (isGoed) {
-                // GOED!
                 stats.huidigGoed++;
                 playGoedGeluid();
-                
-                feedback.innerHTML = `
-                    <div class="icon-circle">✓</div>
-                    <div class="title">Goed zo! 🎉</div>
-                `;
+                feedback.innerHTML = `<div class="icon-circle">✓</div><div class="title">Goed zo! 🎉</div>`;
                 feedback.className = 'feedback goed-feedback show';
                 feedbackDuur = 800;
-                
-                // Adaptief: update moeilijke sommen
                 if (moeilijkeSommen[somString]) {
                     moeilijkeSommen[somString]--;
-                    if (moeilijkeSommen[somString] <= 0) {
-                        delete moeilijkeSommen[somString];
-                    }
+                    if (moeilijkeSommen[somString] <= 0) delete moeilijkeSommen[somString];
                 }
                 sommenSindsMoeilijk++;
-                
             } else {
-                // FOUT!
                 stats.huidigFout++;
                 playFoutGeluid();
-                
-                feedback.innerHTML = `
-                    <div class="icon-circle">✗</div>
-                    <div class="title">Helaas!</div>
-                    <div class="sub">Antwoord: ${correctTeller}/${correctNoemer}</div>
-                `;
+                feedback.innerHTML = `<div class="icon-circle">✗</div><div class="title">Helaas!</div><div class="sub">Antwoord: ${correctTeller}/${correctNoemer}</div>`;
                 feedback.className = 'feedback fout-feedback show';
                 feedbackDuur = 1500;
-                
-                // Adaptief: markeer als moeilijk
-                if (!moeilijkeSommen[somString]) {
-                    moeilijkeSommen[somString] = 0;
-                }
+                if (!moeilijkeSommen[somString]) moeilijkeSommen[somString] = 0;
                 moeilijkeSommen[somString] += 3;
                 sommenSindsMoeilijk = 0;
             }
@@ -1133,82 +1131,43 @@
         function updateVoortgang() {
             const indicator = document.getElementById('voortgang-indicator');
             let text = '';
-            
-            if (minimumSommen > 0) {
-                text = `${stats.sommenTeller} / ${minimumSommen} sommen`;
-            }
-            
+            if (minimumSommen > 0) text = `${stats.sommenTeller} / ${minimumSommen} sommen`;
             if (tijdLimiet > 0 && startTijd) {
                 const verstreken = Math.floor((Date.now() - startTijd) / 1000);
                 const resterend = Math.max(0, tijdLimiet - verstreken);
                 const minuten = Math.floor(resterend / 60);
                 const seconden = resterend % 60;
                 const tijdText = `${minuten}:${seconden.toString().padStart(2, '0')}`;
-                
-                if (text) {
-                    text += ` • ${tijdText}`;
-                } else {
-                    text = `Tijd: ${tijdText}`;
-                }
+                text = text ? `${text} • ${tijdText}` : `Tijd: ${tijdText}`;
             }
-            
-            if (text) {
-                indicator.textContent = text;
-                indicator.style.display = 'inline-block';
-            } else {
-                indicator.style.display = 'none';
-            }
+            if (text) { indicator.textContent = text; indicator.style.display = 'inline-block'; }
+            else { indicator.style.display = 'none'; }
         }
 
         function checkStopVoorwaarde() {
             let tijdBereikt = false;
             let minimumBereikt = false;
-            
-            if (tijdLimiet > 0 && startTijd) {
-                const verstreken = (Date.now() - startTijd) / 1000;
-                tijdBereikt = verstreken >= tijdLimiet;
-            }
-            
-            if (minimumSommen > 0) {
-                minimumBereikt = stats.sommenTeller >= minimumSommen;
-            }
-            
-            if (tijdLimiet > 0 && minimumSommen > 0) {
-                return tijdBereikt || minimumBereikt;
-            }
-            
-            if (tijdLimiet > 0) {
-                return tijdBereikt;
-            }
-            
-            if (minimumSommen > 0) {
-                return minimumBereikt;
-            }
-            
+            if (tijdLimiet > 0 && startTijd) tijdBereikt = (Date.now() - startTijd) / 1000 >= tijdLimiet;
+            if (minimumSommen > 0) minimumBereikt = stats.sommenTeller >= minimumSommen;
+            if (tijdLimiet > 0 && minimumSommen > 0) return tijdBereikt || minimumBereikt;
+            if (tijdLimiet > 0) return tijdBereikt;
+            if (minimumSommen > 0) return minimumBereikt;
             return false;
         }
 
         function stopOefenen() {
-            if (confirm('Weet je zeker dat je wilt stoppen?')) {
-                toonResultaten();
-            }
+            if (confirm('Weet je zeker dat je wilt stoppen?')) toonResultaten();
         }
 
         function toonResultaten() {
-            if (window.timerInterval) {
-                clearInterval(window.timerInterval);
-                window.timerInterval = null;
-            }
-
+            if (window.timerInterval) { clearInterval(window.timerInterval); window.timerInterval = null; }
             document.getElementById('oefen-scherm').classList.add('hidden');
             document.getElementById('resultaten-scherm').classList.remove('hidden');
-
-            const totaalHuidig = stats.huidigGoed + stats.huidigFout;
-            const percHuidig = totaalHuidig > 0 ? Math.round((stats.huidigGoed / totaalHuidig) * 100) : 0;
-
+            const totaal = stats.huidigGoed + stats.huidigFout;
+            const perc = totaal > 0 ? Math.round((stats.huidigGoed / totaal) * 100) : 0;
             document.getElementById('sessie-goed').textContent = stats.huidigGoed;
             document.getElementById('sessie-fout').textContent = stats.huidigFout;
-            document.getElementById('sessie-score').textContent = percHuidig + '%';
+            document.getElementById('sessie-score').textContent = perc + '%';
         }
 
         function opnieuw() {
