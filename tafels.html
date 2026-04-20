@@ -1,0 +1,2065 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tafels — Schoolvenster</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(160deg, #f0fdf8 0%, #e6f7fb 50%, #f0fdf8 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 42px;
+            color: #2a9d8f;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #64748b;
+        }
+
+        /* HOOFDMENU - Type oefening knoppen */
+        .oefening-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .oefening-card {
+            background: white;
+            border: 3px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .oefening-card:hover:not(.disabled) {
+            border-color: #2a9d8f;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(42, 157, 143, 0.3);
+        }
+
+        .oefening-card.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .oefening-card .icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .oefening-card .title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .oefening-card .beschrijving {
+            font-size: 16px;
+            opacity: 0.8;
+        }
+
+        .oefening-card.disabled .badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #fed7aa;
+            color: #c05621;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .card h2 {
+            font-size: 28px;
+            color: #1a3a5c;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .hint {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        /* Tafel grid - 3 kolommen zoals Base44 */
+        .tafel-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .tafel-btn {
+            padding: 35px 20px;
+            border: 3px solid #e2e8f0;
+            background: white;
+            color: #1a3a5c;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 130px;
+        }
+
+        .tafel-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .tafel-btn.selected {
+            background: linear-gradient(135deg, #2a9d8f, #6ab04c);
+            border-color: #2a9d8f;
+            color: white;
+        }
+
+        .tafel-btn.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 12px;
+            right: 15px;
+            font-size: 22px;
+            font-weight: 800;
+            color: white;
+        }
+
+        .tafel-label {
+            display: block;
+            font-size: 15px;
+            opacity: 0.7;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .tafel-nummer {
+            font-size: 44px;
+            font-weight: 800;
+        }
+
+        /* Settings */
+        .settings {
+            margin: 30px 0;
+        }
+
+        .setting-row {
+            margin-bottom: 20px;
+        }
+
+        .setting-row label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 17px;
+            font-weight: 600;
+            color: #1a3a5c;
+            margin-bottom: 10px;
+        }
+
+        .setting-row select {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            background: #f7fafc;
+            color: #1a3a5c;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            width: 100%;
+            padding: 24px;
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #2a9d8f 0%, #2a9d8f 100%);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(42, 157, 143, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(42, 157, 143, 0.5);
+        }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 18px;
+            font-size: 18px;
+            font-weight: 600;
+            background: white;
+            border: 2px solid #e2e8f0;
+            color: #1a3a5c;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-secondary:hover {
+            border-color: #cbd5e0;
+            background: #f7fafc;
+        }
+
+        /* OEFEN SCHERM */
+        .voortgang-indicator {
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a3a5c;
+            margin-bottom: 15px;
+            padding: 8px 15px;
+            background: rgba(42, 157, 143, 0.1);
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        /* Sticky voortgang voor mobiel */
+        @media (max-width: 768px) {
+            .voortgang-indicator {
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                background: white;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                margin: 0 -20px 15px -20px;
+                padding: 12px 15px;
+                border-radius: 0;
+                width: calc(100% + 40px);
+            }
+        }
+
+        /* SPLITSEN OEFENING - 3 vakjes */
+        .splitsen-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin: 40px auto;
+        }
+
+        .splitsen-top {
+            font-size: 80px;
+            font-weight: 800;
+            color: #1a3a5c;
+            padding: 20px 35px;
+            background: white;
+            border: 3px solid #e2e8f0;
+            border-radius: 16px;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .splitsen-bottom {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .splitsen-vakje {
+            font-size: 60px;
+            font-weight: 800;
+            padding: 20px 30px;
+            background: white;
+            border: 3px solid #e2e8f0;
+            border-radius: 16px;
+            min-width: 110px;
+            text-align: center;
+        }
+
+        .splitsen-vakje input {
+            width: 100%;
+            font-size: 60px;
+            font-weight: 800;
+            text-align: center;
+            border: none;
+            background: transparent;
+            color: #1a3a5c;
+            outline: none;
+        }
+
+        .splitsen-vakje.active {
+            border-color: #2a9d8f;
+            box-shadow: 0 0 0 4px rgba(42, 157, 143, 0.15);
+        }
+
+        .splitsen-lijn {
+            width: 3px;
+            height: 40px;
+            background: #cbd5e0;
+            margin: -30px auto 10px auto;
+        }
+
+        .splitsen-v {
+            width: 60px;
+            height: 3px;
+            background: #cbd5e0;
+        }
+
+        .som-card {
+            background: transparent;
+            border-radius: 0;
+            padding: 15px 20px;
+            box-shadow: none;
+            margin: 60px auto 10px auto;
+            max-width: 700px;
+        }
+
+        /* Voortgang/Timer display */
+        .progress-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px 15px 30px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a3a5c;
+        }
+
+        .progress-display .timer {
+            color: #2a9d8f;
+        }
+
+        .progress-display .counter {
+            color: #2a9d8f;
+        }
+
+        .som-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding-left: 30px;
+        }
+
+        .som-display {
+            font-size: 60px;
+            font-weight: 800;
+            color: #1a3a5c;
+            letter-spacing: 3px;
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        .som-display .times {
+            color: #2a9d8f;
+        }
+
+        .input-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .equals {
+            font-size: 50px;
+            color: #94a3b8;
+            font-weight: 700;
+        }
+
+        .antwoord-input {
+            width: 140px;
+            padding: 14px 20px;
+            font-size: 44px;
+            font-weight: 700;
+            text-align: center;
+            border: 3px solid #e2e8f0;
+            border-radius: 14px;
+            background: white;
+            color: #1a3a5c;
+            transition: all 0.3s ease;
+            -webkit-appearance: none;
+            -moz-appearance: textfield;
+        }
+
+        .antwoord-input::-webkit-inner-spin-button,
+        .antwoord-input::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .antwoord-input:focus {
+            outline: none;
+            border-color: #2a9d8f;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(42, 157, 143, 0.15);
+        }
+
+        /* KRITIEK: Prevent any unfocus styling */
+        .antwoord-input:not(:focus) {
+            /* Force focus look even when not focused */
+            border-color: #2a9d8f;
+            background: white;
+        }
+
+        .submit-btn {
+            width: 65px;
+            height: 65px;
+            font-size: 28px;
+            background: linear-gradient(135deg, #4ab3d0 0%, #2a9d8f 100%);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(42, 157, 143, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(42, 157, 143, 0.5);
+        }
+
+        /* FEEDBACK POPUP - EXACT zoals Base44 */
+        .feedback {
+            position: fixed;
+            bottom: 520px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            max-width: 320px;
+            width: 70%;
+            border-radius: 20px;
+            text-align: center;
+            padding: 30px 25px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        .feedback.show {
+            opacity: 1;
+        }
+
+        .feedback.goed-feedback {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+        }
+
+        .feedback.fout-feedback {
+            background: linear-gradient(135deg, #fc8181 0%, #f56565 100%);
+            color: white;
+        }
+
+        .feedback .icon-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px auto;
+            font-size: 35px;
+            font-weight: 800;
+        }
+
+        .feedback.goed-feedback .icon-circle {
+            color: #38a169;
+        }
+
+        .feedback.fout-feedback .icon-circle {
+            color: #f56565;
+        }
+
+        .feedback .title {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .feedback .sub {
+            font-size: 24px;
+            font-weight: 600;
+            opacity: 0.95;
+            margin-top: 8px;
+        }
+
+        .stop-btn {
+            display: block;
+            margin: 10px auto 15px auto;
+            padding: 10px 30px;
+            font-size: 15px;
+            font-weight: 600;
+            background: white;
+            border: 2px solid #feb2b2;
+            color: #e53e3e;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .stop-btn:hover {
+            background: #fff5f5;
+            border-color: #fc8181;
+        }
+
+        /* RESULTATEN */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-box {
+            padding: 25px;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .stat-box.goed-box {
+            background: #c6f6d5;
+        }
+
+        .stat-box.fout-box {
+            background: #fed7d7;
+        }
+
+        .stat-box.score-box {
+            background: #e6f7fb;
+        }
+
+        .stat-box .stat-nummer {
+            font-size: 48px;
+            font-weight: 800;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .stat-box.goed-box .stat-nummer {
+            color: #22543d;
+        }
+
+        .stat-box.fout-box .stat-nummer {
+            color: #742a2a;
+        }
+
+        .stat-box.score-box .stat-nummer {
+            color: #1a3a5c;
+        }
+
+        .stat-box .stat-label {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .stat-box.goed-box .stat-label {
+            color: #276749;
+        }
+
+        .stat-box.fout-box .stat-label {
+            color: #9b2c2c;
+        }
+
+        .stat-box.score-box .stat-label {
+            color: #1a3a5c;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a3a5c;
+            margin: 30px 0 15px 0;
+        }
+
+        .moeilijke-sommen {
+            background: #fef5e7;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .som-item {
+            display: inline-block;
+            background: white;
+            padding: 12px 20px;
+            margin: 5px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #c05621;
+            border: 2px solid #fed7aa;
+        }
+
+        /* Utility */
+        .hidden {
+            display: none !important;
+        }
+
+        /* iPad Landscape optimalisatie */
+        @media (min-width: 769px) and (max-width: 1180px) {
+            .container {
+                max-width: 950px;
+            }
+
+            .tafel-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 18px;
+            }
+
+            .som-display {
+                font-size: 110px;
+            }
+
+            .antwoord-input {
+                font-size: 60px;
+                width: 200px;
+            }
+
+            .submit-btn {
+                width: 85px;
+                height: 85px;
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .oefening-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tafel-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .tafel-btn {
+                padding: 25px 15px;
+                min-height: 110px;
+            }
+
+            .tafel-label {
+                font-size: 13px;
+                margin-bottom: 6px;
+            }
+
+            .tafel-nummer {
+                font-size: 36px;
+            }
+
+            .voortgang-balk {
+                font-size: 16px;
+                padding: 8px 15px;
+            }
+
+            .stop-btn {
+                font-size: 16px;
+                padding: 12px 24px;
+                margin: 15px auto;
+            }
+
+            .som-container {
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 0;
+                gap: 20px;
+                margin: 30px 0;
+            }
+
+            .som-display {
+                font-size: 48px;
+                text-align: center;
+            }
+
+            .input-row {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: nowrap;
+            }
+
+            .antwoord-input {
+                font-size: 44px;
+                width: 140px;
+                padding: 12px 16px;
+            }
+
+            .equals {
+                font-size: 44px;
+            }
+
+            .submit-btn {
+                width: 65px;
+                height: 65px;
+                font-size: 28px;
+            }
+
+            .card {
+                padding: 20px 15px;
+            }
+
+            .header h1 {
+                font-size: 36px;
+            }
+
+            .feedback {
+                width: 85%;
+                max-width: 320px;
+                padding: 25px 20px;
+                bottom: auto;
+                top: 20%;
+                transform: translateX(-50%);
+            }
+
+            .feedback .title {
+                font-size: 28px;
+            }
+
+            .feedback .sub {
+                font-size: 18px;
+            }
+
+            .feedback .icon-circle {
+                width: 50px;
+                height: 50px;
+                font-size: 28px;
+            }
+
+            .feedback .icon-circle {
+                width: 50px;
+                height: 50px;
+                font-size: 28px;
+            }
+        }
+        }
+    
+        /* TOETSMODUS */
+        .toets-balk {
+            background: white;
+            border-radius: 16px;
+            padding: 14px 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            border: 1.5px solid #e2e8f0;
+        }
+        .toets-timer-groot {
+            font-size: 42px;
+            font-weight: 800;
+            color: #1a3a5c;
+            text-align: center;
+            line-height: 1;
+            margin-bottom: 4px;
+            transition: color 0.3s;
+        }
+        .toets-timer-groot.urgent { color: #dc2626; animation: pulse 0.5s ease infinite alternate; }
+        @keyframes pulse { from { opacity: 1; } to { opacity: 0.6; } }
+
+        .toets-progress-wrap {
+            margin: 8px 0 4px;
+        }
+        .toets-progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            font-weight: 700;
+            color: #64748b;
+            margin-bottom: 5px;
+        }
+        .toets-progress-bg {
+            background: #e2e8f0;
+            border-radius: 99px;
+            height: 12px;
+            overflow: hidden;
+        }
+        .toets-progress-bar {
+            height: 100%;
+            border-radius: 99px;
+            background: linear-gradient(90deg, #2a9d8f, #6ab04c);
+            transition: width 0.5s ease, background 0.3s;
+        }
+        .toets-progress-bar.achter { background: linear-gradient(90deg, #f59e0b, #ef4444); }
+        .toets-progress-bar.voor  { background: linear-gradient(90deg, #2a9d8f, #6ab04c); }
+
+        .toets-aanmoediging {
+            text-align: center;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 10px;
+            margin-top: 6px;
+            transition: all 0.3s;
+        }
+        .toets-aanmoediging.goed  { background: #dcfce7; color: #15803d; }
+        .toets-aanmoediging.matig { background: #fef3c7; color: #92400e; }
+        .toets-aanmoediging.slecht { background: #fee2e2; color: #dc2626; }
+
+        /* Toets eindscherm */
+        .toets-eind-score {
+            font-size: 80px;
+            font-weight: 800;
+            text-align: center;
+            line-height: 1;
+            margin: 10px 0 4px;
+        }
+        .toets-eind-norm {
+            text-align: center;
+            font-size: 16px;
+            font-weight: 700;
+            padding: 10px 16px;
+            border-radius: 12px;
+            margin: 10px 0 20px;
+        }
+        .toets-eind-norm.gehaald  { background: #dcfce7; color: #15803d; }
+        .toets-eind-norm.bijna    { background: #fef3c7; color: #92400e; }
+        .toets-eind-norm.niet     { background: #fee2e2; color: #dc2626; }
+
+        /* SV back-link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: 8px;
+            border: 1.5px solid #e2e8f0;
+            background: white;
+            margin-bottom: 20px;
+            transition: all 0.2s;
+        }
+        .back-link:hover {
+            border-color: #2a9d8f;
+            color: #2a9d8f;
+            background: #f0fdf8;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HOOFDMENU -->
+        <div id="hoofdmenu-scherm" class="hidden">
+            <div class="header">
+                <h1>✨ Tafeltrainer</h1>
+                <p class="subtitle">Leer rekenen op een slimme manier!</p>
+            </div>
+
+            <div class="card">
+                <h2>Wat wil je oefenen?</h2>
+                <p class="hint">Kies een type oefening om te beginnen</p>
+
+                <div class="oefening-grid">
+                    <div class="oefening-card" onclick="gaaNaarTafelSelectie()">
+                        <div class="icon">✖️</div>
+                        <div class="title">Tafels</div>
+                        <div class="beschrijving">Keersommen oefenen</div>
+                    </div>
+
+                    <div class="oefening-card disabled">
+                        <div class="badge">Binnenkort</div>
+                        <div class="icon">➕</div>
+                        <div class="title">Plussommen</div>
+                        <div class="beschrijving">Optellen oefenen</div>
+                    </div>
+
+                    <div class="oefening-card disabled">
+                        <div class="badge">Binnenkort</div>
+                        <div class="icon">➖</div>
+                        <div class="title">Minsommen</div>
+                        <div class="beschrijving">Aftrekken oefenen</div>
+                    </div>
+
+                    <div class="oefening-card disabled">
+                        <div class="badge">Binnenkort</div>
+                        <div class="icon">➗</div>
+                        <div class="title">Deelsommen</div>
+                        <div class="beschrijving">Delen oefenen</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAFEL SELECTIE -->
+        <div id="tafel-selectie-scherm">
+            <div class="header">
+                <h1>✨ Tafeltrainer</h1>
+                <p class="subtitle">Leer de tafels op een slimme manier!</p>
+                <button onclick="window.location.href='index.html'" style="margin-top: 10px; padding: 10px 20px; background: white; border: 2px solid #e2e8f0; border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 600; color: #1a3a5c;">🏠 Terug naar hoofdmenu</button>
+            </div>
+
+            <div class="card">
+                <h2>Welke tafels wil je oefenen?</h2>
+                <p class="hint">Kies één of meer tafels</p>
+
+                <div class="tafel-grid" id="tafel-grid">
+                    <!-- Wordt gevuld met JavaScript -->
+                </div>
+
+                <div class="settings">
+                    <div class="setting-row">
+                        <label>
+                            <span>⏱️</span>
+                            <span>Tijdslimiet</span>
+                        </label>
+                        <select id="tijd-select">
+                            <option value="0">Geen limiet</option>
+                            <option value="300">5 minuten</option>
+                            <option value="600">10 minuten</option>
+                            <option value="900">15 minuten</option>
+                            <option value="1200">20 minuten</option>
+                            <option value="1500">25 minuten</option>
+                            <option value="1800">30 minuten</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-row">
+                        <label>
+                            <span>⦿</span>
+                            <span>Minimum aantal sommen</span>
+                        </label>
+                        <select id="minimum-select">
+                            <option value="0">Geen minimum</option>
+                            <option value="30">30 sommen</option>
+                            <option value="50">50 sommen</option>
+                            <option value="100">100 sommen</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="btn-primary" onclick="startOefenen(false)" style="background:linear-gradient(135deg,#2a9d8f,#6ab04c)">
+                    <span>🏋️</span>
+                    <span>Vrij oefenen</span>
+                </button>
+
+                <button class="btn-primary" onclick="startOefenen(true)" style="margin-top:14px;background:linear-gradient(135deg,#1a3a5c,#2a9d8f)">
+                    <span>⏱️</span>
+                    <span>Oefenen voor de toets — 2 minuten</span>
+                </button>
+
+                <button class="btn-secondary" onclick="toonHoofdmenu()" style="margin-top: 15px;">
+                    <span>🏠</span>
+                    <span>Terug</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- OEFEN SCHERM -->
+        <div id="oefen-scherm" class="hidden">
+            <!-- iOS KEYBOARD HACK: Dummy input om keyboard betrouwbaar te triggeren -->
+            <input 
+                type="text" 
+                id="dummy-input"
+                style="position: absolute; left: -9999px; width: 1px; height: 1px;"
+                tabindex="-1"
+            >
+
+            <!-- TOETSMODUS BALK (alleen zichtbaar in toetsmodus) -->
+            <div id="toets-balk" class="toets-balk hidden" style="margin-top:16px">
+                <div class="toets-timer-groot" id="toets-timer-groot">2:00</div>
+                <div class="toets-progress-wrap">
+                    <div class="toets-progress-label">
+                        <span id="toets-sommen-label">0 / 50 sommen</span>
+                        <span id="toets-tempo-label">Tempo: —</span>
+                    </div>
+                    <div class="toets-progress-bg">
+                        <div class="toets-progress-bar voor" id="toets-progress-bar" style="width:0%"></div>
+                    </div>
+                </div>
+                <div class="toets-aanmoediging goed" id="toets-aanmoediging">💪 Blijf zo doorgaan!</div>
+            </div>
+
+            <!-- VOORTGANGSINDICATOR -->
+            <div style="text-align: center; margin-top: 20px;">
+                <div id="voortgang-indicator" class="voortgang-indicator" style="display: none;"></div>
+            </div>
+            
+            <div class="som-card">
+                <div class="som-container">
+                    <div class="som-display" id="som-display">
+                        4 <span class="times">×</span> 2
+                    </div>
+
+                    <div class="input-row">
+                        <div class="equals">=</div>
+                        <input 
+                            type="tel" 
+                            id="antwoord-input" 
+                            class="antwoord-input"
+                            pattern="[0-9]*"
+                            autocomplete="off"
+                            autocapitalize="off"
+                            autocorrect="off"
+                        >
+                        <button class="submit-btn" onclick="controleerAntwoord()">➤</button>
+                    </div>
+                </div>
+            </div>
+
+            <button class="stop-btn" onclick="stopOefenen()">⏹ Stoppen</button>
+
+            <div class="feedback" id="feedback"></div>
+        </div>
+
+        <!-- TOETS EINDSCHERM -->
+        <div id="toets-eind-scherm" class="hidden">
+            <div class="card" style="text-align:center">
+                <div style="font-size:48px;margin-bottom:8px" id="toets-eind-emoji">🏆</div>
+                <h2 id="toets-eind-titel">Klaar!</h2>
+                <div class="toets-eind-score" id="toets-eind-score" style="color:#2a9d8f">0/50</div>
+                <div style="color:#64748b;font-size:15px;margin-bottom:8px">correct in 2 minuten</div>
+                <div class="toets-eind-norm gehaald" id="toets-eind-norm">Norm gehaald!</div>
+
+                <!-- Fouten -->
+                <div id="toets-fouten-sectie" class="hidden" style="margin-top:20px;text-align:left">
+                    <div style="font-size:15px;font-weight:700;color:#dc2626;margin-bottom:10px">❌ Fout gemaakt bij:</div>
+                    <div id="toets-fouten-lijst" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"></div>
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px">
+                    <button class="btn-primary" onclick="herstartToetsModus()" style="font-size:18px;padding:16px">
+                        🔁 Opnieuw
+                    </button>
+                    <button class="btn-secondary" onclick="naarTafelSelectie()" style="font-size:18px;padding:16px">
+                        ← Terug
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESULTATEN SCHERM -->
+        <div id="resultaten-scherm" class="hidden">
+            <div class="card">
+                <h2 id="resultaat-titel">🏆 Gefeliciteerd!</h2>
+
+                <div class="section-title">
+                    📊 Deze sessie
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-box goed-box">
+                        <span class="stat-nummer" id="sessie-goed">0</span>
+                        <span class="stat-label">Goed</span>
+                    </div>
+                    <div class="stat-box fout-box">
+                        <span class="stat-nummer" id="sessie-fout">0</span>
+                        <span class="stat-label">Fout</span>
+                    </div>
+                    <div class="stat-box score-box">
+                        <span class="stat-nummer" id="sessie-score">0%</span>
+                        <span class="stat-label">Score</span>
+                    </div>
+                </div>
+
+                <div class="section-title">
+                    🏆 Totaal (alle sessies)
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-box goed-box">
+                        <span class="stat-nummer" id="totaal-goed">0</span>
+                        <span class="stat-label">Goed</span>
+                    </div>
+                    <div class="stat-box fout-box">
+                        <span class="stat-nummer" id="totaal-fout">0</span>
+                        <span class="stat-label">Fout</span>
+                    </div>
+                    <div class="stat-box score-box">
+                        <span class="stat-nummer" id="totaal-score">0%</span>
+                        <span class="stat-label">Score</span>
+                    </div>
+                </div>
+
+                <div id="moeilijke-sommen-sectie" class="hidden">
+                    <div class="section-title">
+                        ⚠️ Moeilijke sommen
+                    </div>
+                    <div class="moeilijke-sommen" id="moeilijke-sommen-lijst"></div>
+                </div>
+
+                <button class="btn-primary" onclick="opnieuw()" style="margin-top: 30px;">
+                    <span>↻</span>
+                    <span>Opnieuw</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // GELUIDJES - Simpele beeps
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playGoedGeluid() {
+            // Vrolijke oplopende toon
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 800; // Hoge toon
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.15);
+        }
+        
+        function playFoutGeluid() {
+            // Korte lage toon
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 200; // Lage toon
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.2);
+        }
+
+        // State
+        let geselecteerdeTafels = [];
+        let alleSommen = [];
+        let moeilijkeSommen = {};
+        let geleerdesommen = {};
+        let huidigeSom = null;
+        let sommenSindsMoeilijk = 0;
+        let tijdLimiet = null;
+        let minimumSommen = null;
+        let startTijd = null;
+        let timerInterval = null;
+
+        let stats = {
+            huidigGoed: 0,
+            huidigFout: 0,
+            totaalGoed: 0,
+            totaalFout: 0,
+            sommenTeller: 0
+        };
+
+        // LocalStorage
+        function loadStats() {
+            const saved = localStorage.getItem('tafeltrainer-stats');
+            if (saved) {
+                const data = JSON.parse(saved);
+                stats.totaalGoed = data.totaalGoed || 0;
+                stats.totaalFout = data.totaalFout || 0;
+            }
+        }
+
+        function saveStats() {
+            localStorage.setItem('tafeltrainer-stats', JSON.stringify({
+                totaalGoed: stats.totaalGoed,
+                totaalFout: stats.totaalFout
+            }));
+        }
+
+        // Initialisatie
+        function init() {
+            loadStats();
+            maakTafelGrid();
+            
+            const input = document.getElementById('antwoord-input');
+            
+            // Enter key
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    controleerAntwoord();
+                }
+            });
+
+            // KRITIEK: Prevent blur op iPad - keyboard moet ALTIJD open blijven
+            input.addEventListener('blur', (e) => {
+                // Alleen refocus als we in oefen scherm zijn
+                if (!document.getElementById('oefen-scherm').classList.contains('hidden')) {
+                    e.preventDefault();
+                    setTimeout(() => input.focus(), 10);
+                }
+            });
+
+            // Extra: focus bij touchend
+            input.addEventListener('touchend', (e) => {
+                if (!document.getElementById('oefen-scherm').classList.contains('hidden')) {
+                    setTimeout(() => input.focus(), 10);
+                }
+            });
+        }
+
+        // Navigatie
+        function toonHoofdmenu() {
+            document.getElementById('hoofdmenu-scherm').classList.remove('hidden');
+            document.getElementById('tafel-selectie-scherm').classList.add('hidden');
+            document.getElementById('oefen-scherm').classList.add('hidden');
+            document.getElementById('resultaten-scherm').classList.add('hidden');
+        }
+
+        function gaaNaarTafelSelectie() {
+            document.getElementById('hoofdmenu-scherm').classList.add('hidden');
+            document.getElementById('tafel-selectie-scherm').classList.remove('hidden');
+        }
+
+        function maakTafelGrid() {
+            const grid = document.getElementById('tafel-grid');
+            for (let i = 1; i <= 12; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'tafel-btn';
+                btn.innerHTML = `<span class="tafel-label">Tafel</span><span class="tafel-nummer">${i}</span>`;
+                btn.onclick = () => toggleTafel(i, btn);
+                grid.appendChild(btn);
+            }
+        }
+
+        function toggleTafel(tafel, btn) {
+            if (geselecteerdeTafels.includes(tafel)) {
+                geselecteerdeTafels = geselecteerdeTafels.filter(t => t !== tafel);
+                btn.classList.remove('selected');
+            } else {
+                geselecteerdeTafels.push(tafel);
+                btn.classList.add('selected');
+            }
+        }
+
+        // Start oefenen
+        function startOefenen_orig() {
+            if (geselecteerdeTafels.length === 0) {
+                alert('❌ Selecteer minstens één tafel!');
+                return;
+            }
+
+            // Reset
+            stats.huidigGoed = 0;
+            stats.huidigFout = 0;
+            stats.sommenTeller = 0;
+            moeilijkeSommen = {};
+            geleerdesommen = {};
+            sommenSindsMoeilijk = 0;
+
+            // Instellingen
+            tijdLimiet = parseInt(document.getElementById('tijd-select').value);
+            minimumSommen = parseInt(document.getElementById('minimum-select').value);
+            startTijd = tijdLimiet > 0 ? Date.now() : null;
+
+            // Maak sommen
+            alleSommen = [];
+            geselecteerdeTafels.forEach(tafel => {
+                for (let i = 1; i <= 10; i++) {
+                    alleSommen.push([i, tafel]);
+                }
+            });
+            shuffle(alleSommen);
+
+            // Start
+            document.getElementById('tafel-selectie-scherm').classList.add('hidden');
+            document.getElementById('oefen-scherm').classList.remove('hidden');
+            
+            volgendeSom();
+            
+            // iOS HACK: Focus dummy eerst, dan echte input
+            const dummyInput = document.getElementById('dummy-input');
+            const realInput = document.getElementById('antwoord-input');
+            
+            // Step 1: Focus dummy (activeert iOS keyboard subsystem)
+            dummyInput.focus();
+            
+            // Step 2: Na 50ms, focus echte input
+            setTimeout(() => {
+                realInput.focus();
+                realInput.click();
+            }, 50);
+            
+            // Step 3: Extra zekerheid
+            setTimeout(() => {
+                realInput.setSelectionRange(0, 0);
+                realInput.focus();
+            }, 200);
+
+            // Start timer interval (update elke seconde)
+            if (window.timerInterval) clearInterval(window.timerInterval);
+            if (tijdLimiet > 0) {
+                window.timerInterval = setInterval(updateVoortgang, 1000);
+            }
+        }
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function volgendeSom() {
+            if (checkStopVoorwaarde()) {
+                toonResultaten();
+                return;
+            }
+
+            huidigeSom = getVolgendeSomInternal();
+            
+            if (!huidigeSom) {
+                toonResultaten();
+                return;
+            }
+
+            toonSom(huidigeSom);
+            updateVoortgang();
+            
+            // Clear feedback
+            const feedback = document.getElementById('feedback');
+            feedback.className = 'feedback';
+            feedback.innerHTML = '';
+        }
+
+        function updateVoortgang() {
+            const indicator = document.getElementById('voortgang-indicator');
+            let text = '';
+            
+            // Check of we moeten stoppen
+            if (checkStopVoorwaarde()) {
+                toonResultaten();
+                return;
+            }
+            
+            // Minimum sommen
+            if (minimumSommen > 0) {
+                text = `${stats.sommenTeller} / ${minimumSommen} sommen`;
+            }
+            
+            // Timer
+            if (tijdLimiet > 0 && startTijd) {
+                const verstreken = Math.floor((Date.now() - startTijd) / 1000);
+                const resterend = Math.max(0, tijdLimiet - verstreken);
+                const minuten = Math.floor(resterend / 60);
+                const seconden = resterend % 60;
+                const tijdText = `${minuten}:${seconden.toString().padStart(2, '0')}`;
+                
+                if (text) {
+                    text += ` • ${tijdText}`;
+                } else {
+                    text = `Tijd: ${tijdText}`;
+                }
+            }
+            
+            if (text) {
+                indicator.textContent = text;
+                indicator.style.display = 'inline-block';
+            } else {
+                indicator.style.display = 'none';
+            }
+        }
+
+        function getVolgendeSomInternal() {
+            const moeilijkeKeys = Object.keys(moeilijkeSommen);
+            
+            // Bepaal interval op basis van score
+            // Score 1-3: interval 3-5 (vaak, moeilijk)
+            // Score 0: interval 10-15 (minder vaak, geleerd)
+            // Score <0: interval 15-20 (nog minder vaak, goed gekend)
+            let benodigdInterval = 3;
+            
+            if (moeilijkeKeys.length > 0) {
+                // Vind som met hoogste prioriteit
+                const somMetHoogstePrio = moeilijkeKeys.reduce((best, key) => {
+                    const score = moeilijkeSommen[key];
+                    if (!best) return key;
+                    if (score > moeilijkeSommen[best]) return key;
+                    return best;
+                }, null);
+                
+                const score = moeilijkeSommen[somMetHoogstePrio];
+                
+                // Bepaal benodig interval op basis van score
+                if (score >= 1) {
+                    benodigdInterval = Math.floor(Math.random() * 3) + 3; // 3-5
+                } else if (score === 0) {
+                    benodigdInterval = Math.floor(Math.random() * 6) + 10; // 10-15
+                } else {
+                    benodigdInterval = Math.floor(Math.random() * 6) + 15; // 15-20
+                }
+            }
+            
+            // Moeilijke som herhalen (ALLEEN score > 0, dus nog niet geleerd)
+            const echtMoeilijkeKeys = moeilijkeKeys.filter(key => moeilijkeSommen[key] > 0);
+            
+            if (echtMoeilijkeKeys.length > 0 && sommenSindsMoeilijk >= benodigdInterval) {
+                const gewogenSom = kiesMoeilijkeSom(echtMoeilijkeKeys);
+                const [a, b] = gewogenSom.split('x').map(Number);
+                sommenSindsMoeilijk = 0;
+                return [a, b];
+            }
+
+            // Nieuwe som (ALTIJD PRIORITEIT!)
+            if (alleSommen.length > 0) {
+                sommenSindsMoeilijk++;
+                return alleSommen.shift();
+            }
+
+            // ==== PAS ALS LIJST LEEG IS ====
+            
+            // Eerst echt moeilijke sommen (score > 0) - MET interval!
+            if (echtMoeilijkeKeys.length > 0 && sommenSindsMoeilijk >= benodigdInterval) {
+                const gewogenSom = kiesMoeilijkeSom(echtMoeilijkeKeys);
+                const [a, b] = gewogenSom.split('x').map(Number);
+                sommenSindsMoeilijk = 0;
+                return [a, b];
+            }
+
+            // Dan geleerde sommen herhalen (score ≤ 0)
+            const geleerdeKeys = moeilijkeKeys.filter(key => moeilijkeSommen[key] <= 0);
+            if (geleerdeKeys.length > 0 && sommenSindsMoeilijk >= benodigdInterval) {
+                const gewogenSom = kiesMoeilijkeSom(geleerdeKeys);
+                const [a, b] = gewogenSom.split('x').map(Number);
+                sommenSindsMoeilijk = 0;
+                return [a, b];
+            }
+
+            // Tussentijds - tel op voor moeilijke/geleerde sommen
+            sommenSindsMoeilijk++;
+
+            // Random sommen blijven geven
+            // - Met timer/minimum: tot limiet bereikt
+            // - Zonder timer/minimum: blijf altijd doorgaan (gebruiker stopt handmatig)
+            if (tijdLimiet > 0 || minimumSommen > 0) {
+                // Check of we moeten stoppen
+                if (checkStopVoorwaarde()) {
+                    return null;
+                }
+            }
+            
+            // Geef random som
+            const tafel = geselecteerdeTafels[Math.floor(Math.random() * geselecteerdeTafels.length)];
+            const getal = Math.floor(Math.random() * 10) + 1;
+            return [getal, tafel];
+        }
+
+        function kiesMoeilijkeSom(moeilijkeKeys) {
+            let totaalGewicht = 0;
+            const gewichten = [];
+            
+            moeilijkeKeys.forEach(key => {
+                const gewicht = Math.min(moeilijkeSommen[key], 5);
+                gewichten.push({ key, gewicht });
+                totaalGewicht += gewicht;
+            });
+
+            let random = Math.random() * totaalGewicht;
+            
+            for (let i = 0; i < gewichten.length; i++) {
+                random -= gewichten[i].gewicht;
+                if (random <= 0) {
+                    return gewichten[i].key;
+                }
+            }
+
+            return moeilijkeKeys[0];
+        }
+
+        function checkStopVoorwaarde() {
+            let tijdBereikt = false;
+            let minimumBereikt = false;
+            
+            if (tijdLimiet > 0 && startTijd) {
+                const verstreken = (Date.now() - startTijd) / 1000;
+                tijdBereikt = verstreken >= tijdLimiet;
+            }
+            
+            if (minimumSommen > 0) {
+                minimumBereikt = stats.sommenTeller >= minimumSommen;
+            }
+            
+            if (tijdLimiet > 0 && minimumSommen > 0) {
+                return tijdBereikt || minimumBereikt;
+            }
+            
+            if (tijdLimiet > 0) {
+                return tijdBereikt;
+            }
+            
+            if (minimumSommen > 0) {
+                return minimumBereikt;
+            }
+            
+            // GEEN timer/minimum = NOOIT automatisch stoppen
+            // Gebruiker stopt zelf met stopknop
+            return false;
+        }
+
+        function toonSom(som) {
+            const [a, b] = som;
+            document.getElementById('som-display').innerHTML = 
+                `${a} <span class="times">×</span> ${b}`;
+        }
+
+        function controleerAntwoordOrig() {
+            const input = document.getElementById('antwoord-input');
+            const antwoord = parseInt(input.value);
+
+            if (isNaN(antwoord) || input.value === '') {
+                input.focus();
+                return;
+            }
+
+            const [a, b] = huidigeSom;
+            const correct = a * b;
+            const somString = `${a}x${b}`;
+
+            stats.sommenTeller++;
+
+            const feedback = document.getElementById('feedback');
+            let feedbackDuur = 800; // Default voor goed antwoord
+            
+            if (antwoord === correct) {
+                // GOED!
+                stats.huidigGoed++;
+                stats.totaalGoed++;
+                
+                // GELUID afspelen
+                playGoedGeluid();
+                
+                feedback.innerHTML = `
+                    <div class="icon-circle">✓</div>
+                    <div class="title">Goed zo! 🎉</div>
+                `;
+                feedback.className = 'feedback goed-feedback show';
+                feedbackDuur = 800; // Snel door bij goed
+
+                // Update score: goed antwoord verlaagt score
+                if (moeilijkeSommen[somString] !== undefined) {
+                    moeilijkeSommen[somString]--;
+                    
+                    // Als score 0 of lager bereikt: verwijder uit tracking en terug in lijst
+                    if (moeilijkeSommen[somString] <= 0) {
+                        delete moeilijkeSommen[somString];
+                        
+                        // Voeg som terug toe aan alleSommen lijst
+                        // Begin weer van voor af aan - som komt later weer terug
+                        alleSommen.push(huidigeSom);
+                    }
+                } else {
+                    // Eerste keer goed → niet toevoegen aan moeilijk
+                    delete geleerdesommen[somString];
+                }
+            } else {
+                // FOUT!
+                stats.huidigFout++;
+                stats.totaalFout++;
+                
+                // GELUID afspelen
+                playFoutGeluid();
+                
+                feedback.innerHTML = `
+                    <div class="icon-circle">✗</div>
+                    <div class="title">Helaas!</div>
+                    <div class="sub">${a} × ${b} = ${correct}</div>
+                `;
+                feedback.className = 'feedback fout-feedback show';
+                feedbackDuur = 1500; // Langer bij fout - kind kan antwoord lezen
+
+                // Voeg toe aan moeilijke sommen met score 3
+                // Bij fout antwoord → altijd terug naar score 3
+                moeilijkeSommen[somString] = 3;
+                
+                if (geleerdesommen[somString]) {
+                    geleerdesommen[somString] = 0;
+                }
+            }
+
+            saveStats();
+            
+            // KRITIEK: Clear en focus DIRECT (voor timeout) - keyboard blijft open!
+            input.value = '';
+            input.focus();
+
+            // Wacht variabele tijd (800ms goed, 1500ms fout), dan volgende
+            setTimeout(() => {
+                // Verberg feedback VOOR nieuwe som
+                const feedback = document.getElementById('feedback');
+                feedback.className = 'feedback';
+                feedback.innerHTML = '';
+                
+                volgendeSom();
+                // Focus opnieuw voor zekerheid
+                setTimeout(() => input.focus(), 50);
+            }, feedbackDuur);
+        }
+
+        function focusInput() {
+            setTimeout(() => {
+                const input = document.getElementById('antwoord-input');
+                if (input) {
+                    input.focus();
+                    input.select();
+                }
+            }, 100);
+        }
+
+        // Update timer en counter displays
+        function updateProgressDisplays() {
+            const timerEl = document.getElementById('timer-display');
+            const counterEl = document.getElementById('counter-display');
+
+            // Timer display
+            if (tijdLimiet > 0 && startTijd) {
+                const verstreken = Math.floor((Date.now() - startTijd) / 1000);
+                const resterend = Math.max(0, tijdLimiet - verstreken);
+                const minuten = Math.floor(resterend / 60);
+                const seconden = resterend % 60;
+                timerEl.textContent = `⏱️ ${minuten}:${seconden.toString().padStart(2, '0')}`;
+            } else {
+                timerEl.textContent = '';
+            }
+
+            // Counter display
+            if (minimumSommen > 0) {
+                counterEl.textContent = `⦿ ${stats.sommenTeller}/${minimumSommen}`;
+            } else {
+                counterEl.textContent = '';
+            }
+        }
+
+        function stopOefenen() {
+            if (confirm('Weet je zeker dat je wilt stoppen?')) {
+                toonResultaten();
+            }
+        }
+
+        function toonResultaten() {
+            // Stop timer interval
+            if (window.timerInterval) {
+                clearInterval(window.timerInterval);
+                window.timerInterval = null;
+            }
+
+            document.getElementById('oefen-scherm').classList.add('hidden');
+            document.getElementById('resultaten-scherm').classList.remove('hidden');
+
+            const totaalHuidig = stats.huidigGoed + stats.huidigFout;
+            const percHuidig = totaalHuidig > 0 ? Math.round((stats.huidigGoed / totaalHuidig) * 100) : 0;
+
+            const totaalAlles = stats.totaalGoed + stats.totaalFout;
+            const percTotaal = totaalAlles > 0 ? Math.round((stats.totaalGoed / totaalAlles) * 100) : 0;
+
+            document.getElementById('sessie-goed').textContent = stats.huidigGoed;
+            document.getElementById('sessie-fout').textContent = stats.huidigFout;
+            document.getElementById('sessie-score').textContent = percHuidig + '%';
+
+            document.getElementById('totaal-goed').textContent = stats.totaalGoed;
+            document.getElementById('totaal-fout').textContent = stats.totaalFout;
+            document.getElementById('totaal-score').textContent = percTotaal + '%';
+
+            const moeilijkeKeys = Object.keys(moeilijkeSommen);
+            if (moeilijkeKeys.length > 0) {
+                document.getElementById('moeilijke-sommen-sectie').classList.remove('hidden');
+                const lijst = document.getElementById('moeilijke-sommen-lijst');
+                lijst.innerHTML = '';
+                moeilijkeKeys.forEach(somString => {
+                    const [a, b] = somString.split('x').map(Number);
+                    const item = document.createElement('span');
+                    item.className = 'som-item';
+                    item.textContent = `${a} × ${b}`;
+                    lijst.appendChild(item);
+                });
+            } else {
+                document.getElementById('moeilijke-sommen-sectie').classList.add('hidden');
+            }
+
+            const titel = document.getElementById('resultaat-titel');
+            if (moeilijkeKeys.length === 0 && alleSommen.length === 0) {
+                titel.textContent = '🏆 Gefeliciteerd!';
+            } else {
+                titel.textContent = '📊 Samenvatting';
+            }
+        }
+
+        function opnieuw() {
+            document.getElementById('resultaten-scherm').classList.add('hidden');
+            document.getElementById('tafel-selectie-scherm').classList.remove('hidden');
+        }
+
+        // ── TOETSMODUS ──────────────────────────────────────────────
+        let toetsModus       = false;
+        let toetsTimer       = null;
+        let toetsResterend   = 120; // seconden
+        let toetsGoed        = 0;
+        let toetsFout        = 0;
+        let toetsSommen      = []; // alle sommen deze sessie
+        let toetsHuidigeSom  = null;
+        let toetsBezig       = false;
+        let toetsPool        = [];
+
+        const TOETS_NORM     = 50;
+        const TOETS_SECONDEN = 120;
+        const TOETS_TEMPO    = 2.4; // seconden per som voor norm
+
+        function startOefenen(isToets) {
+            // Controleer of tafels geselecteerd zijn
+            if (geselecteerdeTafels.length === 0) {
+                alert('Kies eerst één of meer tafels!');
+                return;
+            }
+
+            if (isToets) {
+                startToetsModus();
+            } else {
+                // Originele oefenmodus
+                toetsModus = false;
+                // Roep originele start aan
+                startOefenen_orig();
+            }
+        }
+
+        function startToetsModus() {
+            toetsModus      = true;
+            toetsGoed       = 0;
+            toetsFout       = 0;
+            toetsSommen     = [];
+            toetsResterend  = TOETS_SECONDEN;
+            toetsBezig      = false;
+
+            // Genereer sommen pool
+            toetsPool = [];
+            geselecteerdeTafels.forEach(t => {
+                for (let g = 1; g <= 10; g++) toetsPool.push([g, t]);
+            });
+            toetsPool = shuffleArray([...toetsPool]);
+
+            // Toon oefen-scherm met toets-balk
+            document.getElementById('tafel-selectie-scherm').classList.add('hidden');
+            document.getElementById('oefen-scherm').classList.remove('hidden');
+            document.getElementById('toets-balk').classList.remove('hidden');
+            document.getElementById('voortgang-indicator').style.display = 'none';
+            document.querySelector('.stop-btn').style.display = 'none';
+
+            // Reset balk
+            updateToetsBalk();
+
+            // Countdown 3-2-1-GO
+            startToetsCountdown(() => {
+                // Start timer
+                const t0 = Date.now();
+                toetsTimer = setInterval(() => {
+                    toetsResterend = Math.max(0, TOETS_SECONDEN - Math.floor((Date.now() - t0) / 1000));
+                    updateToetsBalk();
+                    if (toetsResterend === 0) eindeToetsModus();
+                }, 250);
+
+                // Laad eerste som
+                laadToetsSom();
+
+                // Focus
+                const input = document.getElementById('antwoord-input');
+                input.value = '';
+                input.focus();
+            });
+        }
+
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function laadToetsSom() {
+            // Vul pool aan als leeg
+            if (toetsPool.length === 0) {
+                toetsPool = [];
+                geselecteerdeTafels.forEach(t => {
+                    for (let g = 1; g <= 10; g++) toetsPool.push([g, t]);
+                });
+                toetsPool = shuffleArray(toetsPool);
+            }
+
+            toetsHuidigeSom = toetsPool.shift();
+            const [a, b] = toetsHuidigeSom;
+            document.getElementById('som-display').innerHTML =
+                `${a} <span class="times">×</span> ${b}`;
+
+            const input = document.getElementById('antwoord-input');
+            input.value = '';
+            input.style.opacity = '1';
+            toetsBezig = false;
+            setTimeout(() => input.focus(), 30);
+        }
+
+        function controleerToetsAntwoord() {
+            if (toetsBezig || toetsResterend <= 0) return;
+
+            const input   = document.getElementById('antwoord-input');
+            const waarde  = input.value.trim();
+            const antwoord = parseInt(waarde);
+            if (isNaN(antwoord) || waarde === '') { input.focus(); return; }
+
+            toetsBezig = true;
+            const [a, b] = toetsHuidigeSom;
+            const juist  = a * b;
+            const correct = antwoord === juist;
+
+            if (correct) {
+                toetsGoed++;
+                playGoedGeluid();
+            } else {
+                toetsFout++;
+                playFoutGeluid();
+                toetsSommen.push({ a, b, juist, gegeven: antwoord, correct: false });
+            }
+
+            input.value = '';
+            input.style.opacity = '0.3';
+
+            if (toetsResterend > 0) {
+                setTimeout(() => { laadToetsSom(); }, 80);
+            }
+        }
+
+        function updateToetsBalk() {
+            const min = Math.floor(toetsResterend / 60);
+            const sec = toetsResterend % 60;
+            const timerEl = document.getElementById('toets-timer-groot');
+            timerEl.textContent = min + ':' + String(sec).padStart(2, '0');
+            timerEl.className = 'toets-timer-groot' + (toetsResterend <= 20 ? ' urgent' : '');
+
+            const totaalGemaakt = toetsGoed + toetsFout;
+            const verstreken    = TOETS_SECONDEN - toetsResterend;
+
+            // Voortgangsbalk: hoeveel % van de 50 norm gehaald
+            const normPct = Math.min(100, Math.round(toetsGoed / TOETS_NORM * 100));
+            const balk    = document.getElementById('toets-progress-bar');
+            balk.style.width = normPct + '%';
+
+            // Tempo berekening op basis van totaal geprobeerde sommen
+            const gemTempoSec = totaalGemaakt > 0 && verstreken > 0
+                ? verstreken / totaalGemaakt
+                : null;
+
+            // Voorspelling: hoeveel GOEDE sommen aan het einde?
+            // Correctiepercentage: als 90% goed, dan verwacht = (120/tempo) * 0.9
+            const pctGoed = totaalGemaakt > 0 ? toetsGoed / totaalGemaakt : 1;
+            const verwachtEind = gemTempoSec !== null
+                ? Math.round((TOETS_SECONDEN / gemTempoSec) * pctGoed)
+                : null;
+
+            // Groen = voorspeld aantal GOED >= 50 EN tempo < 2,4s per som
+            const opSchema = verwachtEind !== null
+                && verwachtEind >= TOETS_NORM
+                && gemTempoSec <= TOETS_TEMPO;
+
+            balk.className = 'toets-progress-bar ' + (opSchema ? 'voor' : 'achter');
+
+            // Labels
+            document.getElementById('toets-sommen-label').textContent = toetsGoed + ' / ' + TOETS_NORM + ' sommen';
+            document.getElementById('toets-tempo-label').textContent  = gemTempoSec
+                ? 'Verwacht: ~' + verwachtEind + ' sommen · ' + gemTempoSec.toFixed(1) + 's/som'
+                : 'Tempo: —';
+
+            // Aanmoediging
+            const aanEl = document.getElementById('toets-aanmoediging');
+            if (verstreken < 8 || gemTempoSec === null) {
+                aanEl.textContent = '🚀 GO! Zo snel mogelijk!';
+                aanEl.className   = 'toets-aanmoediging goed';
+            } else if (toetsGoed >= TOETS_NORM) {
+                aanEl.textContent = '🌟 Norm gehaald! Ga door!';
+                aanEl.className   = 'toets-aanmoediging goed';
+            } else if (opSchema && gemTempoSec <= 1.8) {
+                aanEl.textContent = '⚡ Super! Je haalt ~' + verwachtEind + ' sommen!';
+                aanEl.className   = 'toets-aanmoediging goed';
+            } else if (opSchema) {
+                aanEl.textContent = '👍 Op schema! Verwacht: ~' + verwachtEind + ' sommen';
+                aanEl.className   = 'toets-aanmoediging goed';
+            } else if (verwachtEind >= 40) {
+                aanEl.textContent = '⚡ Sneller! Nu op ~' + verwachtEind + ' sommen — norm is 50';
+                aanEl.className   = 'toets-aanmoediging matig';
+            } else {
+                aanEl.textContent = '🔥 Veel sneller! Nu op ~' + verwachtEind + ' sommen — norm is 50!';
+                aanEl.className   = 'toets-aanmoediging slecht';
+            }
+        }
+
+        function eindeToetsModus() {
+            if (toetsTimer) { clearInterval(toetsTimer); toetsTimer = null; }
+
+            document.getElementById('oefen-scherm').classList.add('hidden');
+            document.getElementById('toets-eind-scherm').classList.remove('hidden');
+
+            // Score
+            document.getElementById('toets-eind-score').textContent = toetsGoed + '/50';
+
+            // Bericht
+            let emoji, titel, normTekst, normKlasse;
+            if (toetsGoed >= 60) {
+                emoji = '🌟'; titel = 'Waanzinnig! Ver boven de norm!';
+                normTekst = '✅ ' + toetsGoed + '/50 — Norm ruimschoots gehaald!';
+                normKlasse = 'gehaald';
+            } else if (toetsGoed >= 50) {
+                emoji = '🏆'; titel = 'Gefeliciteerd! Norm gehaald!';
+                normTekst = '✅ ' + toetsGoed + '/50 — Norm gehaald!';
+                normKlasse = 'gehaald';
+            } else if (toetsGoed >= 45) {
+                emoji = '👍'; titel = 'Bijna! Nog een kleine stap!';
+                normTekst = '⚡ ' + toetsGoed + '/50 — Nog ' + (50 - toetsGoed) + ' sommen voor de norm!';
+                normKlasse = 'bijna';
+            } else if (toetsGoed >= 35) {
+                emoji = '🙂'; titel = 'Aardig werk — blijf oefenen!';
+                normTekst = '📈 ' + toetsGoed + '/50 — Blijf oefenen!';
+                normKlasse = 'bijna';
+            } else {
+                emoji = '💪'; titel = 'Oefenen maar — het lukt je!';
+                normTekst = '❌ ' + toetsGoed + '/50 — Norm nog niet gehaald.';
+                normKlasse = 'niet';
+            }
+
+            document.getElementById('toets-eind-emoji').textContent = emoji;
+            document.getElementById('toets-eind-titel').textContent  = titel;
+            document.getElementById('toets-eind-norm').textContent   = normTekst;
+            document.getElementById('toets-eind-norm').className     = 'toets-eind-norm ' + normKlasse;
+
+            // Fouten tonen
+            const fouten = toetsSommen.filter(s => !s.correct);
+            if (fouten.length > 0) {
+                document.getElementById('toets-fouten-sectie').classList.remove('hidden');
+                const lijst = document.getElementById('toets-fouten-lijst');
+                lijst.innerHTML = '';
+                fouten.forEach(f => {
+                    const wrap = document.createElement('div');
+                    wrap.style.cssText = 'background:#fee2e2;border:1.5px solid #fca5a5;border-radius:12px;padding:8px 14px;font-size:14px;font-weight:700;color:#dc2626;text-align:center';
+                    wrap.innerHTML = `<div style="font-size:16px;font-weight:800">${f.a} × ${f.b}</div>
+                        <div style="text-decoration:line-through;opacity:0.7;font-size:12px">= ${f.gegeven}</div>
+                        <div style="color:#15803d;font-size:12px">= ${f.juist}</div>`;
+                    lijst.appendChild(wrap);
+                });
+            } else {
+                document.getElementById('toets-fouten-sectie').classList.add('hidden');
+            }
+        }
+
+        function herstartToetsModus() {
+            document.getElementById('toets-eind-scherm').classList.add('hidden');
+            startToetsModus();
+        }
+
+        function naarTafelSelectie() {
+            if (toetsTimer) { clearInterval(toetsTimer); toetsTimer = null; }
+            document.getElementById('toets-eind-scherm').classList.add('hidden');
+            document.getElementById('tafel-selectie-scherm').classList.remove('hidden');
+        }
+
+        // Countdown overlay voor toetsmodus
+        function startToetsCountdown(callback) {
+            const overlay = document.createElement('div');
+            overlay.style.cssText = 'position:fixed;inset:0;background:rgba(26,58,92,0.92);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;z-index:9999';
+
+            const getal = document.createElement('div');
+            getal.style.cssText = 'font-size:140px;font-weight:800;color:white;line-height:1;font-family:Inter,sans-serif';
+
+            const sub = document.createElement('div');
+            sub.style.cssText = 'font-size:20px;font-weight:700;color:rgba(255,255,255,0.7);letter-spacing:2px;text-transform:uppercase';
+
+            overlay.appendChild(getal);
+            overlay.appendChild(sub);
+            document.body.appendChild(overlay);
+
+            // Focus dummy input zodat keyboard al klaarstaat
+            document.getElementById('dummy-input').focus();
+
+            const stappen = [
+                { t: '3', s: 'Maak je klaar…' },
+                { t: '2', s: 'Maak je klaar…' },
+                { t: '1', s: 'Bijna…' },
+                { t: 'GO!', s: 'Succes!', kleur: '#6ab04c', klein: true },
+            ];
+
+            let i = 0;
+            function volgende() {
+                if (i >= stappen.length) {
+                    overlay.style.transition = 'opacity 0.3s';
+                    overlay.style.opacity = '0';
+                    setTimeout(() => { overlay.remove(); callback(); }, 300);
+                    return;
+                }
+                const stap = stappen[i];
+                getal.textContent  = stap.t;
+                getal.style.color  = stap.kleur || 'white';
+                getal.style.fontSize = stap.klein ? '90px' : '140px';
+                sub.textContent    = stap.s;
+                i++;
+                setTimeout(volgende, stap.t === 'GO!' ? 700 : 900);
+            }
+            volgende();
+        }
+
+        // Dispatcher: kies juiste controleer functie op basis van modus
+        function controleerAntwoord() {
+            if (toetsModus) {
+                controleerToetsAntwoord();
+            } else {
+                controleerAntwoordOrig();
+            }
+        }
+
+        // Start app
+        init();
+    </script>
+</body>
+</html>
