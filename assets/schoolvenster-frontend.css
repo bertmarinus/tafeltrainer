@@ -1,0 +1,1497 @@
+/*
+ * ============================================================
+ *  SCHOOLVENSTER — FRONTEND STYLESHEET
+ *  app.schoolvenster.nl / oefeningen
+ *  Versie: 1.0 | April 2026
+ *  "waar groeien gewoon is"
+ * ============================================================
+ *
+ *  GEBRUIK:
+ *  <link rel="stylesheet" href="/assets/schoolvenster-frontend.css">
+ *  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+ *
+ *  FONTS:
+ *  - Fredoka   → titels, knoppen, grote display-tekst
+ *  - Nunito    → bodytekst taal-oefeningen
+ *  - Inter     → bodytekst rekenen/cijfer-oefeningen
+ * ============================================================
+ */
+
+
+/* ── 1. CSS VARIABELEN ─────────────────────────────────────── */
+
+:root {
+    /* Primaire kleuren */
+    --sv-navy:          #1a3a5c;
+    --sv-teal:          #2a9d8f;
+    --sv-teal-dark:     #1a8a7e;
+    --sv-green:         #6ab04c;
+
+    /* Gradient (knoppen, selecties, accenten) */
+    --sv-gradient:      linear-gradient(135deg, #2a9d8f, #6ab04c);
+    --sv-gradient-alt:  linear-gradient(135deg, #6ab04c, #2a9d8f);
+
+    /* Achtergrond */
+    --sv-bg:            linear-gradient(160deg, #f0fdf8 0%, #e6f7fb 50%, #f0fdf8 100%);
+    --sv-bg-light:      #f0fdf8;
+    --sv-bg-teal:       #e6f7fb;
+
+    /* Tekst */
+    --sv-text-dark:     #1a3a5c;   /* = navy, voor titels en body */
+    --sv-text-light:    #64748b;   /* voor subtekst, labels */
+    --sv-text-muted:    #718096;
+    --sv-text-placeholder: #cbd5e0;
+
+    /* Borders */
+    --sv-border:        #e2e8f0;
+    --sv-border-light:  #d1fae5;
+
+    /* Feedback kleuren */
+    --sv-success:       #4caf7d;
+    --sv-error:         #e86060;
+    --sv-warning-bg:    #fef3c7;
+    --sv-warning-border:#f6d860;
+    --sv-warning-text:  #92400e;
+
+    /* Fout-melding (inloggen) */
+    --sv-fout-bg:       #fff0ee;
+    --sv-fout-border:   #ffc5bb;
+    --sv-fout-text:     #c0392b;
+
+    /* Kaarten & schaduwen */
+    --sv-card-bg:       #ffffff;
+    --sv-shadow-sm:     0 4px 20px rgba(0, 0, 0, 0.06);
+    --sv-shadow-md:     0 10px 40px rgba(0, 0, 0, 0.08);
+    --sv-shadow-lg:     0 20px 60px rgba(0, 0, 0, 0.10);
+    --sv-shadow-teal:   0 10px 40px rgba(42, 157, 143, 0.30);
+    --sv-shadow-green:  0 8px 24px rgba(106, 176, 76, 0.35);
+
+    /* Border-radius */
+    --sv-radius-sm:     8px;
+    --sv-radius-md:     14px;
+    --sv-radius-lg:     20px;
+    --sv-radius-xl:     24px;
+    --sv-radius-xxl:    28px;
+
+    /* Feedback popup timing (gebruik in JS) */
+    --sv-feedback-goed: 1400;   /* ms */
+    --sv-feedback-fout: 2000;   /* ms */
+}
+
+
+/* ── 2. RESET & BASIS ──────────────────────────────────────── */
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--sv-bg);
+    min-height: 100vh;
+    padding: 20px;
+    color: var(--sv-text-dark);
+}
+
+/* Inter body voor rekenen-oefeningen: voeg class .sv-rekenen toe aan <body> */
+body.sv-rekenen {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.sv-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+
+/* ── 3. NAVIGATIEBALK (altijd bovenaan) ────────────────────── */
+/*
+    GEBRUIK:
+    <div class="sv-nav">
+        <a href="URL_HOOFDMENU" class="sv-nav-btn">🏠 Hoofdmenu</a>
+        <a href="URL_OVERZICHT" class="sv-nav-btn">← Terug naar overzicht</a>
+    </div>
+*/
+
+.sv-nav {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.sv-nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--sv-text-light);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 7px 14px;
+    border-radius: var(--sv-radius-sm);
+    border: 1.5px solid var(--sv-border);
+    background: white;
+    transition: all 0.2s;
+    font-family: 'Nunito', sans-serif;
+}
+
+.sv-nav-btn:hover {
+    border-color: var(--sv-teal);
+    color: var(--sv-teal);
+    background: var(--sv-bg-light);
+}
+
+
+/* ── 4. HEADER / APP-ICOON ─────────────────────────────────── */
+/*
+    GEBRUIK:
+    <div class="sv-header">
+        <div class="sv-app-icon">✨</div>
+        <h1 class="sv-header-titel">Naam oefening</h1>
+        <p class="sv-header-sub">Ondertitel of instructie</p>
+    </div>
+*/
+
+.sv-header {
+    text-align: center;
+    margin-bottom: 24px;
+    animation: sv-fadeInDown 0.6s ease;
+}
+
+.sv-app-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--sv-gradient);
+    border-radius: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 42px;
+    margin-bottom: 14px;
+    box-shadow: var(--sv-shadow-teal);
+    animation: sv-float 3s ease-in-out infinite;
+}
+
+.sv-header-titel {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--sv-text-dark);
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+}
+
+.sv-header-sub {
+    font-size: 18px;
+    color: var(--sv-text-light);
+    font-weight: 600;
+}
+
+
+/* ── 5. KAARTEN ────────────────────────────────────────────── */
+
+/* Basis witte card */
+.sv-card {
+    background: var(--sv-card-bg);
+    border-radius: var(--sv-radius-xxl);
+    padding: 45px 40px;
+    box-shadow: var(--sv-shadow-lg);
+    margin-bottom: 22px;
+    animation: sv-fadeInUp 0.6s ease 0.2s both;
+}
+
+/* Vraagkaart — teal achtergrond */
+.sv-question-card {
+    background: var(--sv-teal);
+    border-radius: var(--sv-radius-xl);
+    padding: 36px 44px;
+    margin-bottom: 22px;
+    color: white;
+    text-align: center;
+    box-shadow: var(--sv-shadow-teal);
+}
+
+.sv-question-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.75;
+    margin-bottom: 14px;
+}
+
+.sv-question-zin {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+/* Card-icoon (emoji in licht blokje) */
+.sv-card-icon {
+    width: 68px;
+    height: 68px;
+    border-radius: 18px;
+    background: var(--sv-bg-teal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+    margin: 0 auto 18px;
+}
+
+.sv-card-titel {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--sv-text-dark);
+    text-align: center;
+    margin-bottom: 6px;
+}
+
+.sv-card-sub {
+    color: var(--sv-text-light);
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+/* Selectie-cards (bijv. moeilijkheidsgraad kiezen) */
+.sv-keuze-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 30px;
+}
+
+.sv-keuze-card {
+    border: 3px solid var(--sv-border);
+    border-radius: var(--sv-radius-lg);
+    padding: 25px 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.sv-keuze-card:hover:not(.disabled) {
+    border-color: var(--sv-teal);
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(42, 157, 143, 0.2);
+    background: linear-gradient(135deg, #f0fdf8 0%, #e6f7fb 100%);
+}
+
+.sv-keuze-card.actief {
+    background: var(--sv-gradient);
+    color: white;
+    border-color: var(--sv-teal);
+    box-shadow: 0 6px 20px rgba(42, 157, 143, 0.4);
+}
+
+.sv-keuze-card.disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.sv-keuze-icon {
+    font-size: 44px;
+    margin-bottom: 12px;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.sv-keuze-card:not(.disabled):hover .sv-keuze-icon {
+    transform: scale(1.15) rotate(-5deg);
+}
+
+.sv-keuze-titel {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--sv-text-dark);
+    margin-bottom: 6px;
+}
+
+.sv-keuze-card.actief .sv-keuze-titel {
+    color: white;
+}
+
+.sv-keuze-beschrijving {
+    font-size: 14px;
+    color: var(--sv-text-light);
+    font-weight: 600;
+}
+
+.sv-keuze-card.actief .sv-keuze-beschrijving {
+    color: rgba(255,255,255,0.85);
+}
+
+/* Badge (bijv. "Binnenkort") */
+.sv-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #fed7aa;
+    color: #c05621;
+    padding: 4px 10px;
+    border-radius: var(--sv-radius-sm);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+/* ── 6. INVOERVELDEN ───────────────────────────────────────── */
+
+.sv-input {
+    width: 100%;
+    padding: 18px 22px;
+    border: 3px solid var(--sv-border);
+    border-radius: 16px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    color: var(--sv-text-dark);
+    transition: all 0.3s;
+    margin-bottom: 20px;
+    background: white;
+    outline: none;
+}
+
+.sv-input:focus {
+    border-color: var(--sv-teal);
+    box-shadow: 0 0 0 4px rgba(42, 157, 143, 0.12);
+}
+
+.sv-input::placeholder {
+    color: var(--sv-text-placeholder);
+}
+
+.sv-input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Input label (klein kapsletter label boven veld) */
+.sv-input-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--sv-text-light);
+    letter-spacing: 0.5px;
+    text-align: center;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    display: block;
+}
+
+/* Input groep (label + veld samen) */
+.sv-input-groep {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* Twee invoervelden naast elkaar */
+.sv-input-rij {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+/* Select dropdown */
+.sv-select {
+    width: 100%;
+    padding: 16px 20px;
+    font-size: 16px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    border: 3px solid var(--sv-border);
+    border-radius: var(--sv-radius-md);
+    background: #f7fafc;
+    color: var(--sv-text-dark);
+    cursor: pointer;
+    transition: border-color 0.3s;
+    outline: none;
+}
+
+.sv-select:focus {
+    border-color: var(--sv-teal);
+}
+
+
+/* ── 7. KNOPPEN ────────────────────────────────────────────── */
+
+/* Primaire knop — gradient groen */
+.sv-btn-primair {
+    width: 100%;
+    padding: 18px 24px;
+    background: var(--sv-gradient);
+    color: white;
+    border: none;
+    border-radius: var(--sv-radius-md);
+    font-family: 'Fredoka', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: var(--sv-shadow-green);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.sv-btn-primair:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(106, 176, 76, 0.45);
+}
+
+.sv-btn-primair:active {
+    transform: translateY(0);
+}
+
+/* Controleer-knop (teal) */
+.sv-btn-check {
+    padding: 16px 24px;
+    background: var(--sv-teal);
+    border: none;
+    border-radius: var(--sv-radius-md);
+    font-family: 'Fredoka', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 6px 20px rgba(42, 157, 143, 0.3);
+}
+
+.sv-btn-check:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(42, 157, 143, 0.4);
+    background: var(--sv-teal-dark);
+}
+
+/* Hint-knop (geel) */
+.sv-btn-hint {
+    padding: 16px 24px;
+    background: var(--sv-warning-bg);
+    border: 2px solid var(--sv-warning-border);
+    border-radius: var(--sv-radius-md);
+    font-family: 'Fredoka', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--sv-warning-text);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.sv-btn-hint:hover {
+    background: #fde68a;
+    transform: translateY(-2px);
+}
+
+/* Secundaire knop (wit met border) */
+.sv-btn-secundair {
+    padding: 14px 24px;
+    background: white;
+    border: 2px solid var(--sv-border);
+    border-radius: var(--sv-radius-md);
+    font-family: 'Fredoka', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--sv-text-dark);
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.sv-btn-secundair:hover {
+    border-color: var(--sv-teal);
+    color: var(--sv-teal);
+}
+
+/* Succes-knop (groen) */
+.sv-btn-succes {
+    padding: 14px 24px;
+    background: var(--sv-success);
+    border: none;
+    border-radius: var(--sv-radius-md);
+    font-family: 'Fredoka', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    box-shadow: 0 6px 20px rgba(76, 175, 125, 0.3);
+}
+
+.sv-btn-succes:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(76, 175, 125, 0.4);
+}
+
+/* OK-knop (in modals) */
+.sv-btn-ok {
+    padding: 12px 32px;
+    background: var(--sv-teal);
+    border: none;
+    border-radius: 12px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 14px rgba(42, 157, 143, 0.3);
+}
+
+.sv-btn-ok:hover {
+    transform: translateY(-2px);
+    background: var(--sv-teal-dark);
+}
+
+/* Knoppen-rij (hint links, controleer rechts) */
+.sv-btn-rij {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 14px;
+}
+
+/* Knoppen-rij gelijk verdeeld */
+.sv-btn-rij-gelijk {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+/* Moeilijkheidsgraad knoppen */
+.sv-niveau-btns {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.sv-niveau-btn {
+    padding: 14px 28px;
+    border: 3px solid var(--sv-border);
+    background: white;
+    border-radius: 16px;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--sv-text-light);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Fredoka', sans-serif;
+    min-width: 130px;
+}
+
+.sv-niveau-btn:hover {
+    transform: translateY(-2px);
+    border-color: var(--sv-teal);
+}
+
+.sv-niveau-btn.actief {
+    background: var(--sv-teal);
+    color: white;
+    border-color: var(--sv-teal);
+    box-shadow: 0 6px 20px rgba(42, 157, 143, 0.4);
+}
+
+
+/* ── 8. FEEDBACK POPUPS ────────────────────────────────────── */
+/*
+    HTML-structuur (buiten .sv-container, direct in <body>):
+
+    <!-- GOED -->
+    <div class="sv-feedback-overlay hidden" id="feedbackGoed">
+        <div class="sv-feedback-popup goed">
+            <div class="sv-feedback-cirkel">✔</div>
+            <div class="sv-feedback-tekst">Goed zo! 🎉</div>
+            <div class="sv-feedback-sub" id="feedbackGoedSub"></div>
+        </div>
+    </div>
+
+    <!-- FOUT -->
+    <div class="sv-feedback-overlay hidden" id="feedbackFout">
+        <div class="sv-feedback-popup fout">
+            <div class="sv-feedback-cirkel">✕</div>
+            <div class="sv-feedback-tekst">Helaas!</div>
+            <div class="sv-feedback-sub" id="feedbackFoutSub"></div>
+        </div>
+    </div>
+*/
+
+.sv-feedback-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    padding: 20px;
+    animation: sv-fadeIn 0.15s ease;
+}
+
+.sv-feedback-popup {
+    width: 320px;
+    border-radius: var(--sv-radius-xxl);
+    padding: 44px 36px 38px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: sv-popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    text-align: center;
+}
+
+.sv-feedback-popup.goed { background: var(--sv-success); }
+.sv-feedback-popup.fout { background: var(--sv-error); }
+
+.sv-feedback-cirkel {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 38px;
+    margin-bottom: 22px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.sv-feedback-tekst {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 34px;
+    font-weight: 700;
+    color: white;
+}
+
+.sv-feedback-sub {
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.88);
+    margin-top: 8px;
+    line-height: 1.5;
+}
+
+
+/* ── 9. HINT MODAL ─────────────────────────────────────────── */
+/*
+    HTML-structuur (buiten .sv-container, direct in <body>):
+
+    <div class="sv-modal-overlay hidden" id="modalHint">
+        <div class="sv-modal-content">
+            <div class="sv-modal-header">
+                <div class="sv-modal-icoon">💡</div>
+                <div class="sv-modal-titel">Hint</div>
+            </div>
+            <div class="sv-hint-subtekst">Hoe herken ik ...?</div>
+            <ul class="sv-hint-lijst">
+                <li>Tip 1</li>
+                <li>Tip 2</li>
+            </ul>
+            <div class="sv-modal-footer">
+                <button class="sv-btn-ok" onclick="sluitHint()">OK</button>
+            </div>
+        </div>
+    </div>
+*/
+
+.sv-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.50);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: sv-fadeIn 0.2s ease;
+}
+
+.sv-modal-content {
+    background: white;
+    border-radius: 22px;
+    padding: 32px 40px;
+    max-width: 480px;
+    width: 92%;
+    text-align: left;
+    animation: sv-popIn 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+.sv-modal-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.sv-modal-icoon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--sv-bg-teal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.sv-modal-titel {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--sv-text-dark);
+}
+
+.sv-hint-subtekst {
+    font-weight: 700;
+    color: var(--sv-text-dark);
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.sv-hint-lijst {
+    list-style: none;
+    padding: 0;
+}
+
+.sv-hint-lijst li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 0;
+    font-size: 16px;
+    color: var(--sv-text-dark);
+    border-bottom: 1px solid var(--sv-border);
+    line-height: 1.5;
+}
+
+.sv-hint-lijst li:last-child {
+    border-bottom: none;
+}
+
+.sv-hint-lijst li::before {
+    content: "•";
+    color: var(--sv-teal);
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 1.1;
+    flex-shrink: 0;
+}
+
+.sv-modal-footer {
+    margin-top: 22px;
+    text-align: right;
+}
+
+
+/* ── 10. EINDSCHERM ────────────────────────────────────────── */
+/*
+    HTML-structuur (binnen .sv-card):
+
+    <div class="sv-card sv-eindscherm hidden" id="eindscherm">
+        <div class="sv-card-icon" style="background:#d1fae5;">🏆</div>
+        <div class="sv-card-titel">Alle zinnen gehad!</div>
+        <div class="sv-eind-score" id="eindScore">0/0</div>
+        <div class="sv-eind-label">goed / totaal geprobeerd</div>
+        <div class="sv-eind-bericht" id="eindBericht"></div>
+        <div class="sv-eind-knoppen">
+            <button class="sv-btn-secundair" onclick="herstart()">🔁 Opnieuw</button>
+            <a href="URL_OVERZICHT" class="sv-btn-succes">← Terug naar overzicht</a>
+            <a href="URL_HOOFDMENU" class="sv-btn-secundair">🏠 Hoofdmenu</a>
+        </div>
+    </div>
+*/
+
+.sv-eindscherm {
+    text-align: center;
+}
+
+.sv-eind-score {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 72px;
+    font-weight: 700;
+    color: var(--sv-teal);
+    margin: 8px 0;
+    line-height: 1;
+}
+
+.sv-eind-label {
+    color: var(--sv-text-light);
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+.sv-eind-bericht {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--sv-text-dark);
+    margin-bottom: 28px;
+}
+
+.sv-eind-knoppen {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+
+/* ── 11. INLOGSCHERM ───────────────────────────────────────── */
+/*
+    Gebruik op de login-pagina:
+    <body class="sv-login-body">
+    <div class="sv-login-card">...</div>
+
+    Variabelen bovenaan de pagina (PHP of JS):
+    $tool_naam  = 'Muziektools';   (wordt gesplitst in twee spans)
+*/
+
+.sv-login-body {
+    font-family: 'Nunito', sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #e8f4f8 0%, #d4eee8 50%, #e0f0f4 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.sv-login-card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px 44px 48px;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: 0 8px 40px rgba(26, 58, 92, 0.10);
+    text-align: center;
+    animation: sv-slideUp 0.4s ease both;
+}
+
+.sv-login-logo {
+    width: 150px;
+    height: auto;
+    display: block;
+    margin: 0 auto 20px;
+}
+
+/* Toolnaam onder het logo — splits in twee <span> elementen */
+.sv-login-toolnaam {
+    font-family: 'Fredoka', cursive;
+    font-size: 2.4rem;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.sv-login-toolnaam .deel1 { color: var(--sv-navy); }
+.sv-login-toolnaam .deel2 { color: var(--sv-teal); }
+
+.sv-login-sub {
+    font-size: 0.9rem;
+    color: #7a9ab5;
+    margin-bottom: 36px;
+}
+
+/* Foutmelding */
+.sv-login-fout {
+    background: var(--sv-fout-bg);
+    border: 1px solid var(--sv-fout-border);
+    color: var(--sv-fout-text);
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 0.83rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Formulier velden */
+.sv-login-veld {
+    text-align: left;
+    margin-bottom: 14px;
+}
+
+.sv-login-veld label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #5a7a9c;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.sv-login-input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1.5px solid #d0dce8;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    color: var(--sv-navy);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: #f8fbff;
+}
+
+.sv-login-input:focus {
+    border-color: var(--sv-teal);
+    box-shadow: 0 0 0 4px rgba(42, 157, 143, 0.12);
+    background: white;
+}
+
+/* Login knop */
+.sv-login-btn {
+    width: 100%;
+    padding: 15px;
+    margin-top: 6px;
+    background: var(--sv-gradient);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.sv-login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(42, 157, 143, 0.38);
+}
+
+
+/* ── 12. ANIMATIES ─────────────────────────────────────────── */
+
+@keyframes sv-fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes sv-fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes sv-fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes sv-popIn {
+    from { opacity: 0; transform: scale(0.85); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes sv-slideUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes sv-float {
+    0%, 100% { transform: translateY(0px); }
+    50%       { transform: translateY(-10px); }
+}
+
+
+/* ── 13. HULPKLASSEN ───────────────────────────────────────── */
+
+.hidden { display: none !important; }
+
+.sv-tekst-midden { text-align: center; }
+.sv-mb-sm { margin-bottom: 12px; }
+.sv-mb-md { margin-bottom: 20px; }
+.sv-mb-lg { margin-bottom: 30px; }
+
+
+/* ── 14. RESPONSIVE ────────────────────────────────────────── */
+
+/* Tablet */
+@media (max-width: 900px) {
+    .sv-card { padding: 36px 30px; }
+    .sv-question-card { padding: 28px 30px; }
+    .sv-question-zin { font-size: 26px; }
+    .sv-keuze-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Mobiel */
+@media (max-width: 768px) {
+    body { padding: 14px; }
+    .sv-header-titel { font-size: 32px; }
+    .sv-header-sub { font-size: 16px; }
+    .sv-app-icon { width: 68px; height: 68px; font-size: 36px; }
+    .sv-card { padding: 28px 20px; }
+    .sv-question-card { padding: 22px 20px; }
+    .sv-question-zin { font-size: 22px; }
+    .sv-card-titel { font-size: 23px; }
+    .sv-feedback-popup { width: 290px; padding: 36px 28px 30px; }
+    .sv-feedback-tekst { font-size: 28px; }
+    .sv-eind-knoppen { flex-direction: column; align-items: stretch; }
+    .sv-btn-rij { grid-template-columns: 1fr; }
+    .sv-input-rij { grid-template-columns: 1fr; gap: 10px; }
+    .sv-keuze-grid { grid-template-columns: 1fr; }
+    .sv-login-card { padding: 32px 24px 40px; }
+    .sv-login-toolnaam { font-size: 2rem; }
+}
+
+/* Klein mobiel */
+@media (max-width: 480px) {
+    .sv-question-zin { font-size: 19px; }
+    .sv-input { font-size: 19px; }
+    .sv-feedback-cirkel { width: 66px; height: 66px; font-size: 32px; }
+    .sv-niveau-btns { flex-direction: column; align-items: stretch; }
+    .sv-niveau-btn { width: 100%; }
+}
+
+/* Landscape op tablet/mobiel */
+@media (orientation: landscape) and (max-height: 768px) {
+    body { padding: 12px; }
+    .sv-question-card { padding: 16px 40px; margin-bottom: 12px; }
+    .sv-question-zin { font-size: 24px; }
+    .sv-card { padding: 20px 36px; }
+    .sv-card-icon { width: 52px; height: 52px; font-size: 26px; margin-bottom: 10px; }
+    .sv-card-titel { font-size: 22px; margin-bottom: 4px; }
+    .sv-card-sub { font-size: 14px; margin-bottom: 14px; }
+    .sv-input { padding: 12px 22px; margin-bottom: 14px; }
+}
+
+
+/* ════════════════════════════════════════════════════════════
+ *  15. COMPATIBILITEITSLAAG — GITHUB-OEFENINGEN
+ *
+ *  De oefeningen in deze map gebruiken generieke klassenamen
+ *  (.card, .header, .type-card, …). Dit blok geeft ze het
+ *  Schoolvenster-uiterlijk zonder dat de markup of het
+ *  JavaScript aangepast hoeft te worden.
+ *
+ *  Bouw je een NIEUWE oefening? Gebruik dan gewoon de sv-
+ *  klassen hierboven. Dit blok is er alleen voor bestaande
+ *  bestanden.
+ * ════════════════════════════════════════════════════════════ */
+
+/* ── Layout ───────────────────────────────────────────────── */
+
+.container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* ── Navigatie ────────────────────────────────────────────── */
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--sv-text-light);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 7px 14px;
+    border-radius: var(--sv-radius-sm);
+    border: 1.5px solid var(--sv-border);
+    background: white;
+    transition: all 0.2s;
+    margin: 0 12px 20px 0;
+}
+
+.back-link:hover {
+    border-color: var(--sv-teal);
+    color: var(--sv-teal);
+    background: var(--sv-bg-light);
+}
+
+/* ── Header ───────────────────────────────────────────────── */
+
+.header {
+    text-align: center;
+    margin-bottom: 24px;
+    animation: sv-fadeInDown 0.6s ease;
+}
+
+.app-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--sv-gradient);
+    border-radius: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 42px;
+    margin-bottom: 14px;
+    box-shadow: var(--sv-shadow-teal);
+    animation: sv-float 3s ease-in-out infinite;
+}
+
+.header h1 {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--sv-text-dark);
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+}
+
+.header .subtitle {
+    font-size: 18px;
+    color: var(--sv-text-light);
+    font-weight: 600;
+}
+
+/* ── Kaarten ──────────────────────────────────────────────── */
+
+.card {
+    background: var(--sv-card-bg);
+    border-radius: var(--sv-radius-xxl);
+    padding: 45px 40px;
+    box-shadow: var(--sv-shadow-lg);
+    margin-bottom: 22px;
+    animation: sv-fadeInUp 0.6s ease 0.2s both;
+}
+
+.card h2 {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--sv-text-dark);
+    text-align: center;
+    margin-bottom: 6px;
+}
+
+.hint {
+    color: var(--sv-text-light);
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+/* ── Keuzetegels ──────────────────────────────────────────── */
+
+.type-grid,
+.oefening-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.type-card,
+.oefening-card {
+    border: 3px solid var(--sv-border);
+    border-radius: var(--sv-radius-lg);
+    padding: 25px 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: white;
+    text-decoration: none;
+    display: block;
+    position: relative;
+}
+
+.type-card:hover:not(.disabled),
+.oefening-card:not(.disabled):hover {
+    border-color: var(--sv-teal);
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(42, 157, 143, 0.2);
+    background: linear-gradient(135deg, #f0fdf8 0%, #e6f7fb 100%);
+}
+
+.type-card:not(.disabled):active,
+.oefening-card:not(.disabled):active { transform: translateY(-2px); }
+
+.type-card.disabled,
+.oefening-card.disabled { opacity: 0.55; cursor: not-allowed; }
+
+.type-card .icon,
+.oefening-card .icon {
+    font-size: 44px;
+    margin-bottom: 12px;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.type-card:not(.disabled):hover .icon,
+.oefening-card:not(.disabled):hover .icon { transform: scale(1.15) rotate(-5deg); }
+
+.type-card .title,
+.oefening-card .title {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--sv-text-dark);
+    margin-bottom: 6px;
+}
+
+.type-card .beschrijving,
+.oefening-card .beschrijving {
+    font-size: 14px;
+    color: var(--sv-text-light);
+    font-weight: 600;
+}
+
+.badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #fed7aa;
+    color: #c05621;
+    padding: 4px 10px;
+    border-radius: var(--sv-radius-sm);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.badge-active {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--sv-border-light);
+    color: #276749;
+    padding: 4px 10px;
+    border-radius: var(--sv-radius-sm);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* ── Instellingen ─────────────────────────────────────────── */
+
+.settings { margin-bottom: 24px; }
+
+.setting-row { margin-bottom: 18px; }
+
+.setting-row label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--sv-text-light);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.setting-row select {
+    width: 100%;
+    padding: 16px 20px;
+    font-size: 16px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    border: 3px solid var(--sv-border);
+    border-radius: var(--sv-radius-md);
+    background: #f7fafc;
+    color: var(--sv-text-dark);
+    cursor: pointer;
+    transition: border-color 0.3s;
+    outline: none;
+}
+
+.setting-row select:focus { border-color: var(--sv-teal); }
+
+/* ── Knoppen ──────────────────────────────────────────────── */
+
+.btn-primary {
+    width: 100%;
+    padding: 18px 24px;
+    background: var(--sv-gradient);
+    color: white;
+    border: none;
+    border-radius: var(--sv-radius-md);
+    font-family: 'Fredoka', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: var(--sv-shadow-green);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(106, 176, 76, 0.45);
+}
+
+.btn-secondary {
+    padding: 14px 24px;
+    background: white;
+    border: 2px solid var(--sv-border);
+    border-radius: var(--sv-radius-md);
+    font-family: 'Fredoka', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--sv-text-dark);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-secondary:hover { border-color: var(--sv-teal); color: var(--sv-teal); }
+
+.submit-btn {
+    padding: 16px 40px;
+    background: var(--sv-teal);
+    border: none;
+    border-radius: var(--sv-radius-md);
+    font-family: 'Fredoka', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 6px 20px rgba(42, 157, 143, 0.3);
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    background: var(--sv-teal-dark);
+}
+
+.stop-btn {
+    display: block;
+    margin: 14px auto 0;
+    padding: 11px 32px;
+    background: white;
+    border: 2px solid var(--sv-fout-border);
+    border-radius: var(--sv-radius-md);
+    font-family: 'Nunito', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--sv-fout-text);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.stop-btn:hover { background: var(--sv-fout-bg); }
+
+/* ── Voortgang ────────────────────────────────────────────── */
+
+.voortgang-indicator {
+    text-align: center;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--sv-text-light);
+    margin-bottom: 14px;
+}
+
+/* ── Feedback ─────────────────────────────────────────────── */
+
+.feedback {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    padding: 20px;
+}
+
+.feedback.show { display: flex; animation: sv-fadeIn 0.15s ease; }
+
+.feedback.goed-feedback,
+.feedback.fout-feedback { flex-direction: column; }
+
+.feedback .icon-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 38px;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    animation: sv-popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.feedback.goed-feedback .icon-circle { color: var(--sv-success); }
+.feedback.fout-feedback .icon-circle { color: var(--sv-error); }
+
+.feedback .title {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 34px;
+    font-weight: 700;
+    color: white;
+    text-align: center;
+}
+
+.feedback .sub {
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    margin-top: 8px;
+    text-align: center;
+}
+
+.feedback.goed-feedback { background: rgba(76, 175, 125, 0.94); }
+.feedback.fout-feedback { background: rgba(232, 96, 96, 0.94); }
+
+/* ── Scorekaart ───────────────────────────────────────────── */
+
+.score-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 20px 0 28px;
+}
+
+.score-item {
+    background: var(--sv-bg-light);
+    border: 1px solid var(--sv-border-light);
+    border-radius: var(--sv-radius-md);
+    padding: 18px 12px;
+    text-align: center;
+}
+
+.score-getal {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--sv-teal);
+    line-height: 1;
+}
+
+.score-label {
+    font-size: 13px;
+    color: var(--sv-text-light);
+    font-weight: 600;
+    margin-top: 6px;
+}
+
+/* ── Responsive ───────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+    .type-grid, .oefening-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+    .header h1 { font-size: 32px; }
+    .header .subtitle { font-size: 16px; }
+    .app-icon { width: 68px; height: 68px; font-size: 36px; }
+    .card { padding: 28px 20px; }
+    .card h2 { font-size: 23px; }
+    .type-grid, .oefening-grid { grid-template-columns: 1fr; gap: 14px; }
+    .score-grid { gap: 10px; }
+    .score-getal { font-size: 32px; }
+}
