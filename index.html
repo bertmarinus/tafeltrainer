@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Rekenen — oefenen</title>
+
+    <!-- Fonts: Fredoka (titels), Nunito (taal), Inter (rekenen) -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232a9d8f'/><text y='.9em' font-size='75' x='12'>🔢</text></svg>">
+
+    <!-- Gedeelde Schoolvenster-stylesheet -->
+    <link rel="stylesheet" href="assets/schoolvenster-frontend.css">
+
+    <style>
+        /* Deze pagina gebruikt alleen gedeelde onderdelen. */
+    </style>
+</head>
+<body class="sv-rekenen">
+    <div class="container">
+
+        <div class="header">
+            <div class="app-icon">🔢</div>
+            <h1>Rekenen</h1>
+            <p class="subtitle">Kies een onderwerp om te oefenen!</p>
+        </div>
+
+        <div class="card">
+            <h2>Wat wil je oefenen?</h2>
+            <p class="hint">Kies een onderwerp om te beginnen</p>
+
+            <div class="oefening-grid">
+
+                <a href="tafels.html" class="oefening-card">
+                    <span class="badge-active">✓ Beschikbaar</span>
+                    <span class="icon">✖️</span>
+                    <div class="title">Tafels</div>
+                    <div class="beschrijving">Keersommen oefenen</div>
+                </a>
+
+                <a href="plusmin.html" class="oefening-card">
+                    <span class="badge-active">✓ Beschikbaar</span>
+                    <span class="icon">➕➖</span>
+                    <div class="title">Plus- en minsommen</div>
+                    <div class="beschrijving">Optellen en aftrekken</div>
+                </a>
+
+                <a href="breuken.html" class="oefening-card">
+                    <span class="badge-active">✓ Beschikbaar</span>
+                    <span class="icon">🍰</span>
+                    <div class="title">Breuken</div>
+                    <div class="beschrijving">Breuken rekenen</div>
+                </a>
+
+                <div class="oefening-card disabled">
+                    <span class="badge">Binnenkort</span>
+                    <span class="icon">➗</span>
+                    <div class="title">Deelsommen</div>
+                    <div class="beschrijving">Delen oefenen</div>
+                </div>
+
+                <div class="oefening-card disabled">
+                    <span class="badge">Binnenkort</span>
+                    <span class="icon">🧮</span>
+                    <div class="title">Gemengd</div>
+                    <div class="beschrijving">Alles door elkaar</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>
