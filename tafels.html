@@ -673,6 +673,28 @@
         }
 
         /* Utility */
+        .terug-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: 8px;
+            border: 1.5px solid #e2e8f0;
+            background: white;
+            transition: all 0.2s;
+            margin-bottom: 18px;
+        }
+
+        .terug-link:hover {
+            border-color: #2a9d8f;
+            color: #2a9d8f;
+            background: #f0fdf8;
+        }
+
         .hidden {
             display: none !important;
         }
@@ -997,49 +1019,12 @@
 <body>
     <div class="container">
         <!-- HOOFDMENU -->
-        <div id="hoofdmenu-scherm" class="hidden">
-            <div class="header">
-                <h1>✨ Tafeltrainer</h1>
-                <p class="subtitle">Leer rekenen op een slimme manier!</p>
-            </div>
-
-            <div class="card">
-                <h2>Wat wil je oefenen?</h2>
-                <p class="hint">Kies een type oefening om te beginnen</p>
-
-                <div class="oefening-grid">
-                    <div class="oefening-card" onclick="gaaNaarTafelSelectie()">
-                        <div class="icon">✖️</div>
-                        <div class="title">Tafels</div>
-                        <div class="beschrijving">Keersommen oefenen</div>
-                    </div>
-
-                    <div class="oefening-card disabled">
-                        <div class="badge">Binnenkort</div>
-                        <div class="icon">➕</div>
-                        <div class="title">Plussommen</div>
-                        <div class="beschrijving">Optellen oefenen</div>
-                    </div>
-
-                    <div class="oefening-card disabled">
-                        <div class="badge">Binnenkort</div>
-                        <div class="icon">➖</div>
-                        <div class="title">Minsommen</div>
-                        <div class="beschrijving">Aftrekken oefenen</div>
-                    </div>
-
-                    <div class="oefening-card disabled">
-                        <div class="badge">Binnenkort</div>
-                        <div class="icon">➗</div>
-                        <div class="title">Deelsommen</div>
-                        <div class="beschrijving">Delen oefenen</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- TAFEL SELECTIE -->
         <div id="tafel-selectie-scherm">
+
+            <!-- Terug naar het gedeelde hoofdmenu (index.html) -->
+            <a href="index.html" class="terug-link">← Terug naar Rekenen</a>
+
             <div class="header">
                 <h1>✨ Tafeltrainer</h1>
                 <p class="subtitle">Leer de tafels op een slimme manier!</p>
@@ -1095,9 +1080,9 @@
                     <span>Oefenen voor de toets — 2 minuten</span>
                 </button>
 
-                <button class="btn-secondary" onclick="toonHoofdmenu()" style="margin-top: 15px;">
+                <button class="btn-secondary" onclick="window.location.href='index.html'" style="margin-top: 15px;">
                     <span>🏠</span>
-                    <span>Terug</span>
+                    <span>Terug naar Rekenen</span>
                 </button>
             </div>
         </div>
@@ -1440,19 +1425,7 @@
             });
         }
 
-        // Navigatie
-        function toonHoofdmenu() {
-            ontgrendelScroll();
-            document.getElementById('hoofdmenu-scherm').classList.remove('hidden');
-            document.getElementById('tafel-selectie-scherm').classList.add('hidden');
-            document.getElementById('oefen-scherm').classList.add('hidden');
-            document.getElementById('resultaten-scherm').classList.add('hidden');
-        }
-
-        function gaaNaarTafelSelectie() {
-            document.getElementById('hoofdmenu-scherm').classList.add('hidden');
-            document.getElementById('tafel-selectie-scherm').classList.remove('hidden');
-        }
+        // Navigatie — het hoofdmenu zit nu in index.html
 
         function maakTafelGrid() {
             const grid = document.getElementById('tafel-grid');
