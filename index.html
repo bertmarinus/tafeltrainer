@@ -15,61 +15,88 @@
     <link rel="stylesheet" href="assets/schoolvenster-frontend.css">
 
     <style>
-        /* Deze pagina gebruikt alleen gedeelde onderdelen. */
+        /*
+         * Alleen wat de gedeelde stylesheet nog niet heeft:
+         * de keuzekaart als link, en een groene "beschikbaar"-badge.
+         */
+
+        /* Kaart is hier een <a>, dus link-opmaak weghalen en ruimte
+           maken voor de badge rechtsboven. */
+        .sv-keuze-card {
+            position: relative;
+            display: block;
+            text-decoration: none;
+            padding-top: 34px;
+        }
+
+        /* Groene tegenhanger van .sv-badge (die is oranje, voor "Binnenkort") */
+        .sv-badge-beschikbaar {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #d1fae5;
+            color: #2f7a52;
+            padding: 4px 10px;
+            border-radius: var(--sv-radius-sm);
+            font-size: 11px;
+            font-weight: 700;
+        }
     </style>
 </head>
+
 <body class="sv-rekenen">
-    <div class="container">
+<div class="sv-container">
 
-        <div class="header">
-            <div class="app-icon">🔢</div>
-            <h1>Rekenen</h1>
-            <p class="subtitle">Kies een onderwerp om te oefenen!</p>
-        </div>
+    <div class="sv-header">
+        <div class="sv-app-icon">🔢</div>
+        <h1 class="sv-header-titel">Rekenen</h1>
+        <p class="sv-header-sub">Kies een onderwerp om te oefenen</p>
+    </div>
 
-        <div class="card">
-            <h2>Wat wil je oefenen?</h2>
-            <p class="hint">Kies een onderwerp om te beginnen</p>
+    <div class="sv-card">
+        <div class="sv-card-titel">Wat wil je oefenen?</div>
+        <div class="sv-card-sub">Kies een onderwerp om te beginnen</div>
 
-            <div class="oefening-grid">
+        <div class="sv-keuze-grid">
 
-                <a href="tafels.html" class="oefening-card">
-                    <span class="badge-active">✓ Beschikbaar</span>
-                    <span class="icon">✖️</span>
-                    <div class="title">Tafels</div>
-                    <div class="beschrijving">Keersommen oefenen</div>
-                </a>
+            <a href="tafels.html" class="sv-keuze-card">
+                <span class="sv-badge-beschikbaar">✓ Beschikbaar</span>
+                <span class="sv-keuze-icon">✖️</span>
+                <div class="sv-keuze-titel">Tafels</div>
+                <div class="sv-keuze-beschrijving">Keersommen oefenen</div>
+            </a>
 
-                <a href="plusmin.html" class="oefening-card">
-                    <span class="badge-active">✓ Beschikbaar</span>
-                    <span class="icon">➕➖</span>
-                    <div class="title">Plus- en minsommen</div>
-                    <div class="beschrijving">Optellen en aftrekken</div>
-                </a>
+            <a href="plusmin.html" class="sv-keuze-card">
+                <span class="sv-badge-beschikbaar">✓ Beschikbaar</span>
+                <span class="sv-keuze-icon">➕➖</span>
+                <div class="sv-keuze-titel">Plus- en minsommen</div>
+                <div class="sv-keuze-beschrijving">Optellen en aftrekken</div>
+            </a>
 
-                <a href="breuken.html" class="oefening-card">
-                    <span class="badge-active">✓ Beschikbaar</span>
-                    <span class="icon">🍰</span>
-                    <div class="title">Breuken</div>
-                    <div class="beschrijving">Breuken rekenen</div>
-                </a>
+            <a href="deelsommen.html" class="sv-keuze-card">
+                <span class="sv-badge-beschikbaar">✓ Beschikbaar</span>
+                <span class="sv-keuze-icon">➗</span>
+                <div class="sv-keuze-titel">Deelsommen</div>
+                <div class="sv-keuze-beschrijving">Delen oefenen</div>
+            </a>
 
-                <div class="oefening-card disabled">
-                    <span class="badge">Binnenkort</span>
-                    <span class="icon">➗</span>
-                    <div class="title">Deelsommen</div>
-                    <div class="beschrijving">Delen oefenen</div>
-                </div>
+            <a href="breuken.html" class="sv-keuze-card">
+                <span class="sv-badge-beschikbaar">✓ Beschikbaar</span>
+                <span class="sv-keuze-icon">🍰</span>
+                <div class="sv-keuze-titel">Breuken</div>
+                <div class="sv-keuze-beschrijving">Breuken rekenen</div>
+            </a>
 
-                <div class="oefening-card disabled">
-                    <span class="badge">Binnenkort</span>
-                    <span class="icon">🧮</span>
-                    <div class="title">Gemengd</div>
-                    <div class="beschrijving">Alles door elkaar</div>
-                </div>
-
+            <div class="sv-keuze-card disabled">
+                <span class="sv-badge">Binnenkort</span>
+                <span class="sv-keuze-icon">🧮</span>
+                <div class="sv-keuze-titel">Gemengd</div>
+                <div class="sv-keuze-beschrijving">Alles door elkaar</div>
             </div>
+
         </div>
     </div>
+
+</div>
 </body>
 </html>
