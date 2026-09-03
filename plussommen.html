@@ -6,7 +6,8 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Tafels — Schoolvenster</title>
+    <title>Plussommen — Schoolvenster</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232a9d8f'/><text y='.9em' font-size='75' x='12'>➕</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
@@ -126,16 +127,16 @@
             margin-bottom: 30px;
         }
 
-        /* Tafel grid - 3 kolommen zoals Base44 */
-        .tafel-grid {
+        /* Categorie grid - soorten plussommen */
+        .categorie-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 15px;
             margin-bottom: 40px;
         }
 
-        .tafel-btn {
-            padding: 35px 20px;
+        .categorie-btn {
+            padding: 28px 20px;
             border: 3px solid #e2e8f0;
             background: white;
             color: #1a3a5c;
@@ -150,18 +151,18 @@
             min-height: 130px;
         }
 
-        .tafel-btn:hover {
+        .categorie-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        .tafel-btn.selected {
+        .categorie-btn.selected {
             background: linear-gradient(135deg, #2a9d8f, #6ab04c);
             border-color: #2a9d8f;
             color: white;
         }
 
-        .tafel-btn.selected::after {
+        .categorie-btn.selected::after {
             content: '✓';
             position: absolute;
             top: 12px;
@@ -171,17 +172,24 @@
             color: white;
         }
 
-        .tafel-label {
-            display: block;
-            font-size: 15px;
-            opacity: 0.7;
-            margin-bottom: 8px;
-            font-weight: 500;
+        .categorie-icoon {
+            font-size: 34px;
+            line-height: 1;
+            margin-bottom: 10px;
         }
 
-        .tafel-nummer {
-            font-size: 44px;
+        .categorie-titel {
+            display: block;
+            font-size: 19px;
             font-weight: 800;
+            margin-bottom: 6px;
+            line-height: 1.2;
+        }
+
+        .categorie-voorbeeld {
+            font-size: 16px;
+            font-weight: 600;
+            opacity: 0.7;
         }
 
         /* Settings */
@@ -708,8 +716,8 @@
                 max-width: 950px;
             }
 
-            .tafel-grid {
-                grid-template-columns: repeat(4, 1fr);
+            .categorie-grid {
+                grid-template-columns: repeat(2, 1fr);
                 gap: 18px;
             }
 
@@ -734,23 +742,28 @@
                 grid-template-columns: 1fr;
             }
 
-            .tafel-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .categorie-grid {
+                grid-template-columns: 1fr;
                 gap: 12px;
             }
 
-            .tafel-btn {
-                padding: 25px 15px;
-                min-height: 110px;
+            .categorie-btn {
+                padding: 20px 15px;
+                min-height: 0;
             }
 
-            .tafel-label {
-                font-size: 13px;
+            .categorie-icoon {
+                font-size: 28px;
                 margin-bottom: 6px;
             }
 
-            .tafel-nummer {
-                font-size: 36px;
+            .categorie-titel {
+                font-size: 17px;
+                margin-bottom: 4px;
+            }
+
+            .categorie-voorbeeld {
+                font-size: 15px;
             }
 
             .voortgang-balk {
@@ -996,61 +1009,22 @@
 </head>
 <body>
     <div class="container">
-        <!-- HOOFDMENU -->
-        <div id="hoofdmenu-scherm" class="hidden">
+        <!-- CATEGORIE SELECTIE -->
+        <div id="categorie-selectie-scherm">
             <div class="header">
-                <h1>✨ Tafeltrainer</h1>
-                <p class="subtitle">Leer rekenen op een slimme manier!</p>
+                <h1>➕ Plussommen</h1>
+                <p class="subtitle">Kies wat je wilt oefenen</p>
+                <div style="margin-top: 10px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                    <button onclick="window.location.href='../../index.html'" style="padding: 10px 20px; background: white; border: 2px solid #e2e8f0; border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 600; color: #1a3a5c;">🏠 Hoofdmenu</button>
+                    <button onclick="window.location.href='plusmin.html'" style="padding: 10px 20px; background: white; border: 2px solid #e2e8f0; border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 600; color: #1a3a5c;">← Terug naar Plus- en minsommen</button>
+                </div>
             </div>
 
             <div class="card">
                 <h2>Wat wil je oefenen?</h2>
-                <p class="hint">Kies een type oefening om te beginnen</p>
+                <p class="hint">Kies één of meer soorten sommen</p>
 
-                <div class="oefening-grid">
-                    <div class="oefening-card" onclick="gaaNaarTafelSelectie()">
-                        <div class="icon">✖️</div>
-                        <div class="title">Tafels</div>
-                        <div class="beschrijving">Keersommen oefenen</div>
-                    </div>
-
-                    <div class="oefening-card disabled">
-                        <div class="badge">Binnenkort</div>
-                        <div class="icon">➕</div>
-                        <div class="title">Plussommen</div>
-                        <div class="beschrijving">Optellen oefenen</div>
-                    </div>
-
-                    <div class="oefening-card disabled">
-                        <div class="badge">Binnenkort</div>
-                        <div class="icon">➖</div>
-                        <div class="title">Minsommen</div>
-                        <div class="beschrijving">Aftrekken oefenen</div>
-                    </div>
-
-                    <div class="oefening-card disabled">
-                        <div class="badge">Binnenkort</div>
-                        <div class="icon">➗</div>
-                        <div class="title">Deelsommen</div>
-                        <div class="beschrijving">Delen oefenen</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAFEL SELECTIE -->
-        <div id="tafel-selectie-scherm">
-            <div class="header">
-                <h1>✨ Tafeltrainer</h1>
-                <p class="subtitle">Leer de tafels op een slimme manier!</p>
-                <button onclick="window.location.href='index.html'" style="margin-top: 10px; padding: 10px 20px; background: white; border: 2px solid #e2e8f0; border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 600; color: #1a3a5c;">🏠 Terug naar hoofdmenu</button>
-            </div>
-
-            <div class="card">
-                <h2>Welke tafels wil je oefenen?</h2>
-                <p class="hint">Kies één of meer tafels</p>
-
-                <div class="tafel-grid" id="tafel-grid">
+                <div class="categorie-grid" id="categorie-grid">
                     <!-- Wordt gevuld met JavaScript -->
                 </div>
 
@@ -1135,7 +1109,7 @@
             <div class="som-card">
                 <div class="som-container">
                     <div class="som-display" id="som-display">
-                        4 <span class="times">×</span> 2
+                        6 <span class="times">+</span> 5
                     </div>
 
                     <div class="input-row">
@@ -1191,7 +1165,7 @@
                     <button class="btn-primary" onclick="herstartToetsModus()" style="font-size:18px;padding:16px">
                         🔁 Opnieuw
                     </button>
-                    <button class="btn-secondary" onclick="naarTafelSelectie()" style="font-size:18px;padding:16px">
+                    <button class="btn-secondary" onclick="naarCategorieSelectie()" style="font-size:18px;padding:16px">
                         ← Terug
                     </button>
                 </div>
@@ -1314,7 +1288,7 @@
         }
 
         // State
-        let geselecteerdeTafels = [];
+        let geselecteerdeCategorieen = [];
         let queue = [];          // Normale sommen (nog niet fout geweest)
         let foutQueue = [];      // Sommen die fout waren (moeten 3x terug)
         let huidigeSom = null;
@@ -1338,7 +1312,7 @@
 
         // LocalStorage
         function loadStats() {
-            const saved = localStorage.getItem('tafeltrainer-stats');
+            const saved = localStorage.getItem('plussommen-stats');
             if (saved) {
                 const data = JSON.parse(saved);
                 stats.totaalGoed = data.totaalGoed || 0;
@@ -1347,7 +1321,7 @@
         }
 
         function saveStats() {
-            localStorage.setItem('tafeltrainer-stats', JSON.stringify({
+            localStorage.setItem('plussommen-stats', JSON.stringify({
                 totaalGoed: stats.totaalGoed,
                 totaalFout: stats.totaalFout
             }));
@@ -1384,7 +1358,7 @@
 
         function init() {
             loadStats();
-            maakTafelGrid();
+            maakCategorieGrid();
 
             zetZichtbareHoogte();
             if (window.visualViewport) {
@@ -1459,45 +1433,128 @@
             });
         }
 
-        // Navigatie
+        // Navigatie — terug naar het overzicht met de plus- en minoefeningen
         function toonHoofdmenu() {
             ontgrendelScroll();
-            document.getElementById('hoofdmenu-scherm').classList.remove('hidden');
-            document.getElementById('tafel-selectie-scherm').classList.add('hidden');
-            document.getElementById('oefen-scherm').classList.add('hidden');
-            document.getElementById('resultaten-scherm').classList.add('hidden');
+            window.location.href = 'plusmin.html';
         }
 
-        function gaaNaarTafelSelectie() {
-            document.getElementById('hoofdmenu-scherm').classList.add('hidden');
-            document.getElementById('tafel-selectie-scherm').classList.remove('hidden');
-        }
-
-        function maakTafelGrid() {
-            const grid = document.getElementById('tafel-grid');
-            for (let i = 1; i <= 12; i++) {
-                const btn = document.createElement('button');
-                btn.className = 'tafel-btn';
-                btn.innerHTML = `<span class="tafel-label">Tafel</span><span class="tafel-nummer">${i}</span>`;
-                btn.onclick = () => toggleTafel(i, btn);
-                grid.appendChild(btn);
+        // ── SOORTEN PLUSSOMMEN ──────────────────────────────────────
+        // Elke categorie levert ALLE mogelijke sommen binnen die soort,
+        // net zoals een tafel alle tien sommen levert.
+        const CATEGORIEEN = [
+            {
+                id: 'tot10',
+                icoon: '🟢',
+                titel: 'Tot 10',
+                voorbeeld: '2 + 4 · 6 + 3',
+                // Beide getallen 1 t/m 9, uitkomst maximaal 10 (onder het tiental)
+                maak: function () {
+                    const lijst = [];
+                    for (let a = 1; a <= 9; a++) {
+                        for (let b = 1; b <= 9; b++) {
+                            if (a + b <= 10) lijst.push([a, b]);
+                        }
+                    }
+                    return lijst;
+                }
+            },
+            {
+                id: 'over10',
+                icoon: '🟡',
+                titel: 'Over het tiental',
+                voorbeeld: '6 + 5 · 4 + 8',
+                // Beide getallen 1 t/m 9, uitkomst 11 t/m 18 (springt over de 10)
+                maak: function () {
+                    const lijst = [];
+                    for (let a = 1; a <= 9; a++) {
+                        for (let b = 1; b <= 9; b++) {
+                            if (a + b >= 11) lijst.push([a, b]);
+                        }
+                    }
+                    return lijst;
+                }
+            },
+            {
+                id: 'tiental',
+                icoon: '🔵',
+                titel: 'Tiental erbij',
+                voorbeeld: '12 + 3 · 15 + 4',
+                // Eerste getal 10 t/m 19, geen sprong over het tiental
+                maak: function () {
+                    const lijst = [];
+                    for (let a = 10; a <= 19; a++) {
+                        for (let b = 1; b <= 9; b++) {
+                            if ((a % 10) + b <= 10) lijst.push([a, b]);
+                        }
+                    }
+                    return lijst;
+                }
+            },
+            {
+                id: 'over20',
+                icoon: '🟠',
+                titel: 'Over de 20',
+                voorbeeld: '15 + 8 · 17 + 6',
+                // Eerste getal 11 t/m 19, uitkomst boven de 20
+                maak: function () {
+                    const lijst = [];
+                    for (let a = 11; a <= 19; a++) {
+                        for (let b = 2; b <= 9; b++) {
+                            if ((a % 10) + b > 10) lijst.push([a, b]);
+                        }
+                    }
+                    return lijst;
+                }
             }
+        ];
+
+        function maakCategorieGrid() {
+            const grid = document.getElementById('categorie-grid');
+            CATEGORIEEN.forEach(function (cat) {
+                const btn = document.createElement('button');
+                btn.className = 'categorie-btn';
+                btn.innerHTML =
+                    '<span class="categorie-icoon">' + cat.icoon + '</span>' +
+                    '<span class="categorie-titel">' + cat.titel + '</span>' +
+                    '<span class="categorie-voorbeeld">' + cat.voorbeeld + '</span>';
+                btn.onclick = function () { toggleCategorie(cat.id, btn); };
+                grid.appendChild(btn);
+            });
         }
 
-        function toggleTafel(tafel, btn) {
-            if (geselecteerdeTafels.includes(tafel)) {
-                geselecteerdeTafels = geselecteerdeTafels.filter(t => t !== tafel);
+        function toggleCategorie(id, btn) {
+            if (geselecteerdeCategorieen.includes(id)) {
+                geselecteerdeCategorieen = geselecteerdeCategorieen.filter(c => c !== id);
                 btn.classList.remove('selected');
             } else {
-                geselecteerdeTafels.push(tafel);
+                geselecteerdeCategorieen.push(id);
                 btn.classList.add('selected');
             }
         }
 
+        // Alle sommen van de gekozen categorieën als losse [a, b] paren.
+        function maakSommenParen() {
+            const paren = [];
+            CATEGORIEEN.forEach(function (cat) {
+                if (geselecteerdeCategorieen.includes(cat.id)) {
+                    cat.maak().forEach(function (p) { paren.push(p); });
+                }
+            });
+            return paren;
+        }
+
+        // Verse queue-objecten met de tellers voor het adaptieve algoritme.
+        function maakSommenQueue() {
+            return maakSommenParen().map(function (p) {
+                return { a: p[0], b: p[1], failCount: 0, successCount: 0 };
+            });
+        }
+
         // Start oefenen
         function startOefenen_orig() {
-            if (geselecteerdeTafels.length === 0) {
-                alert('❌ Selecteer minstens één tafel!');
+            if (geselecteerdeCategorieen.length === 0) {
+                alert('❌ Kies minstens één soort som!');
                 return;
             }
 
@@ -1521,22 +1578,12 @@
             startTijd = tijdLimiet > 0 ? Date.now() : null;
 
             // Maak sommen MET failCount/successCount
-            queue = [];
+            queue = maakSommenQueue();
             foutQueue = [];
-            geselecteerdeTafels.forEach(tafel => {
-                for (let i = 1; i <= 10; i++) {
-                    queue.push({
-                        a: i,
-                        b: tafel,
-                        failCount: 0,
-                        successCount: 0
-                    });
-                }
-            });
             shuffle(queue);
 
             // Start
-            document.getElementById('tafel-selectie-scherm').classList.add('hidden');
+            document.getElementById('categorie-selectie-scherm').classList.add('hidden');
             document.getElementById('oefen-scherm').classList.remove('hidden');
             vergrendelScroll();
 
@@ -1650,14 +1697,12 @@
             
             if (besteIndex >= 0) {
                 const som = foutQueue.splice(besteIndex, 1)[0];
-                console.log('getVolgendeSom uit foutQueue (due):', som, 'somTeller:', somTeller);
                 return som;
             }
             
             // Anders uit normale queue
             if (queue.length > 0) {
                 const som = queue.shift();
-                console.log('getVolgendeSom uit queue:', som, 'queue length:', queue.length);
                 return som;
             }
             
@@ -1665,12 +1710,11 @@
             // pakt! Dat kon dezelfde som direct achter elkaar tonen (bijv. net
             // fout gedaan, geen andere sommen meer in queue → direct weer dezelfde).
             // Als queue leeg is, laat getVolgendeSomInternal een verse ronde klaarzetten.
-            console.log('getVolgendeSom: queue leeg, geen due foutQueue-item');
             return null;
         }
 
         function somSleutel(som) {
-            return som.a + 'x' + som.b;
+            return som.a + '+' + som.b;
         }
 
         // Zoek een som die NIET gelijk is aan 'exclude' - gebruikt als de
@@ -1715,17 +1759,8 @@
             // Als queue EN foutQueue (due) beide niks opleveren: shuffle de hele
             // lijst opnieuw (net als Irregular Verbs) - GEEN losse willekeurige
             // sommen meer, anders werkt "achteraan in de queue" niet meer.
-            if (!som && geselecteerdeTafels.length > 0) {
-                geselecteerdeTafels.forEach(tafel => {
-                    for (let i = 1; i <= 10; i++) {
-                        queue.push({
-                            a: i,
-                            b: tafel,
-                            failCount: 0,
-                            successCount: 0
-                        });
-                    }
-                });
+            if (!som && geselecteerdeCategorieen.length > 0) {
+                maakSommenQueue().forEach(function (s) { queue.push(s); });
                 shuffle(queue);
                 som = getVolgendeSom();
             }
@@ -1733,14 +1768,10 @@
             // ANTI-HERHALING: dezelfde som mag NOOIT 2x (of vaker) direct
             // achter elkaar verschijnen - ook niet via de adaptieve herhaling.
             if (som && vorigeSomSleutel && somSleutel(som) === vorigeSomSleutel) {
-                console.log('Zelfde som als vorige beurt gedetecteerd:', somSleutel(som), '- zoek alternatief');
                 const alternatief = vindAlternatiefVoor(som);
                 if (alternatief) {
                     zetSomTerug(som);
                     som = alternatief;
-                    console.log('Alternatief gevonden:', somSleutel(som));
-                } else {
-                    console.log('Geen alternatief beschikbaar - herhaling geaccepteerd (zeldzaam)');
                 }
             }
             
@@ -1783,7 +1814,7 @@
             const a = som.a || som[0];
             const b = som.b || som[1];
             document.getElementById('som-display').innerHTML = 
-                `${a} <span class="times">×</span> ${b}`;
+                `${a} <span class="times">+</span> ${b}`;
         }
 
         function controleerAntwoordOrig() {
@@ -1798,7 +1829,7 @@
 
             const a = huidigeSom.a || huidigeSom[0];
             const b = huidigeSom.b || huidigeSom[1];
-            const correct = a * b;
+            const correct = a + b;
 
             stats.sommenTeller++;
 
@@ -1822,19 +1853,16 @@
                 // Als woord eerder fout was (uit foutQueue):
                 if (huidigeSom.failCount && huidigeSom.failCount > 0) {
                     huidigeSom.successCount++;
-                    console.log('Goed! successCount nu:', huidigeSom.successCount);
                     
                     if (huidigeSom.successCount < 3) {
                         // Nog niet 3x goed - terug naar foutQueue, weer 3 beurten wachten
                         huidigeSom.dueAt = somTeller + 3;
                         foutQueue.push(huidigeSom);
-                        console.log('Nog niet 3x - terug naar foutQueue, dueAt:', huidigeSom.dueAt);
                     } else {
                         // 3x goed! - reset naar "normale" som en achteraan queue.
                         // BELANGRIJK: failCount/successCount resetten, anders wordt
                         // deze som bij de volgende GOEDE beurt weer als "was fout"
                         // behandeld en blijft hij voor altijd rondzingen in de queue!
-                        console.log('3x goed! Reset en naar queue (klaar met herhalen)');
                         huidigeSom.failCount = 0;
                         huidigeSom.successCount = 0;
                         delete huidigeSom.dueAt;
@@ -1847,13 +1875,12 @@
                 stats.huidigFout++;
                 stats.totaalFout++;
                 
-                console.log('FOUT:', a, 'x', b);
                 playFoutGeluid();
                 
                 feedback.innerHTML = `
                     <div class="icon-circle">✗</div>
                     <div class="title">Helaas!</div>
-                    <div class="sub">${a} × ${b} = ${correct}</div>
+                    <div class="sub">${a} + ${b} = ${correct}</div>
                 `;
                 feedback.className = 'feedback fout-feedback show';
                 feedbackDuur = 1500;
@@ -1867,9 +1894,7 @@
                     dueAt: somTeller + 3   // Komt terug na 3 andere sommen
                 };
                 
-                console.log('Som naar foutQueue:', somKopie, 'dueAt:', somKopie.dueAt, 'huidige somTeller:', somTeller);
                 foutQueue.push(somKopie);
-                console.log('foutQueue na push:', foutQueue);
             }
 
             saveStats();
@@ -1984,7 +2009,7 @@
                         gezien.add(key);
                         const item = document.createElement('span');
                         item.className = 'som-item';
-                        item.textContent = `${som.a} × ${som.b}`;
+                        item.textContent = `${som.a} + ${som.b}`;
                         lijst.appendChild(item);
                     }
                 });
@@ -2002,7 +2027,7 @@
 
         function opnieuw() {
             document.getElementById('resultaten-scherm').classList.add('hidden');
-            document.getElementById('tafel-selectie-scherm').classList.remove('hidden');
+            document.getElementById('categorie-selectie-scherm').classList.remove('hidden');
         }
 
         // ── TOETSMODUS ──────────────────────────────────────────────
@@ -2021,9 +2046,9 @@
         const TOETS_TEMPO    = 2.4; // seconden per som voor norm
 
         function startOefenen(isToets) {
-            // Controleer of tafels geselecteerd zijn
-            if (geselecteerdeTafels.length === 0) {
-                alert('Kies eerst één of meer tafels!');
+            // Controleer of er categorieën gekozen zijn
+            if (geselecteerdeCategorieen.length === 0) {
+                alert('Kies eerst één of meer soorten sommen!');
                 return;
             }
 
@@ -2046,14 +2071,10 @@
             toetsBezig      = false;
 
             // Genereer sommen pool
-            toetsPool = [];
-            geselecteerdeTafels.forEach(t => {
-                for (let g = 1; g <= 10; g++) toetsPool.push([g, t]);
-            });
-            toetsPool = shuffleArray([...toetsPool]);
+            toetsPool = shuffleArray(maakSommenParen());
 
             // Toon oefen-scherm met toets-balk
-            document.getElementById('tafel-selectie-scherm').classList.add('hidden');
+            document.getElementById('categorie-selectie-scherm').classList.add('hidden');
             document.getElementById('oefen-scherm').classList.remove('hidden');
             document.getElementById('toets-balk').classList.remove('hidden');
             document.getElementById('voortgang-indicator').style.display = 'none';
@@ -2093,17 +2114,13 @@
         function laadToetsSom() {
             // Vul pool aan als leeg
             if (toetsPool.length === 0) {
-                toetsPool = [];
-                geselecteerdeTafels.forEach(t => {
-                    for (let g = 1; g <= 10; g++) toetsPool.push([g, t]);
-                });
-                toetsPool = shuffleArray(toetsPool);
+                toetsPool = shuffleArray(maakSommenParen());
             }
 
             toetsHuidigeSom = toetsPool.shift();
             const [a, b] = toetsHuidigeSom;
             document.getElementById('som-display').innerHTML =
-                `${a} <span class="times">×</span> ${b}`;
+                `${a} <span class="times">+</span> ${b}`;
 
             const input = document.getElementById('antwoord-input');
             input.value = '';
@@ -2122,7 +2139,7 @@
 
             toetsBezig = true;
             const [a, b] = toetsHuidigeSom;
-            const juist  = a * b;
+            const juist  = a + b;
             const correct = antwoord === juist;
 
             if (correct) {
@@ -2253,7 +2270,7 @@
                 fouten.forEach(f => {
                     const wrap = document.createElement('div');
                     wrap.style.cssText = 'background:#fee2e2;border:1.5px solid #fca5a5;border-radius:12px;padding:8px 14px;font-size:14px;font-weight:700;color:#dc2626;text-align:center';
-                    wrap.innerHTML = `<div style="font-size:16px;font-weight:800">${f.a} × ${f.b}</div>
+                    wrap.innerHTML = `<div style="font-size:16px;font-weight:800">${f.a} + ${f.b}</div>
                         <div style="text-decoration:line-through;opacity:0.7;font-size:12px">= ${f.gegeven}</div>
                         <div style="color:#15803d;font-size:12px">= ${f.juist}</div>`;
                     lijst.appendChild(wrap);
@@ -2268,10 +2285,10 @@
             startToetsModus();
         }
 
-        function naarTafelSelectie() {
+        function naarCategorieSelectie() {
             if (toetsTimer) { clearInterval(toetsTimer); toetsTimer = null; }
             document.getElementById('toets-eind-scherm').classList.add('hidden');
-            document.getElementById('tafel-selectie-scherm').classList.remove('hidden');
+            document.getElementById('categorie-selectie-scherm').classList.remove('hidden');
         }
 
         // Countdown overlay voor toetsmodus

@@ -6,10 +6,10 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Tafels — Schoolvenster</title>
+    <title>Deelsommen — Schoolvenster</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * {
+        / {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -127,14 +127,14 @@
         }
 
         /* Tafel grid - 3 kolommen zoals Base44 */
-        .tafel-grid {
+        .deeltafel-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
             margin-bottom: 40px;
         }
 
-        .tafel-btn {
+        .deeltafel-btn {
             padding: 35px 20px;
             border: 3px solid #e2e8f0;
             background: white;
@@ -150,18 +150,18 @@
             min-height: 130px;
         }
 
-        .tafel-btn:hover {
+        .deeltafel-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        .tafel-btn.selected {
+        .deeltafel-btn.selected {
             background: linear-gradient(135deg, #2a9d8f, #6ab04c);
             border-color: #2a9d8f;
             color: white;
         }
 
-        .tafel-btn.selected::after {
+        .deeltafel-btn.selected::after {
             content: '✓';
             position: absolute;
             top: 12px;
@@ -171,7 +171,7 @@
             color: white;
         }
 
-        .tafel-label {
+        .deeltafel-label {
             display: block;
             font-size: 15px;
             opacity: 0.7;
@@ -179,7 +179,7 @@
             font-weight: 500;
         }
 
-        .tafel-nummer {
+        .deeltafel-nummer {
             font-size: 44px;
             font-weight: 800;
         }
@@ -708,7 +708,7 @@
                 max-width: 950px;
             }
 
-            .tafel-grid {
+            .deeltafel-grid {
                 grid-template-columns: repeat(4, 1fr);
                 gap: 18px;
             }
@@ -734,22 +734,22 @@
                 grid-template-columns: 1fr;
             }
 
-            .tafel-grid {
+            .deeltafel-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 12px;
             }
 
-            .tafel-btn {
+            .deeltafel-btn {
                 padding: 25px 15px;
                 min-height: 110px;
             }
 
-            .tafel-label {
+            .deeltafel-label {
                 font-size: 13px;
                 margin-bottom: 6px;
             }
 
-            .tafel-nummer {
+            .deeltafel-nummer {
                 font-size: 36px;
             }
 
@@ -1010,8 +1010,8 @@
                 <div class="oefening-grid">
                     <div class="oefening-card" onclick="gaaNaarTafelSelectie()">
                         <div class="icon">✖️</div>
-                        <div class="title">Tafels</div>
-                        <div class="beschrijving">Keersommen oefenen</div>
+                        <div class="title">Deelsommen</div>
+                        <div class="beschrijving">Delen oefenen</div>
                     </div>
 
                     <div class="oefening-card disabled">
@@ -1039,18 +1039,18 @@
         </div>
 
         <!-- TAFEL SELECTIE -->
-        <div id="tafel-selectie-scherm">
+        <div id="deeltafel-selectie-scherm">
             <div class="header">
                 <h1>✨ Tafeltrainer</h1>
-                <p class="subtitle">Leer de tafels op een slimme manier!</p>
+                <p class="subtitle">Leer de deelsommen op een slimme manier!</p>
                 <button onclick="window.location.href='index.html'" style="margin-top: 10px; padding: 10px 20px; background: white; border: 2px solid #e2e8f0; border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 600; color: #1a3a5c;">🏠 Terug naar hoofdmenu</button>
             </div>
 
             <div class="card">
-                <h2>Welke tafels wil je oefenen?</h2>
-                <p class="hint">Kies één of meer tafels</p>
+                <h2>Welke deelsommen wil je oefenen?</h2>
+                <p class="hint">Kies één of meer deelsommen</p>
 
-                <div class="tafel-grid" id="tafel-grid">
+                <div class="deeltafel-grid" id="deeltafel-grid">
                     <!-- Wordt gevuld met JavaScript -->
                 </div>
 
@@ -1135,7 +1135,7 @@
             <div class="som-card">
                 <div class="som-container">
                     <div class="som-display" id="som-display">
-                        4 <span class="times">×</span> 2
+                        4 <span class="times">÷</span> 2
                     </div>
 
                     <div class="input-row">
@@ -1314,9 +1314,9 @@
         }
 
         // State
-        let geselecteerdeTafels = [];
+        let geselecteerdeDeelsommen = [];
         let queue = [];          // Normale sommen (nog niet fout geweest)
-        let foutQueue = [];      // Sommen die fout waren (moeten 3x terug)
+        let foutQueue = [];      // Sommen die fout waren (moeten 3x terug, met dueAt systeem)
         let huidigeSom = null;
         let somTeller = 0;   // aantal getoonde sommen deze sessie
         let vorigeSomSleutel = null;   // voor anti-herhaling: nooit 2x dezelfde som achter elkaar
@@ -1463,40 +1463,40 @@
         function toonHoofdmenu() {
             ontgrendelScroll();
             document.getElementById('hoofdmenu-scherm').classList.remove('hidden');
-            document.getElementById('tafel-selectie-scherm').classList.add('hidden');
+            document.getElementById('deeltafel-selectie-scherm').classList.add('hidden');
             document.getElementById('oefen-scherm').classList.add('hidden');
             document.getElementById('resultaten-scherm').classList.add('hidden');
         }
 
         function gaaNaarTafelSelectie() {
             document.getElementById('hoofdmenu-scherm').classList.add('hidden');
-            document.getElementById('tafel-selectie-scherm').classList.remove('hidden');
+            document.getElementById('deeltafel-selectie-scherm').classList.remove('hidden');
         }
 
         function maakTafelGrid() {
-            const grid = document.getElementById('tafel-grid');
+            const grid = document.getElementById('deeltafel-grid');
             for (let i = 1; i <= 12; i++) {
                 const btn = document.createElement('button');
-                btn.className = 'tafel-btn';
-                btn.innerHTML = `<span class="tafel-label">Tafel</span><span class="tafel-nummer">${i}</span>`;
+                btn.className = 'deeltafel-btn';
+                btn.innerHTML = `<span class="deeltafel-label">Tafel</span><span class="deeltafel-nummer">${i}</span>`;
                 btn.onclick = () => toggleTafel(i, btn);
                 grid.appendChild(btn);
             }
         }
 
         function toggleTafel(tafel, btn) {
-            if (geselecteerdeTafels.includes(tafel)) {
-                geselecteerdeTafels = geselecteerdeTafels.filter(t => t !== tafel);
+            if (geselecteerdeDeelsommen.includes(tafel)) {
+                geselecteerdeDeelsommen = geselecteerdeDeelsommen.filter(t => t !== tafel);
                 btn.classList.remove('selected');
             } else {
-                geselecteerdeTafels.push(tafel);
+                geselecteerdeDeelsommen.push(tafel);
                 btn.classList.add('selected');
             }
         }
 
         // Start oefenen
         function startOefenen_orig() {
-            if (geselecteerdeTafels.length === 0) {
+            if (geselecteerdeDeelsommen.length === 0) {
                 alert('❌ Selecteer minstens één tafel!');
                 return;
             }
@@ -1523,10 +1523,11 @@
             // Maak sommen MET failCount/successCount
             queue = [];
             foutQueue = [];
-            geselecteerdeTafels.forEach(tafel => {
+            geselecteerdeDeelsommen.forEach(tafel => {
                 for (let i = 1; i <= 10; i++) {
+                    const dividend = i * tafel; // quotient × tafel
                     queue.push({
-                        a: i,
+                        a: dividend,
                         b: tafel,
                         failCount: 0,
                         successCount: 0
@@ -1536,7 +1537,7 @@
             shuffle(queue);
 
             // Start
-            document.getElementById('tafel-selectie-scherm').classList.add('hidden');
+            document.getElementById('deeltafel-selectie-scherm').classList.add('hidden');
             document.getElementById('oefen-scherm').classList.remove('hidden');
             vergrendelScroll();
 
@@ -1635,7 +1636,11 @@
             }
         }
 
-        // VERVANGEN DOOR QUEUE SYSTEEM - niet meer nodig
+        // Hoe lang duurt het voor een foute som terugkomt?
+        // Uitdijende herhaling: eerst snel, daarna steeds later.
+        //   resterend 3 (net fout) →  3-4 sommen
+        //   resterend 2            →  7-10 sommen
+        // VERVANGEN DOOR DUE-SYSTEEM - niet meer nodig
         // function herhaalInterval(resterend) { ... }
 
         function getVolgendeSom() {
@@ -1649,23 +1654,17 @@
             }
             
             if (besteIndex >= 0) {
-                const som = foutQueue.splice(besteIndex, 1)[0];
-                console.log('getVolgendeSom uit foutQueue (due):', som, 'somTeller:', somTeller);
-                return som;
+                return foutQueue.splice(besteIndex, 1)[0];
             }
             
             // Anders uit normale queue
             if (queue.length > 0) {
-                const som = queue.shift();
-                console.log('getVolgendeSom uit queue:', som, 'queue length:', queue.length);
-                return som;
+                return queue.shift();
             }
             
             // BELANGRIJK: GEEN forced-fallback meer die een niet-due foutQueue-item
-            // pakt! Dat kon dezelfde som direct achter elkaar tonen (bijv. net
-            // fout gedaan, geen andere sommen meer in queue → direct weer dezelfde).
-            // Als queue leeg is, laat getVolgendeSomInternal een verse ronde klaarzetten.
-            console.log('getVolgendeSom: queue leeg, geen due foutQueue-item');
+            // pakt! Dat kon dezelfde som direct achter elkaar tonen. Als queue leeg
+            // is, laat getVolgendeSomInternal een verse ronde klaarzetten.
             return null;
         }
 
@@ -1678,29 +1677,24 @@
         function vindAlternatiefVoor(exclude) {
             const excludeKey = somSleutel(exclude);
             
-            // Eerst in queue zoeken (normale sommen)
             for (let i = 0; i < queue.length; i++) {
                 if (somSleutel(queue[i]) !== excludeKey) {
                     return queue.splice(i, 1)[0];
                 }
             }
-            // Dan in foutQueue zoeken (ongeacht due - beter een vroege herhaling
-            // dan een DIRECTE herhaling van dezelfde som)
             for (let i = 0; i < foutQueue.length; i++) {
                 if (somSleutel(foutQueue[i]) !== excludeKey) {
                     return foutQueue.splice(i, 1)[0];
                 }
             }
-            return null; // Geen alternatief beschikbaar (zeldzaam)
+            return null;
         }
 
-        // Zet een som terug op de juiste plek (queue of foutQueue, afhankelijk
-        // van of hij een dueAt heeft) nadat hij opzij is gezet voor een alternatief.
         function zetSomTerug(som) {
             if (som.dueAt !== undefined) {
                 foutQueue.push(som);
             } else {
-                queue.unshift(som); // vooraan, komt snel weer aan de beurt
+                queue.unshift(som);
             }
         }
 
@@ -1709,17 +1703,17 @@
 
             somTeller++;
             
-            // Pak volgende som (eerst due foutQueue, dan queue)
+            // Pak volgende som (due foutQueue item, of normale queue)
             let som = getVolgendeSom();
             
             // Als queue EN foutQueue (due) beide niks opleveren: shuffle de hele
-            // lijst opnieuw (net als Irregular Verbs) - GEEN losse willekeurige
-            // sommen meer, anders werkt "achteraan in de queue" niet meer.
-            if (!som && geselecteerdeTafels.length > 0) {
-                geselecteerdeTafels.forEach(tafel => {
+            // lijst opnieuw (net als Irregular Verbs).
+            if (!som && geselecteerdeDeelsommen.length > 0) {
+                geselecteerdeDeelsommen.forEach(tafel => {
                     for (let i = 1; i <= 10; i++) {
+                        const dividend = i * tafel;
                         queue.push({
-                            a: i,
+                            a: dividend,
                             b: tafel,
                             failCount: 0,
                             successCount: 0
@@ -1733,14 +1727,10 @@
             // ANTI-HERHALING: dezelfde som mag NOOIT 2x (of vaker) direct
             // achter elkaar verschijnen - ook niet via de adaptieve herhaling.
             if (som && vorigeSomSleutel && somSleutel(som) === vorigeSomSleutel) {
-                console.log('Zelfde som als vorige beurt gedetecteerd:', somSleutel(som), '- zoek alternatief');
                 const alternatief = vindAlternatiefVoor(som);
                 if (alternatief) {
                     zetSomTerug(som);
                     som = alternatief;
-                    console.log('Alternatief gevonden:', somSleutel(som));
-                } else {
-                    console.log('Geen alternatief beschikbaar - herhaling geaccepteerd (zeldzaam)');
                 }
             }
             
@@ -1783,7 +1773,7 @@
             const a = som.a || som[0];
             const b = som.b || som[1];
             document.getElementById('som-display').innerHTML = 
-                `${a} <span class="times">×</span> ${b}`;
+                `${a} <span class="times">÷</span> ${b}`;
         }
 
         function controleerAntwoordOrig() {
@@ -1798,7 +1788,7 @@
 
             const a = huidigeSom.a || huidigeSom[0];
             const b = huidigeSom.b || huidigeSom[1];
-            const correct = a * b;
+            const correct = a / b;
 
             stats.sommenTeller++;
 
@@ -1819,22 +1809,19 @@
                 feedback.className = 'feedback goed-feedback show';
                 feedbackDuur = 800;
 
-                // Als woord eerder fout was (uit foutQueue):
+                // Als som eerder fout was (uit foutQueue):
                 if (huidigeSom.failCount && huidigeSom.failCount > 0) {
                     huidigeSom.successCount++;
-                    console.log('Goed! successCount nu:', huidigeSom.successCount);
                     
                     if (huidigeSom.successCount < 3) {
                         // Nog niet 3x goed - terug naar foutQueue, weer 3 beurten wachten
                         huidigeSom.dueAt = somTeller + 3;
                         foutQueue.push(huidigeSom);
-                        console.log('Nog niet 3x - terug naar foutQueue, dueAt:', huidigeSom.dueAt);
                     } else {
                         // 3x goed! - reset naar "normale" som en achteraan queue.
                         // BELANGRIJK: failCount/successCount resetten, anders wordt
                         // deze som bij de volgende GOEDE beurt weer als "was fout"
                         // behandeld en blijft hij voor altijd rondzingen in de queue!
-                        console.log('3x goed! Reset en naar queue (klaar met herhalen)');
                         huidigeSom.failCount = 0;
                         huidigeSom.successCount = 0;
                         delete huidigeSom.dueAt;
@@ -1847,13 +1834,12 @@
                 stats.huidigFout++;
                 stats.totaalFout++;
                 
-                console.log('FOUT:', a, 'x', b);
                 playFoutGeluid();
                 
                 feedback.innerHTML = `
                     <div class="icon-circle">✗</div>
                     <div class="title">Helaas!</div>
-                    <div class="sub">${a} × ${b} = ${correct}</div>
+                    <div class="sub">${a} ÷ ${b} = ${correct}</div>
                 `;
                 feedback.className = 'feedback fout-feedback show';
                 feedbackDuur = 1500;
@@ -1867,9 +1853,7 @@
                     dueAt: somTeller + 3   // Komt terug na 3 andere sommen
                 };
                 
-                console.log('Som naar foutQueue:', somKopie, 'dueAt:', somKopie.dueAt, 'huidige somTeller:', somTeller);
                 foutQueue.push(somKopie);
-                console.log('foutQueue na push:', foutQueue);
             }
 
             saveStats();
@@ -1959,10 +1943,10 @@
             document.getElementById('resultaten-scherm').classList.remove('hidden');
 
             const totaalHuidig = stats.huidigGoed + stats.huidigFout;
-            const percHuidig = totaalHuidig > 0 ? Math.round((stats.huidigGoed / totaalHuidig) * 100) : 0;
+            const percHuidig = totaalHuidig > 0 ? Math.round((stats.huidigGoed / totaalHuidig) / 100) : 0;
 
             const totaalAlles = stats.totaalGoed + stats.totaalFout;
-            const percTotaal = totaalAlles > 0 ? Math.round((stats.totaalGoed / totaalAlles) * 100) : 0;
+            const percTotaal = totaalAlles > 0 ? Math.round((stats.totaalGoed / totaalAlles) / 100) : 0;
 
             document.getElementById('sessie-goed').textContent = stats.huidigGoed;
             document.getElementById('sessie-fout').textContent = stats.huidigFout;
@@ -1977,14 +1961,15 @@
                 document.getElementById('moeilijke-sommen-sectie').classList.remove('hidden');
                 const lijst = document.getElementById('moeilijke-sommen-lijst');
                 lijst.innerHTML = '';
+                // Unieke sommen tonen (voorkom duplicaten)
                 const gezien = new Set();
                 foutQueue.forEach(som => {
-                    const key = somSleutel(som);
+                    const key = `${som.a}x${som.b}`;
                     if (!gezien.has(key)) {
                         gezien.add(key);
                         const item = document.createElement('span');
                         item.className = 'som-item';
-                        item.textContent = `${som.a} × ${som.b}`;
+                        item.textContent = `${som.a} ÷ ${som.b}`;
                         lijst.appendChild(item);
                     }
                 });
@@ -1993,7 +1978,7 @@
             }
 
             const titel = document.getElementById('resultaat-titel');
-            if (foutQueue.length === 0) {
+            if (foutQueue.length === 0 && queue.length === 0) {
                 titel.textContent = '🏆 Gefeliciteerd!';
             } else {
                 titel.textContent = '📊 Samenvatting';
@@ -2002,7 +1987,7 @@
 
         function opnieuw() {
             document.getElementById('resultaten-scherm').classList.add('hidden');
-            document.getElementById('tafel-selectie-scherm').classList.remove('hidden');
+            document.getElementById('deeltafel-selectie-scherm').classList.remove('hidden');
         }
 
         // ── TOETSMODUS ──────────────────────────────────────────────
@@ -2021,9 +2006,9 @@
         const TOETS_TEMPO    = 2.4; // seconden per som voor norm
 
         function startOefenen(isToets) {
-            // Controleer of tafels geselecteerd zijn
-            if (geselecteerdeTafels.length === 0) {
-                alert('Kies eerst één of meer tafels!');
+            // Controleer of deelsommen geselecteerd zijn
+            if (geselecteerdeDeelsommen.length === 0) {
+                alert('Kies eerst één of meer deelsommen!');
                 return;
             }
 
@@ -2047,13 +2032,13 @@
 
             // Genereer sommen pool
             toetsPool = [];
-            geselecteerdeTafels.forEach(t => {
+            geselecteerdeDeelsommen.forEach(t => {
                 for (let g = 1; g <= 10; g++) toetsPool.push([g, t]);
             });
             toetsPool = shuffleArray([...toetsPool]);
 
             // Toon oefen-scherm met toets-balk
-            document.getElementById('tafel-selectie-scherm').classList.add('hidden');
+            document.getElementById('deeltafel-selectie-scherm').classList.add('hidden');
             document.getElementById('oefen-scherm').classList.remove('hidden');
             document.getElementById('toets-balk').classList.remove('hidden');
             document.getElementById('voortgang-indicator').style.display = 'none';
@@ -2094,7 +2079,7 @@
             // Vul pool aan als leeg
             if (toetsPool.length === 0) {
                 toetsPool = [];
-                geselecteerdeTafels.forEach(t => {
+                geselecteerdeDeelsommen.forEach(t => {
                     for (let g = 1; g <= 10; g++) toetsPool.push([g, t]);
                 });
                 toetsPool = shuffleArray(toetsPool);
@@ -2103,7 +2088,7 @@
             toetsHuidigeSom = toetsPool.shift();
             const [a, b] = toetsHuidigeSom;
             document.getElementById('som-display').innerHTML =
-                `${a} <span class="times">×</span> ${b}`;
+                `${a} <span class="times">÷</span> ${b}`;
 
             const input = document.getElementById('antwoord-input');
             input.value = '';
@@ -2122,7 +2107,7 @@
 
             toetsBezig = true;
             const [a, b] = toetsHuidigeSom;
-            const juist  = a * b;
+            const juist  = a / b;
             const correct = antwoord === juist;
 
             if (correct) {
@@ -2153,7 +2138,7 @@
             const verstreken    = TOETS_SECONDEN - toetsResterend;
 
             // Voortgangsbalk: hoeveel % van de 50 norm gehaald
-            const normPct = Math.min(100, Math.round(toetsGoed / TOETS_NORM * 100));
+            const normPct = Math.min(100, Math.round(toetsGoed / TOETS_NORM / 100));
             const balk    = document.getElementById('toets-progress-bar');
             balk.style.width = normPct + '%';
 
@@ -2163,10 +2148,10 @@
                 : null;
 
             // Voorspelling: hoeveel GOEDE sommen aan het einde?
-            // Correctiepercentage: als 90% goed, dan verwacht = (120/tempo) * 0.9
+            // Correctiepercentage: als 90% goed, dan verwacht = (120/tempo) / 0.9
             const pctGoed = totaalGemaakt > 0 ? toetsGoed / totaalGemaakt : 1;
             const verwachtEind = gemTempoSec !== null
-                ? Math.round((TOETS_SECONDEN / gemTempoSec) * pctGoed)
+                ? Math.round((TOETS_SECONDEN / gemTempoSec) / pctGoed)
                 : null;
 
             // Groen = voorspeld aantal GOED >= 50 EN tempo < 2,4s per som
@@ -2271,7 +2256,7 @@
         function naarTafelSelectie() {
             if (toetsTimer) { clearInterval(toetsTimer); toetsTimer = null; }
             document.getElementById('toets-eind-scherm').classList.add('hidden');
-            document.getElementById('tafel-selectie-scherm').classList.remove('hidden');
+            document.getElementById('deeltafel-selectie-scherm').classList.remove('hidden');
         }
 
         // Countdown overlay voor toetsmodus
